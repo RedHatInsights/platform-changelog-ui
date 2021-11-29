@@ -5,4 +5,4 @@ app = Flask(__name__)
 app.config.from_object("app.config.Config")
 db = SQLAlchemy(app)
 
-from app import gumbaroo
+from app import gumbaroo  # noqa: E402,F401
