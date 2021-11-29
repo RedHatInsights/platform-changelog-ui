@@ -5,7 +5,7 @@ class Commits(db.Model):
     __tablename__ = 'commits'
 
     id = db.Column(db.Integer, primary_key=True)
-    service = db.Column(db.String, db.ForeignKey('Services.service'))
+    service = db.Column(db.String, db.ForeignKey('services.service'))
     repo = db.Column(db.String(128))
     commit = db.Column(db.String(41))
     title = db.Column(db.String(128))
@@ -41,9 +41,8 @@ class Commits(db.Model):
 class Services(db.Model):
     __tablename__ = 'services'
 
-
-    id = db.Column(db.Integer, primary_key=True)
-    service = db.Column(db.String(50))
+    id = db.Column(db.Integer, autoincrement=True)
+    service = db.Column(db.String(50), primary_key=True, unique=True)
     display_name = db.Column(db.String(40))
     gh_repo = db.Column(db.String(128))
     gl_repo = db.Column(db.String(128))
@@ -79,7 +78,7 @@ class Deploys(db.Model):
     __tablename__ = 'deploys'
 
     id = db.Column(db.Integer, primary_key=True)
-    service = db.Column(db.String, db.ForeignKey('Services.service'))
+    service = db.Column(db.String, db.ForeignKey('services.service'))
     ref = db.Column(db.String(40))
     namespace = db.Column(db.String(128))
     cluster = db.Column(db.String(128))
