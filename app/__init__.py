@@ -6,10 +6,10 @@ app = Flask(__name__)
 app.config.from_object("app.config.Config")
 db = SQLAlchemy(app)
 
-db.init_app(app)
 Migrate(app, db)
 
-from app import models
+
+from app import models # noqa: E402,F401
 
 
 from app import gumbaroo  # noqa: E402,F401
