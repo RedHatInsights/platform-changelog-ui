@@ -38,6 +38,7 @@ class Commits(db.Model):
                     message=self.message,
                     branch=self.branch_name)
 
+
 class Services(db.Model):
     __tablename__ = 'services'
 
@@ -74,6 +75,7 @@ class Services(db.Model):
                     namespace=self.namespace,
                     branch=self.branch_name)
 
+
 class Deploys(db.Model):
     __tablename__ = 'deploys'
 
@@ -94,7 +96,6 @@ class Deploys(db.Model):
         self.namespace = namespace
         self.cluster = cluster
         self.image = image
-
 
     def to_json(self):
         return dict(service=self.service,
