@@ -1,0 +1,9 @@
+services:
+  rbac:
+    display_name: RBAC
+    gh_repo: https://github.com/RedHatInsights/insights-rbac/
+    branch: master
+  rbac:
+    display_name: Entitlements
+    gh_repo: https://github.com/RedHatInsights/entitlements-api-go/
+    branch: master

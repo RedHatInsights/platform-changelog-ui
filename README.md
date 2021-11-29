@@ -18,3 +18,8 @@ To reset your local database:
 ```
 $ docker-compose down --volumes
 ```
+
+### Run seeds to populate service metadata
+```
+$ python3 ./app/seeds.py
+```
