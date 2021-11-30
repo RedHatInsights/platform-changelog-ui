@@ -4,7 +4,9 @@ services:
   api:
     build:
       context: .
-      dockerfile: ./app/Containerfile
+      dockerfile: ./api/Containerfile
+    environment:
+      - FLASK_APP=./api/__init__.py
     ports:
       - 5000:5000
     volumes:

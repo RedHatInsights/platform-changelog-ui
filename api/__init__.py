@@ -3,9 +3,9 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 
 app = Flask(__name__)
-app.config.from_object("app.config.Config")
+app.config.from_object("api.config.Config")
 db = SQLAlchemy(app)
 
 Migrate(app, db)
 
-from app import gumbaroo, seeds
+from api import gumbaroo, seeds  # noqa: E402,F401
