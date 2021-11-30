@@ -8,4 +8,4 @@ db = SQLAlchemy(app)
 
 Migrate(app, db)
 
-from api import gumbaroo, seeds  # noqa: E402,F401
+from api import api, seeds  # noqa: E402,F401
