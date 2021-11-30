@@ -1,11 +1,11 @@
 from app import db
 
 
-class Services(db.Model):
-    __tablename__ = 'services'
+class Service(db.Model):
+    __tablename__ = 'service'
 
     id = db.Column(db.Integer, primary_key=True)
-    service = db.Column(db.String(), nullable=False)
+    name = db.Column(db.String(), nullable=False)
     display_name = db.Column(db.String())
     gh_repo = db.Column(db.String())
     gl_repo = db.Column(db.String())
@@ -15,24 +15,8 @@ class Services(db.Model):
     commits = db.relationship('Commits', backref='commit_ref')
     deploys = db.relationship('Deploys', backref='deploy_ref')
 
-    def __init__(self,
-                 service,
-                 display_name,
-                 gh_repo,
-                 gl_repo,
-                 deploy_file,
-                 namespace,
-                 branch):
-        self.service = service
-        self.display_name = display_name
-        self.gh_repo = gh_repo
-        self.gl_repo = gl_repo
-        self.deploy_file = deploy_file
-        self.namespace = namespace
-        self.branch = branch
-
     def to_json(self):
-        return dict(service=self.service,
+        return dict(name=self.name,
                     display_name=self.display_name,
                     gh_repo=self.gh_repo,
                     gl_repo=self.gl_repo,
@@ -41,38 +25,22 @@ class Services(db.Model):
                     branch=self.branch)
 
 
-class Commits(db.Model):
-    __tablename__ = 'commits'
+class Commit(db.Model):
+    __tablename__ = 'commit'
 
     id = db.Column(db.Integer, primary_key=True)
-    service_id = db.Column(db.Integer, db.ForeignKey('services.id'))
+    service_id = db.Column(db.Integer, db.ForeignKey('service.id'), nullable=False)
     repo = db.Column(db.String(), nullable=False)
-    commit = db.Column(db.String(), nullable=False)
+    ref = db.Column(db.String(), nullable=False)
     title = db.Column(db.String(), nullable=False)
     timestamp = db.Column(db.String(), nullable=False)
     author = db.Column(db.String(), nullable=False)
     message = db.Column(db.String())
     branch = db.Column(db.String(), nullable=False)
 
-    def __init__(self,
-                 repo,
-                 commit,
-                 title,
-                 timestamp,
-                 author,
-                 message,
-                 branch):
-        self.repo = repo
-        self.commit = commit
-        self.title = title
-        self.timestamp = timestamp
-        self.author = author
-        self.message = message
-        self.branch = branch
-
     def to_json(self):
         return dict(repo=self.repo,
-                    commit=self.commit,
+                    ref=self.commit,
                     title=self.title,
                     timestamp=self.timestamp,
                     author=self.author,
@@ -80,25 +48,15 @@ class Commits(db.Model):
                     branch=self.branch)
 
 
-class Deploys(db.Model):
-    __tablename__ = 'deploys'
+class Deploy(db.Model):
+    __tablename__ = 'deploy'
 
     id = db.Column(db.Integer, primary_key=True)
-    service_id = db.Column(db.Integer, db.ForeignKey('services.id'))
+    service_id = db.Column(db.Integer, db.ForeignKey('service.id'), nullable=False)
     ref = db.Column(db.String(), nullable=False)
     namespace = db.Column(db.String(), nullable=False)
     cluster = db.Column(db.String(), nullable=False)
     image = db.Column(db.String(), nullable=False)
-
-    def __init__(self,
-                 ref,
-                 namespace,
-                 cluster,
-                 image):
-        self.ref = ref
-        self.namespace = namespace
-        self.cluster = cluster
-        self.image = image
 
     def to_json(self):
         return dict(ref=self.ref,
