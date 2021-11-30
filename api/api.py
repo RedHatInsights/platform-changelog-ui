@@ -3,7 +3,7 @@ from flask import jsonify
 import hmac
 import hashlib
 
-from app import app, db, models
+from api import app, db, models
 from flask import jsonify, request
 
 
