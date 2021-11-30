@@ -8,6 +8,8 @@ After doing so, you can run the application with `docker-compose`:
 $ pipenv shell
 $ docker-compose up
 ```
+You can now access the application UI on `http://localhost:3000`, and the API
+directly on `http://localhost:5000`.
 
 To start a shell session:
 ```

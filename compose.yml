@@ -1,10 +1,12 @@
 version: '3.8'
 
 services:
-  web:
+  api:
     build:
       context: .
-      dockerfile: Containerfile-web
+      dockerfile: ./api/Containerfile
+    environment:
+      - FLASK_APP=./api/__init__.py
     ports:
       - 5000:5000
     volumes:
@@ -23,6 +25,20 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=postgres
+  ui:
+    build:
+      context: .
+      dockerfile: ./ui/Containerfile
+    volumes:
+      - ./ui:/usr/src/app/
+      - node_modules:/frontend/node_modules
+    environment:
+      - NODE_ENV=development
+    ports:
+      - 3000:3000
+    depends_on:
+      - api
 
 volumes:
   postgres_data:
+  node_modules:

@@ -1,6 +1,6 @@
 import yaml
-from app import app, db
-from app.models import *
+from api import app, db
+from api.models import *
 from pathlib import Path
 from sqlalchemy.orm.exc import NoResultFound
 
