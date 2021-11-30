@@ -11,6 +11,10 @@ flask-sqlalchemy = "*"
 psycopg2-binary = "*"
 flask-migrate = "*"
 pyyaml = "*"
+app-common-python = "*"
+watchtower = "*"
+boto3 = "*"
+logstash-formatter = "*"
 
 [dev-packages]
 flake8 = "*"
