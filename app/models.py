@@ -12,8 +12,8 @@ class Service(db.Model):
     deploy_file = db.Column(db.String())
     namespace = db.Column(db.String())
     branch = db.Column(db.String(), default="master")
-    commits = db.relationship('Commits', backref='commit_ref')
-    deploys = db.relationship('Deploys', backref='deploy_ref')
+    commits = db.relationship('Commit', backref='commit_ref')
+    deploys = db.relationship('Deploy', backref='deploy_ref')
 
     def to_json(self):
         return dict(name=self.name,
