@@ -8,3 +8,13 @@ After doing so, you can run the application with `docker-compose`:
 $ pipenv shell
 $ docker-compose up
 ```
+
+To start a shell session:
+```
+$ docker exec -it gumbaroo_web_1 flask shell
+```
+
+To reset your local database:
+```
+$ docker-compose down --volumes
+```
