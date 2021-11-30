@@ -4,6 +4,7 @@ from app.models import *
 from pathlib import Path
 from sqlalchemy.orm.exc import NoResultFound
 
+
 @app.cli.command("seeds")
 def seeds():
     path = Path(__file__).parent / "../services.yml"
