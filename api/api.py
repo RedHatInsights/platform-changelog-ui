@@ -1,5 +1,3 @@
-from api import app
-from flask import jsonify
 import hmac
 import hashlib
 
