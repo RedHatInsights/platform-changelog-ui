@@ -8,6 +8,4 @@ db = SQLAlchemy(app)
 
 Migrate(app, db)
 
-from app import models  # noqa: E402,F401
-
 from app import gumbaroo  # noqa: E402,F401
