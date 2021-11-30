@@ -9,7 +9,7 @@ class Services(db.Model):
     display_name = db.Column(db.String())
     gh_repo = db.Column(db.String())
     gl_repo = db.Column(db.String())
-    deploy_file = db.Column(db.String(), nullable=False)
+    deploy_file = db.Column(db.String())
     namespace = db.Column(db.String())
     branch = db.Column(db.String(), default="master")
     commits = db.relationship('Commits', backref='commit_ref')
