@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  web:
+  api:
     build:
       context: .
       dockerfile: ./app/Containerfile
@@ -35,7 +35,7 @@ services:
     ports:
       - 3000:3000
     depends_on:
-      - web
+      - api
 
 volumes:
   postgres_data:
