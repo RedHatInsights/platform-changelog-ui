@@ -10,28 +10,28 @@ def seeds():
     path = Path(__file__).parent / "../services.yml"
     with path.open() as stream:
         try:
-            services = yaml.safe_load(stream)["services"]
-            for service in services:
-                metadata = services.get(service)
+            services_from_file = yaml.safe_load(stream)["services"]
+            for service_key in services_from_file:
+                metadata = services_from_file.get(service_key)
                 try:
-                    s = Service.query.filter_by(name=service).one()
-                    s.display_name = metadata.get("display_name")
-                    s.gh_repo = metadata.get("gh_repo")
-                    s.gl_repo = metadata.get("gl_repo")
-                    s.deploy_file = metadata.get("deploy_file")
-                    s.namespace = metadata.get("namespace")
-                    s.branch = metadata.get("branch")
+                    service_object = Service.query.filter_by(name=service_key).one()
                 except NoResultFound:
-                    s = Service(
-                        name=service,
-                        display_name=metadata.get("display_name"),
-                        gh_repo=metadata.get("gh_repo"),
-                        gl_repo=metadata.get("gl_repo"),
-                        deploy_file=metadata.get("deploy_file"),
-                        namespace=metadata.get("namespace"),
-                        branch=metadata.get("branch"),
-                    )
-                db.session.add(s)
+                    service_object = Service()
+                for key, value in service_dict(service_key, metadata).items():
+                    setattr(service_object, key, value)
+                db.session.add(service_object)
                 db.session.commit()
         except yaml.YAMLError as exc:
             print(f"Failed to update services: {exc}")
+
+
+def service_dict(service, metadata):
+    return {
+        "name": service,
+        "display_name": metadata.get("display_name"),
+        "gh_repo": metadata.get("gh_repo"),
+        "gl_repo": metadata.get("gl_repo"),
+        "deploy_file": metadata.get("deploy_file"),
+        "namespace": metadata.get("namespace"),
+        "branch": metadata.get("branch"),
+    }
