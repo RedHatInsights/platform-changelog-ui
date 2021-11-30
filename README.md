@@ -11,6 +11,9 @@ $ docker-compose up
 
 To start a shell session:
 ```
+$ flask shell
+
+# may need to be run within the context of the web container, such as:
 $ docker exec -it gumbaroo_web_1 flask shell
 ```
 
@@ -36,5 +39,8 @@ gl_repo:
 
 ### Run seeds to populate service metadata
 ```
-$ python3 ./app/seeds.py
+$ flask seeds
+
+# may need to be run within the context of the web container, such as:
+$ docker exec -it gumbaroo_web_1 flask seeds
 ```

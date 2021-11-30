@@ -1,3 +1,4 @@
+import click
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
@@ -8,4 +9,4 @@ db = SQLAlchemy(app)
 
 Migrate(app, db)
 
-from app import gumbaroo  # noqa: E402,F401
+from app import gumbaroo, seeds  # noqa: E402,F401

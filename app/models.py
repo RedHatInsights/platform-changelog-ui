@@ -5,7 +5,7 @@ class Service(db.Model):
     __tablename__ = 'service'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(), nullable=False)
+    name = db.Column(db.String(), nullable=False, unique=True)
     display_name = db.Column(db.String())
     gh_repo = db.Column(db.String())
     gl_repo = db.Column(db.String())
