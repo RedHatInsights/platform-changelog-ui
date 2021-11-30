@@ -2,6 +2,6 @@ from app import app
 from flask import jsonify
 
 
-@app.route("/")
-def index():
+@app.route("/status")
+def status():
     return jsonify(status="ok")
