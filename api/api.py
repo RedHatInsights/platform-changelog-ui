@@ -20,34 +20,44 @@ def github_webhook():
     signature = request.headers.get("X-Hub-Signature-256")
     data = request.get_data(as_text=True)
 
-    if verify_hmac_hash(data, signature):
+    try:
+        if not verify_hmac_hash(data, signature):
+            return jsonify(msg="Unable to validate webhook")
+
         if request.headers.get("X-Github-Event") == "ping":
             return jsonify(msg="ok")
-        if request.headers.get("X-Github-Event") == "pull_request":
-            payload = request.json
-            pr = payload["pull_request"]
-            if pr["merged"] and pr["state"] == "closed":
-                repo_url = pr["head"]["repo"]["html_url"]
-                repo_name = pr["head"]["repo"]["name"]
-                commit = pr["merge_commit_sha"]
-                service = models.Service.query.filter_by(gh_repo=repo_url).first()
-                if service:
-                    c = models.Commit(service_id=service.id,
-                                      ref=commit,
-                                      title=pr["title"],
-                                      repo=repo_url,
-                                      timestamp=pr["merged_at"],
-                                      author=pr["user"]["login"],
-                                      message=pr.get("body"))
-                    db.session.add(c)
-                    db.session.commit()
-                    
-                    return jsonify(msg=f"commit data inserted for {repo_name}: {commit}") 
-                else:
-                    return jsonify(msg=f"{repo_name} is not a recognized service")
-            else:
-                return jsonify(msg=f"PR {payload['number']} is not merged")
-        else:
-            return jsonify(msg=f"Event from {repo_name} is not a pull_request")
-    else:
-        return jsonify(msg="Unable to validate webhook")
+
+        if not request.headers.get("X-Github-Event") == "push":
+            return jsonify(msg="Event from this repo is not a push event")
+            
+        payload = request.json
+        service = models.Service.query.filter_by(gh_repo=payload["repository"]["url"]).first()
+        branch = payload["ref"].split("/")[2]
+
+        if not service:
+            return jsonify(msg=f"{payload['repository']['name']} is not a recognized service")
+
+        if branch != service.branch:
+            return jsonify(msg=f"{branch} is not a monitored branch")
+
+        # commit list is sorted earliest to latest so we want to reverse it before
+        # we insert it into the DB
+        payload["commits"].reverse()
+        for commit in payload["commits"]:
+            commit_body = commit["message"].splitlines()
+            title = commit_body[0]
+            message = None
+            if len(commit_body) >= 1:
+                message = ('\n').join(commit_body[1].splitlines()[1:]).strip()
+            c = models.Commit(service_id=service.id,
+                              ref=commit["id"],
+                              title=title,
+                              repo=payload["repository"]["url"],
+                              timestamp=payload["head_commit"]["timestamp"],
+                              author=commit["author"]["username"],
+                              message=message)
+            db.session.add(c)
+        db.session.commit()
+        return jsonify(msg=f"commit date inserted for {payload['repository']['name']}: {payload['after']}")
+    except Exception as e:
+        return jsonify(msg=f"Webhook failed to process: {e}")
