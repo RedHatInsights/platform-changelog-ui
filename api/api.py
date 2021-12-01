@@ -64,6 +64,47 @@ def github_webhook():
         return jsonify(msg=f"Webhook failed to process: {e}")
 
 
+@app.route("/gitlab-webhook", methods=["POST"])
+def gitlab_webhook():
+    signature = request.headers.get("X-Gitlab-Token")
+    
+    try:
+        if signature != app.config.get("GITLAB_SECRET"):
+            return jsonify(msg="Unable to validate webhook")
+
+        if request.headers.get("X-Gitlab-Event") != "Push Hook":
+            return jsonify(msg="Event from this repo is not a push event")
+
+        payload = request.json
+        service = Service.query.filter_by(gl_repo=payload["project"]["web_url"]).first()
+        branch = payload["ref"].split("/")[2]
+
+        if not service:
+            return jsonify(msg=f"{payload['project']['name']} is not a recognized service")
+
+        if branch != service.branch:
+            return jsonify(msg=f"{branch} is not a monitored branch")
+
+        for commit in payload["commits"]:
+            commit_body = commit["message"].splitlines()
+            title = commit_body[0]
+            message = None
+            if len(commit_body) >= 1:
+                message = ('\n').join(commit_body[1].splitlines()[1:]).strip()
+            c = Commit(service_id=service.id,
+                       ref=commit["id"],
+                       title=title,
+                       repo=payload["project"]["web_url"],
+                       timestamp=payload["commits"][-1]["timestamp"],
+                       author=commit["author"]["name"],
+                       message=message)
+            db.session.add(c)
+        db.session.commit()
+        return jsonify(msg=f"commit data inserted for {payload['project']['name']}: {payload['after']}")
+    except Exception as e:
+        return jsonify(msg=f"Webhook failed to process: {e}")
+
+
 @app.route("/services/")
 def get_services():
     services = Service.query.all()
