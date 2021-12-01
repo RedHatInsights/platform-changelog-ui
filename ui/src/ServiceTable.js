@@ -1,6 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { Table, TableHeader, TableBody, TableVariant } from '@patternfly/react-table';
-import '@patternfly/react-core/dist/styles/base.css';
+import React from 'react';
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableVariant,
+  expandable
+} from '@patternfly/react-table';
 
 class ServiceTable extends React.Component {
   constructor(props) {
@@ -17,7 +22,6 @@ class ServiceTable extends React.Component {
 
   GetServices() {
     fetch('/services/').then(res => res.json()).then(data => {
-      debugger
       this.setState({
         serviceColumns: Object.keys(data[0]),
         serviceRows: data.map(d => Object.values(d))
