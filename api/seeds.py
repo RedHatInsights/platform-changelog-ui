@@ -4,6 +4,22 @@ from api.models import *
 from pathlib import Path
 from sqlalchemy.orm.exc import NoResultFound
 
+import string
+import random
+import pytz
+import datetime
+
+
+def generate_commit_hash():
+    ran = ''.join(random.choices(string.ascii_lowercase + string.digits, k=41))
+    return str(ran)
+
+
+def random_timestamp():
+    rtime = datetime.datetime.now(pytz.timezone('America/New_York')).replace(hour=random.randint(8, 14), minute=random.randint(0, 59))
+    rday = rtime + datetime.timedelta(days=random.randint(0, 5))
+    return rday.isoformat('T', 'seconds')
+
 
 @app.cli.command("seeds")
 def seeds():
@@ -19,6 +35,13 @@ def seeds():
                     service_object = Service()
                 for key, value in service_dict(service_key, metadata).items():
                     setattr(service_object, key, value)
+                i = 0
+                while i <= 5:
+                    commit_object = Commit()
+                    for key, value in commit_dict(service_object.gh_repo, service_object.id).items():
+                        setattr(commit_object, key, value)
+                    db.session.add(commit_object)
+                    i += 1
                 db.session.add(service_object)
                 db.session.commit()
         except yaml.YAMLError as exc:
@@ -35,3 +58,17 @@ def service_dict(service, metadata):
         "namespace": metadata.get("namespace"),
         "branch": metadata.get("branch"),
     }
+
+
+def commit_dict(repo, service_id):
+    ref = generate_commit_hash()
+    time = random_timestamp()
+    return {
+            "service_id": service_id,
+            "repo": repo,
+            "ref": ref,
+            "title": "This is a test Title",
+            "timestamp": time,
+            "author": "Bob Denver",
+            "message": "I made changes. Weee!"
+           }
