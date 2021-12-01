@@ -1,21 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import './App.css';
+import { Table, TableHeader, TableBody, TableVariant } from '@patternfly/react-table';
+import '@patternfly/react-core/dist/styles/base.css';
 
 function App() {
-  const [status, setstatus] = useState("loading status...");
+  const [serviceColumns, setServiceColumns] = useState([]);
+  const [serviceRows, setServiceRows] = useState([]);
 
   useEffect(() => {
-    fetch('/status').then(res => res.json()).then(data => {
-      setstatus(data.status);
+    fetch('/services/').then(res => res.json()).then(data => {
+      setServiceColumns(Object.keys(data[0]));
+      setServiceRows(data.map(d => Object.values(d)));
     });
   }, []);
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <p>status: {status}</p>
-      </header>
-    </div>
+    <Table caption="Services" rows={serviceRows} cells={serviceColumns} variant={TableVariant.compact}>
+      <TableHeader />
+      <TableBody />
+    </Table>
   );
 }
 
