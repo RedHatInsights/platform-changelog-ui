@@ -1,6 +1,8 @@
 import os
 from api.logging import get_logger
 
+from app_common_python import isClowderEnabled
+
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 
@@ -42,7 +44,7 @@ class Config(object):
     def __init__(self):
         self.logger = get_logger(__name__)
         
-        if os.getenv("CLOWDER_ENABLED"):
+        if isClowderEnabled():
             self.clowder_config()
         else:
             self.non_clowder_config()

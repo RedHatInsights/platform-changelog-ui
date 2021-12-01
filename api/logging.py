@@ -7,6 +7,7 @@ import watchtower
 from boto3.session import Session
 from yaml import safe_load
 from logging import NullHandler
+from app_common_python import isClowderEnabled
 
 DEFAULT_LOGGING_CONFIG_FILE = "logconfig.yaml"
 LOGGER_NAME = "gumbaroo"
@@ -51,7 +52,7 @@ def non_clowder_config():
 
 
 def cloudwatch_handler():
-    if os.getenv("CLOWDER_ENABLED"):
+    if isClowderEnabled():
         f = clowder_config
     else:
         f = non_clowder_config
