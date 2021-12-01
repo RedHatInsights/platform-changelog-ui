@@ -2,23 +2,39 @@ import React, { useState, useEffect } from 'react';
 import { Table, TableHeader, TableBody, TableVariant } from '@patternfly/react-table';
 import '@patternfly/react-core/dist/styles/base.css';
 
-function ServiceTable() {
-  const [serviceColumns, setServiceColumns] = useState([]);
-  const [serviceRows, setServiceRows] = useState([]);
+class ServiceTable extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      serviceColumns: [],
+      serviceRows: []
+    }
+  }
 
-  useEffect(() => {
+  componentDidMount() {
+    this.GetServices();
+  }
+
+  GetServices() {
     fetch('/services/').then(res => res.json()).then(data => {
-      setServiceColumns(Object.keys(data[0]));
-      setServiceRows(data.map(d => Object.values(d)));
+      debugger
+      this.setState({
+        serviceColumns: Object.keys(data[0]),
+        serviceRows: data.map(d => Object.values(d))
+      });
     });
-  }, []);
+  }
 
-  return (
-    <Table caption="Services" rows={serviceRows} cells={serviceColumns} variant={TableVariant.compact}>
-      <TableHeader />
-      <TableBody />
-    </Table>
-  );
+  render() {
+    const serviceRows = this.state.serviceRows;
+    const serviceColumns = this.state.serviceColumns;
+    return (
+      <Table caption="Services" rows={serviceRows} cells={serviceColumns} variant={TableVariant.compact}>
+        <TableHeader />
+        <TableBody />
+      </Table>
+    );
+  }
 }
 
 export default ServiceTable;
