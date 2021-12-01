@@ -1,7 +1,8 @@
 import hmac
 import hashlib
 
-from api import app, db, models
+from api import app, db
+from api.models import *
 from flask import jsonify, request
 
 
@@ -31,7 +32,7 @@ def github_webhook():
             return jsonify(msg="Event from this repo is not a push event")
             
         payload = request.json
-        service = models.Service.query.filter_by(gh_repo=payload["repository"]["url"]).first()
+        service = Service.query.filter_by(gh_repo=payload["repository"]["url"]).first()
         branch = payload["ref"].split("/")[2]
 
         if not service:
@@ -49,7 +50,7 @@ def github_webhook():
             message = None
             if len(commit_body) >= 1:
                 message = ('\n').join(commit_body[1].splitlines()[1:]).strip()
-            c = models.Commit(service_id=service.id,
+            c = Commit(service_id=service.id,
                               ref=commit["id"],
                               title=title,
                               repo=payload["repository"]["url"],
