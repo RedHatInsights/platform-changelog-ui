@@ -12,8 +12,8 @@ class Serializer(object):
     #     del obj["some_field"]
     #     return obj
 
-    def serialize(self):
-        return {key: getattr(self, key) for key in inspect(self).attrs.keys()}
+    def serialize(self, fields_to_strip=[]):
+        return {key: getattr(self, key) for key in inspect(self).attrs.keys() if key not in fields_to_strip}
 
     @staticmethod
     def serialize_list(obj_list):
@@ -44,13 +44,12 @@ class Service(db.Model, Serializer):
                     branch=self.branch)
 
     def serialize(self):
-        obj = Serializer.serialize(self)
-        del obj["commits"]
-        del obj["deploys"]
+        fields_to_strip = ("commits", "deploys")
+        obj = Serializer.serialize(self, fields_to_strip)
         return obj
 
 
-class Commit(db.Model):
+class Commit(db.Model, Serializer):
     __tablename__ = 'commit'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -70,6 +69,12 @@ class Commit(db.Model):
                     author=self.author,
                     message=self.message,
                     branch=self.branch)
+
+    def serialize(self):
+        fields_to_strip = ("commit_ref", "service_id")
+        obj = Serializer.serialize(self, fields_to_strip)
+        obj["service"] = self.commit_ref.display_name
+        return obj
 
 
 class Deploy(db.Model):

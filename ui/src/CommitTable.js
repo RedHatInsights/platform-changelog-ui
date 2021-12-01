@@ -6,7 +6,7 @@ import {
   TableVariant
 } from '@patternfly/react-table';
 
-class ServiceTable extends React.Component {
+class CommitTable extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -20,7 +20,7 @@ class ServiceTable extends React.Component {
   }
 
   GetServices() {
-    fetch('/services/').then(res => res.json()).then(data => {
+    fetch('/commits/').then(res => res.json()).then(data => {
       if (data.length > 0) {
         this.setState({
           serviceColumns: Object.keys(data[0]),
@@ -34,7 +34,7 @@ class ServiceTable extends React.Component {
     const serviceRows = this.state.serviceRows;
     const serviceColumns = this.state.serviceColumns;
     return (
-      <Table caption="Services" rows={serviceRows} cells={serviceColumns} variant={TableVariant.compact}>
+      <Table caption="Commmits" rows={serviceRows} cells={serviceColumns} variant={TableVariant.compact}>
         <TableHeader />
         <TableBody />
       </Table>
@@ -42,4 +42,4 @@ class ServiceTable extends React.Component {
   }
 }
 
-export default ServiceTable;
+export default CommitTable;
