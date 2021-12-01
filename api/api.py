@@ -30,7 +30,7 @@ def github_webhook():
 
         if not request.headers.get("X-Github-Event") == "push":
             return jsonify(msg="Event from this repo is not a push event")
-            
+
         payload = request.json
         service = Service.query.filter_by(gh_repo=payload["repository"]["url"]).first()
         branch = payload["ref"].split("/")[2]
@@ -62,3 +62,9 @@ def github_webhook():
         return jsonify(msg=f"commit date inserted for {payload['repository']['name']}: {payload['after']}")
     except Exception as e:
         return jsonify(msg=f"Webhook failed to process: {e}")
+
+
+@app.route("/services/")
+def get_services():
+    services = Service.query.all()
+    return jsonify(Service.serialize_list(services))

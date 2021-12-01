@@ -16,7 +16,7 @@ To start a shell session:
 $ flask shell
 
 # may need to be run within the context of the web container, such as:
-$ docker exec -it gumbaroo_web_1 flask shell
+$ docker exec -it gumbaroo_api_1 flask shell
 ```
 
 To reset your local database:
@@ -44,5 +44,5 @@ gl_repo:
 $ flask seeds
 
 # may need to be run within the context of the web container, such as:
-$ docker exec -it gumbaroo_web_1 flask seeds
+$ docker exec -it gumbaroo_api_1 flask seeds
 ```

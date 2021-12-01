@@ -1,7 +1,26 @@
 from api import db
+from sqlalchemy.inspection import inspect
+from sqlalchemy.orm.collections import InstrumentedList
 
 
-class Service(db.Model):
+class Serializer(object):
+    # You can override this method in your model if you need to remove certain
+    # attributes in serialized objects, like so:
+    #
+    # def serialize(self):
+    #     obj = Serializer.serialize(self)
+    #     del obj["some_field"]
+    #     return obj
+
+    def serialize(self):
+        return {key: getattr(self, key) for key in inspect(self).attrs.keys()}
+
+    @staticmethod
+    def serialize_list(obj_list):
+        return [obj.serialize() for obj in obj_list]
+
+
+class Service(db.Model, Serializer):
     __tablename__ = 'service'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -23,6 +42,12 @@ class Service(db.Model):
                     deploy_file=self.deploy_file,
                     namespace=self.namespace,
                     branch=self.branch)
+
+    def serialize(self):
+        obj = Serializer.serialize(self)
+        del obj["commits"]
+        del obj["deploys"]
+        return obj
 
 
 class Commit(db.Model):
