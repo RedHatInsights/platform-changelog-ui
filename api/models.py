@@ -36,7 +36,6 @@ class Commit(db.Model):
     timestamp = db.Column(db.String(), nullable=False)
     author = db.Column(db.String(), nullable=False)
     message = db.Column(db.String())
-    branch = db.Column(db.String(), nullable=False)
 
     def to_json(self):
         return dict(repo=self.repo,
