@@ -51,8 +51,11 @@ class Config(object):
 
     @property
     def DATABASE_URI(self):
-        self._db_ssl_mode = os.getenv("DB_SSL_MODE", "")
-        self.db_uri = self._build_db_uri(self._db_ssl_mode)
+        if os.getenv("DATABASE_URL"):
+            self.db_uri = os.getenv("DATABASE_URL")
+        else:
+            self._db_ssl_mode = os.getenv("DB_SSL_MODE", "")
+            self.db_uri = self._build_db_uri(self._db_ssl_mode)
         return self.db_uri
 
     @property
