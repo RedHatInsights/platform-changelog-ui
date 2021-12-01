@@ -113,4 +113,4 @@ def get_services():
 @app.route("/commits/")
 def get_commits():
     commits = Commit.query.all()
-    return jsonify(Service.serialize_list(commits))
+    return jsonify(Commit.serialize_list(commits))

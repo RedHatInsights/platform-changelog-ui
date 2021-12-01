@@ -18,10 +18,10 @@ class GenericTable extends React.Component {
   }
 
   componentDidMount() {
-    this.GetServices();
+    this.GetModel();
   }
 
-  GetServices() {
+  GetModel() {
     fetch(this.state.path).then(res => res.json()).then(data => {
       if (data.length > 0) {
         this.setState({
