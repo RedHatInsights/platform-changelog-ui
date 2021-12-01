@@ -15,7 +15,7 @@ class Config(object):
         cfg = app_common_python.LoadedConfig
 
         # DB Configuration
-        self._db_user = cfg.database.username 
+        self._db_user = cfg.database.username
         self._db_password = cfg.database.password
         self._db_host = cfg.database.hostname
         self._db_port = cfg.database.port
@@ -43,7 +43,7 @@ class Config(object):
 
     def __init__(self):
         self.logger = get_logger(__name__)
-        
+
         if isClowderEnabled():
             self.clowder_config()
         else:

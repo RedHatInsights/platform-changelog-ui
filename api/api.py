@@ -67,7 +67,7 @@ def github_webhook():
 @app.route("/gitlab-webhook", methods=["POST"])
 def gitlab_webhook():
     signature = request.headers.get("X-Gitlab-Token")
-    
+
     try:
         if signature != app.config.get("GITLAB_SECRET"):
             return jsonify(msg="Unable to validate webhook")
