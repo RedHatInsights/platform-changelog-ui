@@ -8,6 +8,7 @@ import string
 import random
 import pytz
 import datetime
+import click
 
 
 def generate_commit_hash():
@@ -22,7 +23,8 @@ def random_timestamp():
 
 
 @app.cli.command("seeds")
-def seeds():
+@click.option('--local', is_flag=True)
+def seeds(local):
     path = Path(__file__).parent / "../services.yml"
     with path.open() as stream:
         try:
@@ -37,35 +39,16 @@ def seeds():
                     setattr(service_object, key, value)
                 db.session.add(service_object)
                 db.session.commit()
-        except yaml.YAMLError as exc:
-            print(f"Failed to update services: {exc}")
-
-
-@app.cli.command("dev-db")
-def seed_commits():
-    path = Path(__file__).parent / "../services.yml"
-    with path.open() as stream:
-        try:
-            services_from_file = yaml.safe_load(stream)["services"]
-            for service_key in services_from_file:
-                metadata = services_from_file.get(service_key)
-                try:
+                if local:
                     service_object = Service.query.filter_by(name=service_key).one()
-                except NoResultFound:
-                    service_object = Service()
-                for key, value in service_dict(service_key, metadata).items():
-                    setattr(service_object, key, value)
-                db.session.add(service_object)
-                db.session.commit()
-                service_object = Service.query.filter_by(name=service_key).one()
-                i = 0
-                while i <= 5:
-                    commit_object = Commit()
-                    for key, value in commit_dict(service_object.gh_repo, service_object.id).items():
-                        setattr(commit_object, key, value)
-                    db.session.add(commit_object)
-                    i += 1
-                db.session.commit()
+                    i = 0
+                    while i <= 5:
+                        commit_object = Commit()
+                        for key, value in commit_dict(service_object.gh_repo, service_object.id).items():
+                            setattr(commit_object, key, value)
+                        db.session.add(commit_object)
+                        i += 1
+                    db.session.commit()
         except yaml.YAMLError as exc:
             print(f"Failed to update services: {exc}")
 
