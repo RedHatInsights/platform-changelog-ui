@@ -121,3 +121,17 @@ def get_commits():
 def get_deploys():
     deploys = Deploy.query.all()
     return jsonify(Deploy.serialize_list(deploys))
+
+
+@app.route("/services/<service_id>/timeline/")
+def service_timeline(service_id):
+    service = Service.query.get(service_id)
+    commits = service.commits
+    deploys = service.deploys
+    service_activity = Commit.serialize_list(commits) + Deploy.serialize_list(deploys)
+    service_activity.sort(key=lambda x: x["timestamp"], reverse=True)
+    payload = [{
+        "action_type": ("deploy" if action.get("cluster") else "commit"),
+        "timestamp": action.get("timestamp")
+    } for action in service_activity]
+    return jsonify(payload)
