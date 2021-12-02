@@ -86,10 +86,12 @@ def commit_dict(repo, service_id):
 
 def deploy_dict(service_object, commit_ref):
     image = commit_ref[:7]
+    time = random_timestamp()
     return {
             "service_id": service_object.id,
             "ref": commit_ref,
             "namespace": service_object.namespace,
             "cluster": "Test Cluster",
-            "image": image
+            "image": image,
+            "timestamp": time
            }
