@@ -66,7 +66,7 @@ class GenericTable extends React.Component {
 
     return (
       <React.Fragment>
-        <TableComposable>
+        <TableComposable variant="compact">
           <Caption>{this.state.title}</Caption>
           <Thead>
             <Tr>
