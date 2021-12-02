@@ -15,6 +15,8 @@ app-common-python = "*"
 watchtower = "*"
 boto3 = "*"
 logstash-formatter = "*"
+pytz = "*"
+click = "*"
 
 [dev-packages]
 flake8 = "*"
