@@ -44,7 +44,7 @@ class Service(db.Model, Serializer):
                     branch=self.branch)
 
     def serialize(self):
-        fields_to_strip = ("commits", "deploys")
+        fields_to_strip = ("commits", "deploys", "id")
         obj = Serializer.serialize(self, fields_to_strip)
         return obj
 
@@ -71,7 +71,7 @@ class Commit(db.Model, Serializer):
                     branch=self.branch)
 
     def serialize(self):
-        fields_to_strip = ("commit_ref", "service_id")
+        fields_to_strip = ("commit_ref", "service_id", "id")
         obj = Serializer.serialize(self, fields_to_strip)
         obj["service"] = self.commit_ref.display_name
         return obj

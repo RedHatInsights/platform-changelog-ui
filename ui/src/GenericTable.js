@@ -1,9 +1,12 @@
 import React from 'react';
 import {
-  Table,
-  TableHeader,
-  TableBody,
-  TableVariant
+  TableComposable,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+  Caption
 } from '@patternfly/react-table';
 
 class GenericTable extends React.Component {
@@ -12,17 +15,19 @@ class GenericTable extends React.Component {
     this.state = {
       columns: [],
       rows: [],
-      path: props.path,
-      title: props.title
+      dataPath: props.dataPath,
+      title: props.title,
+      activeSortIndex: -1,
+      activeSortDirection: "none"
     }
   }
 
   componentDidMount() {
-    this.GetModel();
+    this.getModel();
   }
 
-  GetModel() {
-    fetch(this.state.path).then(res => res.json()).then(data => {
+  getModel() {
+    fetch(this.state.dataPath).then(res => res.json()).then(data => {
       if (data.length > 0) {
         this.setState({
           columns: Object.keys(data[0]),
@@ -33,13 +38,70 @@ class GenericTable extends React.Component {
   }
 
   render() {
-    const rows = this.state.rows;
-    const columns = this.state.columns;
+    const onSort = (event, index, direction) => {
+      this.state.activeSortIndex = index;
+      this.state.activeSortDirection = direction;
+      // sorts the rows
+      const updatedRows = this.state.rows.sort((a, b) => {
+        if (typeof a[index] === 'number') {
+          // numeric sort
+          if (direction === 'asc') {
+            return a[index] - b[index];
+          }
+          return b[index] - a[index];
+        } else {
+          // string sort
+          if (direction === 'asc') {
+            if (a[index]) {
+              return a[index].localeCompare(b[index]);
+            }
+          }
+          if (b[index]) {
+            return b[index].localeCompare(a[index]);
+          }
+        }
+      });
+      this.setState({rows: updatedRows});
+    };
+
     return (
-      <Table caption={this.state.title} rows={rows} cells={columns} variant={TableVariant.compact}>
-        <TableHeader />
-        <TableBody />
-      </Table>
+      <React.Fragment>
+        <TableComposable variant="compact">
+          <Caption>{this.state.title}</Caption>
+          <Thead>
+            <Tr>
+              {this.state.columns.map((column, columnIndex) => {
+                const sortParams = {
+                  sort: {
+                    sortBy: {
+                      index: this.state.activeSortIndex,
+                      direction: this.state.activeSortDirection
+                    },
+                    onSort,
+                    columnIndex
+                  }
+                };
+                return (
+                  <Th key={columnIndex} {...sortParams}>
+                    {column}
+                  </Th>
+                );
+              })}
+            </Tr>
+          </Thead>
+          <Tbody>
+            {this.state.rows.map((row, rowIndex) => (
+              <Tr key={rowIndex}>
+                {row.map((cell, cellIndex) => (
+                  <Td key={`${rowIndex}_${cellIndex}`} dataLabel={this.state.columns[cellIndex]}>
+                    {cell}
+                  </Td>
+                ))}
+              </Tr>
+            ))}
+          </Tbody>
+        </TableComposable>
+      </React.Fragment>
     );
   }
 }
