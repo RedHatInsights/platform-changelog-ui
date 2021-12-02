@@ -77,7 +77,7 @@ class Commit(db.Model, Serializer):
         return obj
 
 
-class Deploy(db.Model):
+class Deploy(db.Model, Serializer):
     __tablename__ = 'deploy'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -92,3 +92,9 @@ class Deploy(db.Model):
                     namespace=self.namespace,
                     cluster=self.cluster,
                     image=self.image)
+
+    def serialize(self):
+        fields_to_strip = ("deploy_ref", "service_id", "id")
+        obj = Serializer.serialize(self, fields_to_strip)
+        obj["service"] = self.deploy_ref.display_name
+        return obj

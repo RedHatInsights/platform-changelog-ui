@@ -115,3 +115,9 @@ def get_services():
 def get_commits():
     commits = Commit.query.order_by(Commit.timestamp.desc()).all()
     return jsonify(Commit.serialize_list(commits))
+
+
+@app.route("/deploys/")
+def get_deploys():
+    deploys = Deploy.query.all()
+    return jsonify(Deploy.serialize_list(deploys))

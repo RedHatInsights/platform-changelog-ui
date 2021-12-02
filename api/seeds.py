@@ -44,9 +44,13 @@ def seeds(local):
                     i = 0
                     while i <= 5:
                         commit_object = Commit()
+                        deploy_object = Deploy()
                         for key, value in commit_dict(service_object.gh_repo, service_object.id).items():
                             setattr(commit_object, key, value)
+                        for key, value in deploy_dict(service_object).items():
+                            setattr(deploy_object, key, value)
                         db.session.add(commit_object)
+                        db.session.add(deploy_object)
                         i += 1
                     db.session.commit()
         except yaml.YAMLError as exc:
@@ -76,4 +80,15 @@ def commit_dict(repo, service_id):
             "timestamp": time,
             "author": "Bob Denver",
             "message": "I made changes. Weee!"
+           }
+
+def deploy_dict(service_object):
+    ref = generate_commit_hash()
+    image = generate_commit_hash()
+    return {
+            "service_id": service_object.id,
+            "ref": ref,
+            "namespace": service_object.namespace,
+            "cluster": "Test Cluster",
+            "image": image
            }
