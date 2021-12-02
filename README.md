@@ -41,8 +41,8 @@ gl_repo:
 
 ### Run seeds to populate service metadata
 ```
-$ flask seeds
+$ flask seeds [--local]
 
 # may need to be run within the context of the web container, such as:
-$ docker exec -it gumbaroo_api_1 flask seeds
+$ docker exec -it gumbaroo_api_1 flask seeds [--local]
 ```
