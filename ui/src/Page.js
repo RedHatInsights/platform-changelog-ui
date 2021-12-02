@@ -47,7 +47,7 @@ class AppPage extends React.Component {
               <NavItem itemId={2} isActive={activeItem === 2}>
                 Commits 
               </NavItem>
-              <NavItem itemId={3} isActive={activeItem === 2}>
+              <NavItem itemId={3} isActive={activeItem === 3}>
                 Deploys 
               </NavItem>
           </NavList>
