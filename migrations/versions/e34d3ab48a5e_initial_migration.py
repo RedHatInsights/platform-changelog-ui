@@ -35,7 +35,7 @@ def upgrade():
     sa.Column('repo', sa.String(), nullable=False),
     sa.Column('ref', sa.String(), nullable=False),
     sa.Column('title', sa.String(), nullable=False),
-    sa.Column('timestamp', sa.String(), nullable=False),
+    sa.Column('timestamp', sa.DateTime(), nullable=False),
     sa.Column('author', sa.String(), nullable=False),
     sa.Column('message', sa.String(), nullable=True),
     sa.Column('branch', sa.String(), nullable=False),

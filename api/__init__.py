@@ -10,6 +10,6 @@ app.config["SQLALCHEMY_DATABASE_URI"] = app.config.get("DATABASE_URI")
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = app.config.get("DB_TRACK_MODIFICATIONS")
 db = SQLAlchemy(app)
 
-Migrate(app, db)
+Migrate(app, db, compare_type=True)
 
 from api import api, seeds  # noqa: E402,F401
