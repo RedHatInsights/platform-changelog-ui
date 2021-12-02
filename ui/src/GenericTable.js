@@ -15,7 +15,7 @@ class GenericTable extends React.Component {
     this.state = {
       columns: [],
       rows: [],
-      path: props.path,
+      dataPath: props.dataPath,
       title: props.title,
       activeSortIndex: -1,
       activeSortDirection: "none"
@@ -27,7 +27,7 @@ class GenericTable extends React.Component {
   }
 
   getModel() {
-    fetch(this.state.path).then(res => res.json()).then(data => {
+    fetch(this.state.dataPath).then(res => res.json()).then(data => {
       if (data.length > 0) {
         this.setState({
           columns: Object.keys(data[0]),
@@ -36,7 +36,6 @@ class GenericTable extends React.Component {
       }
     });
   }
-
 
   render() {
     const onSort = (event, index, direction) => {
