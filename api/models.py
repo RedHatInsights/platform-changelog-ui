@@ -57,7 +57,7 @@ class Commit(db.Model, Serializer):
     repo = db.Column(db.String(), nullable=False)
     ref = db.Column(db.String(), nullable=False)
     title = db.Column(db.String(), nullable=False)
-    timestamp = db.Column(db.String(), nullable=False)
+    timestamp = db.Column(db.DateTime(), nullable=False)
     author = db.Column(db.String(), nullable=False)
     message = db.Column(db.String())
 
