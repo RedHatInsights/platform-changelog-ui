@@ -47,8 +47,9 @@ def seeds(local):
                         deploy_object = Deploy()
                         for key, value in commit_dict(service_object.gh_repo, service_object.id).items():
                             setattr(commit_object, key, value)
-                        for key, value in deploy_dict(service_object).items():
+                        for key, value in deploy_dict(service_object, commit_object.ref).items():
                             setattr(deploy_object, key, value)
+
                         db.session.add(commit_object)
                         db.session.add(deploy_object)
                         i += 1
@@ -83,12 +84,11 @@ def commit_dict(repo, service_id):
            }
 
 
-def deploy_dict(service_object):
-    ref = generate_commit_hash()
-    image = generate_commit_hash()
+def deploy_dict(service_object, commit_ref):
+    image = commit_ref[:7]
     return {
             "service_id": service_object.id,
-            "ref": ref,
+            "ref": commit_ref,
             "namespace": service_object.namespace,
             "cluster": "Test Cluster",
             "image": image
