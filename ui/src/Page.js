@@ -15,6 +15,7 @@ import AppHeader from "./Header";
 import NavExpandableList from "./Nav";
 import ServiceTable from "./ServiceTable";
 import CommitTable from "./CommitTable";
+import DeployTable from "./DeployTable";
 
 class AppPage extends React.Component {
   constructor(props) {
@@ -45,6 +46,9 @@ class AppPage extends React.Component {
               </NavItem>
               <NavItem itemId={2} isActive={activeItem === 2}>
                 Commits 
+              </NavItem>
+              <NavItem itemId={3} isActive={activeItem === 2}>
+                Deploys 
               </NavItem>
           </NavList>
           </Nav>
@@ -85,10 +89,17 @@ class AppPage extends React.Component {
                 Complete commit logs for managed services
             </Text> 
           </TextContent> : null }
+        {this.state.activeItem === 3 ? <TextContent>
+            <Text component="h1">Deploys</Text>
+            <Text component="p">
+                Complete deployment logs for managed services
+            </Text> 
+          </TextContent> : null }
         </PageSection>
         <PageSection>
           {this.state.activeItem === 0 || this.state.activeItem === 1 ? <ServiceTable/> : null }
           {this.state.activeItem === 0 || this.state.activeItem === 2 ? <CommitTable/> : null }
+          {this.state.activeItem === 0 || this.state.activeItem === 3 ? <DeployTable/> : null }
         </PageSection>
       </Page>
     );
