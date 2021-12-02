@@ -107,11 +107,11 @@ def gitlab_webhook():
 
 @app.route("/services/")
 def get_services():
-    services = Service.query.all()
+    services = Service.query.order_by(Service.name).all()
     return jsonify(Service.serialize_list(services))
 
 
 @app.route("/commits/")
 def get_commits():
-    commits = Commit.query.all()
+    commits = Commit.query.order_by(Commit.timestamp.desc()).all()
     return jsonify(Commit.serialize_list(commits))
