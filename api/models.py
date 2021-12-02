@@ -86,7 +86,7 @@ class Deploy(db.Model, Serializer):
     namespace = db.Column(db.String(), nullable=False)
     cluster = db.Column(db.String(), nullable=False)
     image = db.Column(db.String(), nullable=False)
-    timestamp = db.Column(db.String(), nullable=False)
+    timestamp = db.Column(db.DateTime(), nullable=False)
 
     def to_json(self):
         return dict(ref=self.ref,
