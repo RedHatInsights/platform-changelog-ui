@@ -82,6 +82,7 @@ def commit_dict(repo, service_id):
             "message": "I made changes. Weee!"
            }
 
+
 def deploy_dict(service_object):
     ref = generate_commit_hash()
     image = generate_commit_hash()
