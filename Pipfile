@@ -17,6 +17,7 @@ boto3 = "*"
 logstash-formatter = "*"
 pytz = "*"
 click = "*"
+schema = "*"
 
 [dev-packages]
 flake8 = "*"

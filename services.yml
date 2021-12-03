@@ -1,11 +1,14 @@
+# The services.yml file is used to define services that will be managed by
+# gumbaroo.
+
 services:
   rbac:
     display_name: RBAC
-    gh_repo: https://github.com/RedHatInsights/insights-rbac/
+    gh_repo: https://github.com/RedHatInsights/insights-rbac
     branch: master
     namespace: rbac-prod
   entitlements:
     display_name: Entitlements
-    gh_repo: https://github.com/RedHatInsights/entitlements-api-go/
+    gh_repo: https://github.com/RedHatInsights/entitlements-api-go
     branch: master
     namespace: entitlements-prod
