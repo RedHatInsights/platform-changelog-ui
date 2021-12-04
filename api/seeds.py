@@ -1,7 +1,6 @@
 import yaml
 from api import app, db
 from api.models import *
-from pathlib import Path
 from sqlalchemy.orm.exc import NoResultFound
 
 import string
@@ -25,7 +24,7 @@ def random_timestamp():
 @app.cli.command("seeds")
 @click.option('--local', is_flag=True)
 def seeds(local):
-    path = Path(__file__).parent / "../services.yml"
+    path = app.config.get("SERVICE_CONFIG")
     with path.open() as stream:
         try:
             services_from_file = yaml.safe_load(stream)["services"]
