@@ -12,6 +12,53 @@ def verify_hmac_hash(data, signature):
     return hmac.compare_digest('sha256=' + mac.hexdigest(), str(signature))
 
 
+def groom_webhook(payload, host):
+
+    commits = []
+    if host == "github":
+        service = Service.query.filter_by(gh_repo=payload["repository"]["url"]).first()
+        repo_name = payload["repository"]["name"]
+        payload["commits"].reverse()
+        repo_url = payload["repository"]["url"]
+        timestamp = payload["head_commit"]["timestamp"],
+    else:
+        service = Service.query.filter_by(gl_repo=payload["project"]["web_url"]).first()
+        repo_name = payload["project"]["name"]
+        repo_url = payload["project"]["web_url"]
+        timestamp = payload["commits"][-1]["timestamp"],
+
+    branch = payload["ref"].split("/")[2]
+
+    if not service:
+        return jsonify(msg=f"{repo_name} is not a recognized service")
+
+    if branch != service.branch:
+        return jsonify(msg=f"{branch} is not a monitored branch")
+
+    # commit list is sorted earliest to latest so we want to reverse it before
+    # we insert it into the DB
+    for commit in payload["commits"]:
+        commit_body = commit["message"].splitlines()
+        title = commit_body[0]
+        message = None
+        if len(commit_body) >= 1:
+            message = ('\n').join(commit_body[1].splitlines()[1:]).strip()
+        if host == "github":
+            author = commit["author"]["username"]
+        else:
+            author = commit["author"]["name"]
+        c = Commit(service_id=service.id,
+                          ref=commit["id"],
+                          title=title,
+                          repo=repo_url,
+                          timestamp=timestamp,
+                          author=author,
+                          message=message)
+        commits.append(c)
+
+    return commits
+
+
 @app.route("/status")
 def status():
     return jsonify(status="ok")
@@ -34,32 +81,11 @@ def github_webhook():
             return jsonify(msg="Event from this repo is not a push event")
 
         payload = request.json
-        service = Service.query.filter_by(gh_repo=payload["repository"]["url"]).first()
-        branch = payload["ref"].split("/")[2]
+        commits = groom_webhook(payload, "github")
 
-        if not service:
-            return jsonify(msg=f"{payload['repository']['name']} is not a recognized service")
+        for commit in commits:
+            db.session.add(commit)
 
-        if branch != service.branch:
-            return jsonify(msg=f"{branch} is not a monitored branch")
-
-        # commit list is sorted earliest to latest so we want to reverse it before
-        # we insert it into the DB
-        payload["commits"].reverse()
-        for commit in payload["commits"]:
-            commit_body = commit["message"].splitlines()
-            title = commit_body[0]
-            message = None
-            if len(commit_body) >= 1:
-                message = ('\n').join(commit_body[1].splitlines()[1:]).strip()
-            c = Commit(service_id=service.id,
-                              ref=commit["id"],
-                              title=title,
-                              repo=payload["repository"]["url"],
-                              timestamp=parse(payload["head_commit"]["timestamp"]),
-                              author=commit["author"]["username"],
-                              message=message)
-            db.session.add(c)
         db.session.commit()
         return jsonify(msg=f"commit data inserted for {payload['repository']['name']}: {payload['after']}")
     except Exception as e:
@@ -79,29 +105,11 @@ def gitlab_webhook():
             return jsonify(msg="Event from this repo is not a push event")
 
         payload = request.json
-        service = Service.query.filter_by(gl_repo=payload["project"]["web_url"]).first()
-        branch = payload["ref"].split("/")[2]
+        commits = groom_webhook(payload, "gitlab")
 
-        if not service:
-            return jsonify(msg=f"{payload['project']['name']} is not a recognized service")
+        for commit in commits:
+            db.session.add(commit)
 
-        if branch != service.branch:
-            return jsonify(msg=f"{branch} is not a monitored branch")
-
-        for commit in payload["commits"]:
-            commit_body = commit["message"].splitlines()
-            title = commit_body[0]
-            message = None
-            if len(commit_body) >= 1:
-                message = ('\n').join(commit_body[1].splitlines()[1:]).strip()
-            c = Commit(service_id=service.id,
-                       ref=commit["id"],
-                       title=title,
-                       repo=payload["project"]["web_url"],
-                       timestamp=parse(payload["commits"][-1]["timestamp"]),
-                       author=commit["author"]["name"],
-                       message=message)
-            db.session.add(c)
         db.session.commit()
         return jsonify(msg=f"commit data inserted for {payload['project']['name']}: {payload['after']}")
     except Exception as e:
