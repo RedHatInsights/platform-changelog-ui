@@ -22,10 +22,10 @@ jobs:
             python -m pip install --upgrade pipenv wheel
 
         - id: cache-pipenv
-          uses: actions/cache@v1
+          uses: actions/cache@v2
           with:
             path: ~/.local/share/virtualenvs
-            key: ${{ runner.os }}-pipenv-${{ hashFiles('**/Pipefile.lock') }}
+            key: ${{ runner.os }}-python-${{ steps.setup-python.outputs.python-version }}-pipenv-${{ hashFiles('Pipefile.lock') }}
 
         - name: Install deps
           if: steps.cache-pipenv.outputs.cache-hit != 'true'
