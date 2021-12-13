@@ -1,6 +1,7 @@
 import hmac
 import hashlib
 
+from dateutil.parser import parse
 from api import app, db
 from api.models import *
 from flask import jsonify, request
@@ -22,8 +23,9 @@ def github_webhook():
     data = request.get_data(as_text=True)
 
     try:
-        if not verify_hmac_hash(data, signature):
-            return jsonify(msg="Unable to validate webhook")
+        if not app.config.get("TESTING"):
+            if not verify_hmac_hash(data, signature):
+                return jsonify(msg="Unable to validate webhook")
 
         if request.headers.get("X-Github-Event") == "ping":
             return jsonify(msg="ok")
@@ -54,12 +56,12 @@ def github_webhook():
                               ref=commit["id"],
                               title=title,
                               repo=payload["repository"]["url"],
-                              timestamp=payload["head_commit"]["timestamp"],
+                              timestamp=parse(payload["head_commit"]["timestamp"]),
                               author=commit["author"]["username"],
                               message=message)
             db.session.add(c)
         db.session.commit()
-        return jsonify(msg=f"commit date inserted for {payload['repository']['name']}: {payload['after']}")
+        return jsonify(msg=f"commit data inserted for {payload['repository']['name']}: {payload['after']}")
     except Exception as e:
         return jsonify(msg=f"Webhook failed to process: {e}")
 
@@ -69,8 +71,9 @@ def gitlab_webhook():
     signature = request.headers.get("X-Gitlab-Token")
 
     try:
-        if signature != app.config.get("GITLAB_SECRET"):
-            return jsonify(msg="Unable to validate webhook")
+        if not app.config.get("TESTING"):
+            if signature != app.config.get("GITLAB_SECRET"):
+                return jsonify(msg="Unable to validate webhook")
 
         if request.headers.get("X-Gitlab-Event") != "Push Hook":
             return jsonify(msg="Event from this repo is not a push event")
@@ -95,7 +98,7 @@ def gitlab_webhook():
                        ref=commit["id"],
                        title=title,
                        repo=payload["project"]["web_url"],
-                       timestamp=payload["commits"][-1]["timestamp"],
+                       timestamp=parse(payload["commits"][-1]["timestamp"]),
                        author=commit["author"]["name"],
                        message=message)
             db.session.add(c)

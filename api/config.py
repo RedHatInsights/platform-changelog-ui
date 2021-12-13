@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 from api.logging import get_logger
 
 from app_common_python import isClowderEnabled
@@ -50,6 +51,11 @@ class Config(object):
             self.non_clowder_config()
 
     @property
+    def SERVICE_CONFIG(self):
+        self.service_config = Path(__file__).parent / os.getenv("SERVICE_CONFIG", "../services.yml")
+        return self.service_config
+
+    @property
     def DATABASE_URI(self):
         if os.getenv("DATABASE_URL"):
             self.db_uri = os.getenv("DATABASE_URL")
@@ -57,6 +63,10 @@ class Config(object):
             self._db_ssl_mode = os.getenv("DB_SSL_MODE", "")
             self.db_uri = self._build_db_uri(self._db_ssl_mode)
         return self.db_uri
+
+    @property
+    def TESTING(self):
+        return os.getenv("TESTING", "")
 
     @property
     def GITHUB_SECRET(self):
