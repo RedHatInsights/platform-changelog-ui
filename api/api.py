@@ -1,5 +1,7 @@
 import hmac
 import hashlib
+import pytz
+import datetime
 
 from dateutil.parser import parse
 from api import app, db
@@ -10,6 +12,11 @@ from flask import jsonify, request
 def verify_hmac_hash(data, signature):
     mac = hmac.new(app.config.get("GITHUB_SECRET").encode('utf-8'), data.encode('utf-8'), hashlib.sha256)
     return hmac.compare_digest('sha256=' + mac.hexdigest(), str(signature))
+
+
+def fix_timestamp(time_string):
+    time = datetime.datetime.strptime(time_string, "%Y-%m-%dT%H:%M:%S%z")
+    return time.astimezone(pytz.utc)
 
 
 def groom_webhook(payload, host):
@@ -26,6 +33,8 @@ def groom_webhook(payload, host):
         repo_name = payload["project"]["name"]
         repo_url = payload["project"]["web_url"]
         timestamp = payload["commits"][-1]["timestamp"],
+
+    timestamp = fix_timestamp(timestamp[0])
 
     branch = payload["ref"].split("/")[2]
 
