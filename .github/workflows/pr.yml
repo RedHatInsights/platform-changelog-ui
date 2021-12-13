@@ -39,3 +39,7 @@ jobs:
         - name: Run Schema Check
           run: |
             pipenv run python utils/service_schema_check.py
+
+        - name: Run Pytest
+          run: |
+            SERVICE_CONFIG="../tests/services.yml" TESTING="true" pipenv run pytest -s -v ./tests
