@@ -1,0 +1,27 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+flask = "*"
+gunicorn = "*"
+python-dotenv = "*"
+flask-sqlalchemy = "*"
+psycopg2-binary = "*"
+flask-migrate = "*"
+pyyaml = "*"
+app-common-python = "*"
+watchtower = "*"
+boto3 = "*"
+logstash-formatter = "*"
+pytz = "*"
+click = "*"
+schema = "*"
+
+[dev-packages]
+flake8 = "*"
+pytest = "*"
+
+[requires]
+python_version = "3.9"
