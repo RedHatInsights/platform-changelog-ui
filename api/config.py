@@ -90,5 +90,5 @@ class Config(object):
 
         db_uri = f"postgresql://{db_user}:{db_password}@{self._db_host}:{self._db_port}/{self._db_name}"
         if ssl_mode == self.SSL_VERIFY_FULL:
-            db_uri += f"?sslmode={self._db_ssl_mode}&sslrootcert={self._db_ssl_cer}"
+            db_uri += f"?sslmode={self._db_ssl_mode}&sslrootcert={self._db_ssl_cert}"
         return db_uri
