@@ -1,0 +1,27 @@
+@startuml
+!include <c4/C4_Context.puml>  
+
+title Platform Changelog
+
+System_Ext(github_repo, "Github Repository", "Repositories can send PR information via webhooks")
+System_Ext(gitlab_repo, "Gitlab Repository", "Repositories can send MR information via webhook")
+
+System_Boundary(consoledot, "Console Dot"){
+System_Ext(tekton, "Tekton Pipelines", "Pipelines can notify platform changelog via task definition")
+System_Boundary(platform_changelog, "Platform Changelog") {
+System(platform_changelog_api, "REST API", "Platform changelog receiver for searching timestamped changes across the platform")
+System(platform_changelog_ui, "Frontend UI", "Frontend for the Platform Changelog for searching and displaying change data")
+System(platform_changelog_db, "Changelog DB", "Database for holding changelog data")
+}
+}
+
+Person(user, User, "A person connecting to the changelog for information")
+
+Rel(user, platform_changelog_ui, "Uses")
+Rel(platform_changelog_api, platform_changelog_db, "Stores changelog data")
+Rel(github_repo, platform_changelog_api, "Sends webhook on PR. Requires secret")
+Rel(gitlab_repo, platform_changelog_api, "Sends webhook on MR. Requires secret")
+Rel(tekton, platform_changelog_api, "Sends POST events with required data")
+Rel(platform_changelog_db, platform_changelog_api, "Recieves data from changelog db")
+Rel(platform_changelog_ui, platform_changelog_api, "Retrieves json to display in the UI")
+@enduml
