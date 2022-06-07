@@ -1,12 +1,10 @@
 import React from 'react';
 import GenericTable from './GenericTable';
 
-class DeployTable extends React.Component {
-  render() {
+function DeployTable(dataPath="api/v1/deploys") {
     return (
-      <GenericTable title="Deploys" dataPath="/deploys/" />
+        <GenericTable title="Deploys" dataPath={dataPath}/>
     );
-  }
 }
 
 export default DeployTable;
