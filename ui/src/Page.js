@@ -118,8 +118,8 @@ class AppPage extends React.Component {
           {this.state.activeItem === 0 || this.state.activeItem === 2 ? <CommitTable/> : null }
           {this.state.activeItem === 0 || this.state.activeItem === 3 ? <DeployTable/> : null }
           {this.state.activeItem === -1 && <>
-            <CommitTable dataPath={ "/api/v1/commits/" + this.state.activeService }/>
-            <DeployTable dataPath={ "/api/v1/deploys/" + this.state.activeService }/>
+            <CommitTable dataPath={ `/api/v1/services/${this.state.activeService}?_return=commits` }/>
+            <DeployTable dataPath={ `/api/v1/services/${this.state.activeService}?_return=deploys` }/>
           </>}
         </PageSection>
       </Page>
