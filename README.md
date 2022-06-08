@@ -1,8 +1,25 @@
 # gumbaroo
 Global Platform Commit History Organizer
 
-### Run the app locally:
-First, you'll need to copy `.env.example` to `.env`, which should work as is.
+## Run the app locally:
+The project's backend has been moved to [this repo](https://github.com/RedHatInsights/platform-changelog-go) and rewritten in go.
+
+To run the ui as a container:
+```
+$ cd ui
+$ podman build -t platform-changelog-ui:latest .
+$ podman run -it -p 3000:3000 --name platform-changelog platform-changelog-ui:latest
+```
+
+To remove a previous container:
+```
+$ podman rm platform-changelog
+```
+
+When accessing the api, you may have to change the proxy address in ```ui/package.json``` from ```localhost``` to your IP.
+##
+
+To run the ui with the python project, you'll need to copy `.env.example` to `.env`, which should work as is.
 After doing so, you can run the application with `docker-compose`:
 ```
 $ pipenv shell
@@ -23,7 +40,7 @@ To reset your local database:
 ```
 $ docker-compose down --volumes
 
-### Define a service
+## Define a service
 First, add your service to `services.yml` under `services` with the name of your
 service  as the key.
 
