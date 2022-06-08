@@ -1,9 +1,14 @@
 import React from 'react';
 import GenericTable from './GenericTable';
 
-function CommitTable(dataPath="api/v1/commits") {
+function CommitTable(dataPath) {
     return (
-        <GenericTable title="Commits" dataPath={dataPath}/>
+        <>
+            { dataPath.length > 0
+                ? <GenericTable title="Commits" dataPath={dataPath}/> 
+                : <GenericTable title="Commits" dataPath="/api/v1/commits"/>
+            }
+        </>
     );
 }
 
