@@ -1,14 +1,9 @@
 import React from 'react';
 import GenericTable from './GenericTable';
 
-function DeployTable(dataPath) {
+function DeployTable({dataPath = "/api/v1/deploys"}) {
     return (
-        <>
-            { dataPath.length > 0
-                ? <GenericTable title="Deploys" dataPath={dataPath}/>
-                : <GenericTable title="Deploys" dataPath={"/api/v1/deploys"}/>
-            }
-        </>
+        <GenericTable title="Deploys" dataPath={dataPath}/>
     );
 }
 

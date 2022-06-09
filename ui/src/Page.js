@@ -72,6 +72,9 @@ class AppPage extends React.Component {
       <SkipToContent href={`#${pageId}`}>Skip to Content</SkipToContent>
     );
 
+    /** 
+     * Once the user selects a service, the page will display the commits and deploys for that service
+     */
     return (
       <Page
         header={<AppHeader />}
@@ -118,8 +121,8 @@ class AppPage extends React.Component {
           {this.state.activeItem === 0 || this.state.activeItem === 2 ? <CommitTable/> : null }
           {this.state.activeItem === 0 || this.state.activeItem === 3 ? <DeployTable/> : null }
           {this.state.activeItem === -1 && <>
-            <CommitTable dataPath={ `/api/v1/services/${this.state.activeService}?_return=commits` }/>
-            <DeployTable dataPath={ `/api/v1/services/${this.state.activeService}?_return=deploys` }/>
+            <CommitTable dataPath={ `/api/v1/services/${this.state.activeService}` }/>
+            <DeployTable dataPath={ `/api/v1/services/${this.state.activeService}` }/>
           </>}
         </PageSection>
       </Page>
