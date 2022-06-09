@@ -4,7 +4,7 @@ import GenericTable from './GenericTable';
 class CommitTable extends React.Component {
   render() {
     return (
-      <GenericTable title="Commits" dataPath="/commits/" />
+      <GenericTable title="Commits" dataPath="api/v1/commits" />
     );
   }
 }
