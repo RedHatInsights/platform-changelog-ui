@@ -12,34 +12,8 @@ jobs:
         - name: Check out repository code
           uses: actions/checkout@v2
 
-        - name: Setup Python
-          uses: actions/setup-python@v2
+        - name: run structure tests
+          uses: plexsystems/container-structure-test-action@v0.1.0
           with:
-            python-version: "3.9"
-
-        - name: Install pipenv
-          run: |
-            python -m pip install --upgrade pipenv wheel
-
-        - id: cache-pipenv
-          uses: actions/cache@v2
-          with:
-            path: ~/.local/share/virtualenvs
-            key: ${{ runner.os }}-python-${{ steps.setup-python.outputs.python-version }}-pipenv-${{ hashFiles('Pipefile.lock') }}
-
-        - name: Install deps
-          if: steps.cache-pipenv.outputs.cache-hit != 'true'
-          run: |
-            pipenv install --deploy --dev
-
-        - name: Run Flake8
-          run: |
-            pipenv run flake8
-
-        - name: Run Schema Check
-          run: |
-            pipenv run python utils/service_schema_check.py
-
-        - name: Run Pytest
-          run: |
-            SERVICE_CONFIG="../tests/services.yml" TESTING="true" pipenv run pytest -s -v ./tests
+            image: platform-changelog-ui:latest
+            config: tests.yaml
