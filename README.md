@@ -6,7 +6,6 @@ The project's backend has been moved to [this repo](https://github.com/RedHatIns
 
 To run the ui as a container:
 ```
-$ cd ui
 $ podman build -t platform-changelog-ui:latest .
 $ podman run -it -p 3000:3000 --name platform-changelog platform-changelog-ui:latest
 ```
