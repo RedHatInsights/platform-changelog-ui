@@ -3,7 +3,6 @@
 set -exv
 
 UI_IMAGE="quay.io/cloudservices/platform-changelog-ui"
-API_IMAGE="quay.io/cloudservices/platform-changelog-api"
 IMAGE_TAG=$(git rev-parse --short=7 HEAD)
 
 if [[ -z "$QUAY_USER" || -z "$QUAY_TOKEN" ]]; then
@@ -23,6 +22,3 @@ podman login -u="$QUAY_USER" -p="$QUAY_TOKEN" quay.io
 
 podman build -t "${UI_IMAGE}:${IMAGE_TAG}" ui
 podman push "${UI_IMAGE}:${IMAGE_TAG}"
-
-podman build -t "${API_IMAGE}:${IMAGE_TAG}" api
-podman push "${API_IMAGE}:${IMAGE_TAG}"
