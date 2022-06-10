@@ -9,11 +9,8 @@ jobs:
       runs-on: ubuntu-latest
 
       steps:
-        - name: Check out repository code
+        - name: Checkout Code
           uses: actions/checkout@v2
 
-        - name: run structure tests
-          uses: plexsystems/container-structure-test-action@v0.1.0
-          with:
-            image: platform-changelog-ui:latest
-            config: tests.yaml
+        - name: Perform CodeQL Analysis
+          uses: github/codeql-action/analyze@v1
