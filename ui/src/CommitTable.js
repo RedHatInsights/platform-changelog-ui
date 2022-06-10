@@ -1,12 +1,10 @@
 import React from 'react';
 import GenericTable from './GenericTable';
 
-class CommitTable extends React.Component {
-  render() {
+function CommitTable({dataPath = "/api/v1/commits"}) {
     return (
-      <GenericTable title="Commits" dataPath="api/v1/commits" />
+        <GenericTable title="Commits" dataPath={dataPath} />
     );
-  }
 }
 
 export default CommitTable;
