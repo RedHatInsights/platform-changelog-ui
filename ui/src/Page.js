@@ -89,12 +89,6 @@ class AppPage extends React.Component {
             ? <Service service={this.state.activeService} /> 
             : <>
                 <PageSection variant={PageSectionVariants.light}>
-                {this.state.activeItem === -1 && <TextContent>
-                    <Text component="h1">{this.state.activeService} Details</Text>
-                    <Text component="p">
-                        Most recent commits and deployments for this service.
-                    </Text>
-                </TextContent>}
                 {this.state.activeItem === 0 ? <TextContent>
                     <Text component="h1">Gumbaroo</Text>
                     <Text component="p">
@@ -120,17 +114,21 @@ class AppPage extends React.Component {
                     </Text> 
                 </TextContent> : null }
                 </PageSection>
-                <PageSection>
-                {this.state.activeItem === 0 || this.state.activeItem === 1 ? <ServiceTable onNavChange={this.onNavChange}/> : null }
-                {this.state.activeItem === 0 || this.state.activeItem === 2 ? <CommitTable/> : null }
-                {this.state.activeItem === 0 || this.state.activeItem === 3 ? <DeployTable/> : null }
-                {this.state.activeItem === -1 
-                    && <>
-                        <CommitTable dataPath={ `/api/v1/services/${this.state.activeService}` }/>
-                        <DeployTable dataPath={ `/api/v1/services/${this.state.activeService}` }/>
-                    </>
-                }
-                </PageSection>
+                {this.state.activeItem === 0 || this.state.activeItem === 1 
+                    ? <PageSection>
+                        <ServiceTable onNavChange={this.onNavChange}/>
+                    </PageSection> 
+                    : null }
+                {this.state.activeItem === 0 || this.state.activeItem === 2 
+                    ? <PageSection> 
+                        <CommitTable/> 
+                    </PageSection> 
+                    : null }
+                {this.state.activeItem === 0 || this.state.activeItem === 3 
+                    ? <PageSection> 
+                        <DeployTable/> 
+                    </PageSection>
+                    : null }
             </>}
       </Page>
     );
