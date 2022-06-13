@@ -36,10 +36,9 @@ export default function Service({service}) {
                 </TextContent>
             </PageSection>
             <PageSection>
-                { service.map((item, index) => {
-                    <Text>{item}</Text>
-                })}
                 <CommitTable dataPath={ `/api/v1/services/${service[1]}` }/>
+            </PageSection>
+            <PageSection>
                 <DeployTable dataPath={ `/api/v1/services/${service[1]}` }/>
             </PageSection>
         </>

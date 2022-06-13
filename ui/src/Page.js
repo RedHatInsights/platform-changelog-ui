@@ -77,14 +77,14 @@ class AppPage extends React.Component {
      * Once the user selects a service, the page will display the commits and deploys for that service
      */
     return (
-      <Page
-        header={<AppHeader />}
-        sidebar={Sidebar}
-        isManagedSidebar
-        skipToContent={PageSkipToContent}
-        mainContainerId={pageId}
-        className="myPageClass"
-      >
+        <Page
+            header={<AppHeader />}
+            sidebar={Sidebar}
+            isManagedSidebar
+            skipToContent={PageSkipToContent}
+            mainContainerId={pageId}
+            className="myPageClass"
+        >
         {this.state.activeItem === -1 
             ? <Service service={this.state.activeService} /> 
             : <>
