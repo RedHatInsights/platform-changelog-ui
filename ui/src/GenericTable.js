@@ -97,7 +97,7 @@ class GenericTable extends React.Component {
                 {row.map((cell, cellIndex) => (
                   <Td key={`${rowIndex}_${cellIndex}`} dataLabel={this.state.columns[cellIndex]}>
                     {this.state.link && this.state.columns[cellIndex] === "Name" 
-                      ? <a onClick={() => this.props.onNavChange(-1, cell)}>{cell}</a> : <>{cell}</>}
+                      ? <a onClick={() => this.props.onNavChange(-1, row)}>{cell}</a> : <>{cell}</>}
                   </Td>
                 ))}
               </Tr>
