@@ -31,7 +31,7 @@ export default function Service({service}) {
                         </div>
                     </Text>
                     <Text component="p">
-                        Namespace:{service[6]}
+                        Namespace: {service[6]}
                         <br />
                         Branch: {service[7]}
                     </Text>
