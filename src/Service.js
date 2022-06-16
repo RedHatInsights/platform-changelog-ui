@@ -31,7 +31,9 @@ export default function Service({service}) {
                         </div>
                     </Text>
                     <Text component="p">
-                        Most recent commits and deployments for this service.
+                        Namespace:{service[6]}
+                        <br />
+                        Branch: {service[7]}
                     </Text>
                 </TextContent>
             </PageSection>

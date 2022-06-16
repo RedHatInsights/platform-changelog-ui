@@ -9,7 +9,6 @@ import {
   Caption
 } from '@patternfly/react-table';
 
-
 class GenericTable extends React.Component {
   constructor(props) {
     super(props);
@@ -20,7 +19,9 @@ class GenericTable extends React.Component {
       title: props.title,
       activeSortIndex: -1,
       activeSortDirection: "none",
-      link: props.link
+      link: props.link,
+      cellFunction: props.cellFunction,
+      columnFunction: props.columnFunction
     }
   }
 
@@ -68,11 +69,19 @@ class GenericTable extends React.Component {
 
     return (
       <React.Fragment>
-        <TableComposable variant="compact">
+        <TableComposable>
           <Caption>{this.state.title}</Caption>
           <Thead>
             <Tr>
               {this.state.columns.map((column, columnIndex) => {
+                // formatted column name
+                let col = column;
+                if (this.state.columnFunction) {
+                  col = this.state.columnFunction(column);
+
+                  if (col === null) return null;
+                }
+
                 const sortParams = {
                   sort: {
                     sortBy: {
@@ -83,10 +92,9 @@ class GenericTable extends React.Component {
                     columnIndex
                   }
                 };
+
                 return (
-                  <Th key={columnIndex} {...sortParams}>
-                    {column}
-                  </Th>
+                  <Th key={columnIndex} {...sortParams}>{col}</Th>
                 );
               })}
             </Tr>
@@ -95,10 +103,7 @@ class GenericTable extends React.Component {
             {this.state.rows.map((row, rowIndex) => (
               <Tr key={rowIndex}>
                 {row.map((cell, cellIndex) => (
-                  <Td key={`${rowIndex}_${cellIndex}`} dataLabel={this.state.columns[cellIndex]}>
-                    {this.state.link && this.state.columns[cellIndex] === "Name" 
-                      ? <a onClick={() => this.props.onNavChange(-1, row)}>{cell}</a> : <>{cell}</>}
-                  </Td>
+                  this.state.cellFunction(cell, row, this.state.columns, rowIndex, cellIndex)
                 ))}
               </Tr>
             ))}
