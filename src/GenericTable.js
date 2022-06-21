@@ -85,8 +85,6 @@ class GenericTable extends React.Component {
     };
 
     const displayRow = (row, rowIndex) => {
-      console.log(this.state.page)
-      console.log(this.state.perPage)
       if (rowIndex >= (this.state.page - 1) * this.state.perPage && rowIndex < this.state.page * this.state.perPage) {
         return (
           <Tr key={rowIndex}>
