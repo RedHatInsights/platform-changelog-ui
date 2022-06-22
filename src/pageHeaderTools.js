@@ -54,40 +54,40 @@ class AppPageHeaderTools extends React.Component {
     const { isDropdownOpen, isKebabDropdownOpen } = this.state;
 
     const kebabDropdownItems = [
-      <DropdownItem>
+      <DropdownItem componentID="notifications" key="notif">
         <BellIcon/> Notifications
       </DropdownItem>,
-      <DropdownItem>
+      <DropdownItem componentID="settings" key="settings">
         <CogIcon/> Settings
       </DropdownItem>
     ];
     const userDropdownItems = [
-      <DropdownItem>Link</DropdownItem>,
-      <DropdownItem component="button">Action</DropdownItem>,
-      <DropdownItem isDisabled>Disabled Link</DropdownItem>,
-      <DropdownItem isDisabled component="button">
+      <DropdownItem key="link">Link</DropdownItem>,
+      <DropdownItem component="button" key="action">Action</DropdownItem>,
+      <DropdownItem isDisabled componentID="disabled" key="disabled_link">Disabled Link</DropdownItem>,
+      <DropdownItem isDisabled component="button" componentID="disabledButton" key="disabled_action">
         Disabled Action
       </DropdownItem>,
-      <DropdownSeparator/>,
-      <DropdownItem>Separated Link</DropdownItem>,
-      <DropdownItem component="button">Separated Action</DropdownItem>
+      <DropdownSeparator key="separator"/>,
+      <DropdownItem componentID="sep_link" key="sep_link">Separated Link</DropdownItem>,
+      <DropdownItem component="button" componentID="sep_button" key="sep_act">Separated Action</DropdownItem>
     ];
     return (
       <PageHeaderTools>
         <PageHeaderToolsGroup className={css(accessibleStyles.screenReader, accessibleStyles.visibleOnLg)}>
-          <PageHeaderToolsItem>
+          <PageHeaderToolsItem id="notifications">
             <Button id="simple-example-uid-01" aria-label="Notifications actions" variant={ButtonVariant.plain}>
               <BellIcon/>
             </Button>
           </PageHeaderToolsItem>
-          <PageHeaderToolsItem>
+          <PageHeaderToolsItem id="settings">
             <Button id="simple-example-uid-02" aria-label="Settings actions" variant={ButtonVariant.plain}>
               <CogIcon/>
             </Button>
           </PageHeaderToolsItem>
         </PageHeaderToolsGroup>
         <PageHeaderToolsGroup>
-          <PageHeaderToolsItem className={css(accessibleStyles.hiddenOnLg, spacingStyles.mr_0)}>
+          <PageHeaderToolsItem className={css(accessibleStyles.hiddenOnLg, spacingStyles.mr_0)} id="login">
             <Dropdown
               isPlain
               position="right"
@@ -97,7 +97,7 @@ class AppPageHeaderTools extends React.Component {
               dropdownItems={kebabDropdownItems}
             />
           </PageHeaderToolsItem>
-          <PageHeaderToolsItem className={css(accessibleStyles.screenReader, accessibleStyles.visibleOnMd)}>
+          <PageHeaderToolsItem className={css(accessibleStyles.screenReader, accessibleStyles.visibleOnMd)} id="user">
             <Dropdown
               isPlain
               position="right"
