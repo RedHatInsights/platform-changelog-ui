@@ -6,8 +6,11 @@ import {
   Tr,
   Th,
   Td,
-  Caption
+  Caption,
+  RowSelectVariant
 } from '@patternfly/react-table';
+
+import Pagination from 'Pagination';
 
 class GenericTable extends React.Component {
   constructor(props) {
@@ -21,7 +24,9 @@ class GenericTable extends React.Component {
       activeSortDirection: "none",
       link: props.link,
       cellFunction: props.cellFunction,
-      columnFunction: props.columnFunction
+      columnFunction: props.columnFunction,
+      page: 1,
+      perPage: 10
     }
   }
 
@@ -67,10 +72,37 @@ class GenericTable extends React.Component {
       this.setState({rows: updatedRows});
     };
 
+    const onSetPage = (_event, /** @type {number} */ page) => {
+      this.setState({page: page});
+    };
+  
+    const onPerPageSelect = (_event, /** @type {number} */ perPage) => {
+      if (perPage > this.state.rows.length) {
+        this.setState({page: 1, perPage: perPage});
+      } else {
+        this.setState({perPage: perPage});
+      }
+    };
+
+    const displayRow = (row, rowIndex) => {
+      if (rowIndex >= (this.state.page - 1) * this.state.perPage && rowIndex < this.state.page * this.state.perPage) {
+        return (
+          <Tr key={rowIndex}>
+            {row.map((cell, cellIndex) => (
+              this.state.cellFunction(cell, row, this.state.columns, rowIndex, cellIndex)
+            ))}
+          </Tr>);
+      }
+      return null;
+    }
+
     return (
       <React.Fragment>
         <TableComposable>
-          <Caption>{this.state.title}</Caption>
+          <Caption>
+            {this.state.title}
+            <Pagination page={this.state.page} perPage={this.state.perPage} onSetPage={onSetPage} onPerPageSelect={onPerPageSelect} itemCount={this.state.rows.length} />
+          </Caption>
           <Thead>
             <Tr>
               {this.state.columns.map((column, columnIndex) => {
@@ -101,11 +133,7 @@ class GenericTable extends React.Component {
           </Thead>
           <Tbody>
             {this.state.rows.map((row, rowIndex) => (
-              <Tr key={rowIndex}>
-                {row.map((cell, cellIndex) => (
-                  this.state.cellFunction(cell, row, this.state.columns, rowIndex, cellIndex)
-                ))}
-              </Tr>
+              displayRow(row, rowIndex)
             ))}
           </Tbody>
         </TableComposable>
