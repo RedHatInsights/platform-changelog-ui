@@ -3,6 +3,7 @@ import {
   Brand,
   PageHeader,
 } from '@patternfly/react-core';
+
 import AppPageHeaderTools from './pageHeaderTools';
 
 class AppHeader extends React.Component {
@@ -13,7 +14,7 @@ class AppHeader extends React.Component {
   render() {
     return (
       <PageHeader
-        logo={<Brand src="./images/Masthead.png" alt="Gumbaroo Logo" />}
+        logo={<Brand src="/images/Masthead.png" alt="Gumbaroo" />}
         headerTools={<AppPageHeaderTools />}
         showNavToggle
       />

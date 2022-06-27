@@ -1,10 +1,13 @@
 import React from 'react';
-import GenericTable from './GenericTable';
-import Icon from './Icon';
 
 import {Td} from '@patternfly/react-table';
 
-function ServiceTable({dataPath = "/api/v1/services", onNavChange}) {
+import { NavLink } from 'react-router-dom';
+
+import GenericTable from './GenericTable';
+import { Icon } from 'components';
+
+function ServiceTable({dataPath = "/api/v1/services"}) {
     function FormatColumn(column) {
         if (column === "ID") {
             return null;
@@ -38,7 +41,7 @@ function ServiceTable({dataPath = "/api/v1/services", onNavChange}) {
         let cellContents;
         
         if (column === "DisplayName") {
-            cellContents = <a onClick={() => onNavChange(-1, row)}>{cell}</a>;
+            cellContents = <NavLink to={`/services/${row[1]}`}>{cell}</NavLink>;
         } else if (column === "GHRepo") {
             cellContents = <Icon github link={cell} />;
         } else if (column === "GLRepo") {
@@ -52,9 +55,11 @@ function ServiceTable({dataPath = "/api/v1/services", onNavChange}) {
     }
 
     return (
-        <GenericTable title = "Services"
+        <GenericTable 
+            title = "Services"
             dataPath ={dataPath}
-            link cellFunction={FormatCell} columnFunction={FormatColumn} />
+            link cellFunction={FormatCell}
+            columnFunction={FormatColumn} />
     );
 }
 

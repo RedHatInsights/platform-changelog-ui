@@ -1,4 +1,5 @@
 import React from 'react';
+
 import {
   TableComposable,
   Thead,
@@ -6,11 +7,20 @@ import {
   Tr,
   Th,
   Td,
-  Caption,
-  RowSelectVariant
 } from '@patternfly/react-table';
+import { 
+  PageSection, 
+  Toolbar, 
+  ToolbarContent, 
+  ToolbarItem, 
+  ToolbarItemVariant 
+} from '@patternfly/react-core';
 
-import Pagination from 'Pagination';
+
+import Pagination from './Pagination';
+
+const DESC = 'desc';
+const ASC = 'asc';
 
 class GenericTable extends React.Component {
   constructor(props) {
@@ -21,7 +31,7 @@ class GenericTable extends React.Component {
       dataPath: props.dataPath,
       title: props.title,
       activeSortIndex: -1,
-      activeSortDirection: "none",
+      activeSortDirection: DESC,
       link: props.link,
       cellFunction: props.cellFunction,
       columnFunction: props.columnFunction,
@@ -30,36 +40,62 @@ class GenericTable extends React.Component {
     }
   }
 
+  setModel(data) {
+    if (data.length > 0) {
+      this.setState({
+        columns: Object.keys(data[0]),
+        rows: data.map(d => Object.values(d))
+      });
+    }
+  }
+
   componentDidMount() {
-    this.getModel();
+    if (this.props.data === null || this.props.data === undefined) {
+      this.getModel();
+    }
+    else {
+      if (this.props.data.length > 0) {
+        this.setModel(this.props.data);
+      } else {
+        this.setState({
+          columns: [],
+          rows: []
+        });
+      }
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    if (
+      this.props.data !== undefined
+      && this.props.data !== null 
+      && this.props.data !== prevProps.data
+    ) {
+      this.setModel(this.props.data);
+    }
   }
 
   getModel() {
     fetch(this.state.dataPath).then(res => res.json()).then(data => {
-      if (data.length > 0) {
-        this.setState({
-          columns: Object.keys(data[0]),
-          rows: data.map(d => Object.values(d))
-        });
-      }
+      this.setModel(data);
     });
   }
 
   render() {
-    const onSort = (event, index, direction) => {
+    const onSort = (_event, index, direction) => {
       this.state.activeSortIndex = index;
       this.state.activeSortDirection = direction;
       // sorts the rows
       const updatedRows = this.state.rows.sort((a, b) => {
         if (typeof a[index] === 'number') {
           // numeric sort
-          if (direction === 'asc') {
+          if (direction === ASC) {
             return a[index] - b[index];
           }
           return b[index] - a[index];
         } else {
           // string sort
-          if (direction === 'asc') {
+          if (direction === ASC) {
             if (a[index]) {
               return a[index].localeCompare(b[index]);
             }
@@ -97,12 +133,28 @@ class GenericTable extends React.Component {
     }
 
     return (
-      <React.Fragment>
+      <PageSection>
+        <Toolbar>
+          <ToolbarContent>
+            <ToolbarItem variant={ToolbarItemVariant.label}>
+              {this.state.title}
+            </ToolbarItem>
+            {this.state.rows.length > 0
+              ? <ToolbarItem variant="pagination" alignment={{ default : 'alignRight'}}>
+                  <Pagination 
+                    page={this.state.page}
+                    perPage={this.state.perPage} 
+                    onSetPage={onSetPage} 
+                    onPerPageSelect={onPerPageSelect} 
+                    itemCount={this.state.rows.length} />
+                </ToolbarItem>
+              : <ToolbarItem variant={ToolbarItemVariant.label} alignment={{default : "alignRight"}}>
+                  No rows found
+                </ToolbarItem>
+            }
+          </ToolbarContent>
+        </Toolbar>
         <TableComposable>
-          <Caption>
-            {this.state.title}
-            <Pagination page={this.state.page} perPage={this.state.perPage} onSetPage={onSetPage} onPerPageSelect={onPerPageSelect} itemCount={this.state.rows.length} />
-          </Caption>
           <Thead>
             <Tr>
               {this.state.columns.map((column, columnIndex) => {
@@ -137,7 +189,7 @@ class GenericTable extends React.Component {
             ))}
           </Tbody>
         </TableComposable>
-      </React.Fragment>
+      </PageSection>
     );
   }
 }
