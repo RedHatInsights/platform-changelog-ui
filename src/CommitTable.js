@@ -1,10 +1,14 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import GenericTable from './GenericTable';
 import Moment from 'react-moment';
 
-import {Td} from '@patternfly/react-table';
+import { PageSection, PageSectionVariants } from "@patternfly/react-core";
+import { Td } from '@patternfly/react-table';
 
-function CommitTable({dataPath = "/api/v1/commits"}) {
+/**
+ * Options to pass in the desired data or the data path to the table
+ */
+function CommitTable({data = undefined, dataPath = "/api/v1/commits", gh_url="", gl_url=""}) {
 
     function FormatColumn(column) {
         if (column === "ID") {
@@ -33,20 +37,35 @@ function CommitTable({dataPath = "/api/v1/commits"}) {
         let cellContents;
         
         if (column === "Ref") {
-            cellContents 
-              = <a href={cell}>
-                    <img className="smallIcon centered vertical" src="./images/merge.png" alt="Ref" />
-                </a>;
+            // a link to the commit, so this function needs a service's url
+            // can a project have a GL and a GH repo?
+            const image = <img className="smallIcon centered vertical" src="/images/merge.png" alt="Ref" />
+
+            // example: https://github.com/RedHatInsights/rhsm-subscriptions/commit/{Ref}
+            if (gh_url !== "") {
+                cellContents = <a href={`${gh_url}/commit/${cell}`}>{image}</a>;
+            } 
+            else if (gl_url !== "") { // example: https://gitlab.cee.redhat.com/service/app-interface/-/commit/{Ref}
+                cellContents = <a href={`${gl_url}/-/commit/${cell}`}>{image}</a>; // might want to handle if the url has a / at the end, too.
+            } 
+            else {
+                cellContents = <a href={cell}>{image}</a>;
+            }
+
         } else if (column === "Timestamp") {
             cellContents = <Moment date={cell} />;
-        } else {
+        } 
+        else {
             cellContents = <>{cell}</>;
         }
 
         return TableCell(cellContents, column, rowIndex, cellIndex);
     }
+
     return (
-        <GenericTable title="Commits" dataPath={dataPath} cellFunction={FormatCell} columnFunction={FormatColumn} />
+        <PageSection>
+            <GenericTable title="Commits" data={data} dataPath={dataPath} cellFunction={FormatCell} columnFunction={FormatColumn} />
+        </PageSection>
     );
 }
 

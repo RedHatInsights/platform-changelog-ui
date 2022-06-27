@@ -6,11 +6,11 @@ import {
   Tr,
   Th,
   Td,
-  Caption,
-  RowSelectVariant
+  Caption
 } from '@patternfly/react-table';
 
 import Pagination from 'Pagination';
+import { Text, TextContent, TextVariants, Toolbar, ToolbarContent, ToolbarItem, ToolbarItemVariant } from '@patternfly/react-core';
 
 class GenericTable extends React.Component {
   constructor(props) {
@@ -30,23 +30,49 @@ class GenericTable extends React.Component {
     }
   }
 
+  setModel(data) {
+    if (data.length > 0) {
+      this.setState({
+        columns: Object.keys(data[0]),
+        rows: data.map(d => Object.values(d))
+      });
+    }
+  }
+
   componentDidMount() {
-    this.getModel();
+    if (this.props.data === null || this.props.data === undefined) {
+      this.getModel();
+    }
+    else {
+      if (this.props.data.length > 0) {
+        this.setModel(this.props.data);
+      } else {
+        this.setState({
+          columns: [],
+          rows: []
+        });
+      }
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    if (
+      this.props.data !== undefined
+      && this.props.data !== null 
+      && this.props.data !== prevProps.data
+    ) {
+      this.setModel(this.props.data);
+    }
   }
 
   getModel() {
     fetch(this.state.dataPath).then(res => res.json()).then(data => {
-      if (data.length > 0) {
-        this.setState({
-          columns: Object.keys(data[0]),
-          rows: data.map(d => Object.values(d))
-        });
-      }
+      this.setModel(data);
     });
   }
 
   render() {
-    const onSort = (event, index, direction) => {
+    const onSort = (_event, index, direction) => {
       this.state.activeSortIndex = index;
       this.state.activeSortDirection = direction;
       // sorts the rows
@@ -98,11 +124,27 @@ class GenericTable extends React.Component {
 
     return (
       <React.Fragment>
+        <Toolbar>
+          <ToolbarContent>
+            <ToolbarItem variant={ToolbarItemVariant.label}>
+              {this.state.title}
+            </ToolbarItem>
+            {this.state.rows.length > 0
+              ? <ToolbarItem variant="pagination" alignment={{ default : 'alignRight'}}>
+                  <Pagination 
+                    page={this.state.page} 
+                    perPage={this.state.perPage} 
+                    onSetPage={onSetPage} 
+                    onPerPageSelect={onPerPageSelect} 
+                    itemCount={this.state.rows.length} />
+                </ToolbarItem>
+              : <ToolbarItem variant={ToolbarItemVariant.label} alignment={{default : "alignRight"}}>
+                  No rows found
+                </ToolbarItem>
+            }
+          </ToolbarContent>
+        </Toolbar>
         <TableComposable>
-          <Caption>
-            {this.state.title}
-            <Pagination page={this.state.page} perPage={this.state.perPage} onSetPage={onSetPage} onPerPageSelect={onPerPageSelect} itemCount={this.state.rows.length} />
-          </Caption>
           <Thead>
             <Tr>
               {this.state.columns.map((column, columnIndex) => {

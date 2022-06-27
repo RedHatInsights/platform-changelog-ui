@@ -13,7 +13,7 @@ class AppHeader extends React.Component {
   render() {
     return (
       <PageHeader
-        logo={<Brand src="./images/Masthead.png" alt="Gumbaroo Logo" />}
+        logo={<Brand src="/images/Masthead.png" alt="Gumbaroo" />}
         headerTools={<AppPageHeaderTools />}
         showNavToggle
       />

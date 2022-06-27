@@ -1,48 +1,100 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
-  Nav,
-  NavItem,
-  NavList,
-  Page,
-  PageSection,
-  PageSectionVariants,
-  PageSidebar,
-  SkipToContent,
-  TextContent,
-  Text
+    PageSection,
+    PageSectionVariants,
+    TextContent,
+    Text,
+    TextVariants,
+    TextListVariants,
+    TextListItemVariants,
+    TextListItem,
+    TextList
 } from "@patternfly/react-core";
-import AppHeader from "./Header";
-import NavExpandableList from "./Nav";
-import ServiceTable from "./ServiceTable";
+
 import CommitTable from "./CommitTable";
 import DeployTable from "./DeployTable";
 import Icon from "./Icon";
 
-export default function Service({service}) {
+import { useParams } from "react-router-dom";
+import Moment from 'react-moment';
+
+const NONE_SPECIFIED = "None specified";
+const NONE_FOUND = "None found";
+
+export default function Service() {
+
+    const name = useParams().name;
+
+    const [service, setService] = useState({
+        ID: 0, 
+        Name: "",
+        DisplayName: "",
+        GHRepo: "",
+        GLRepo: "", 
+        DeployFile: "", 
+        Namespace: "",
+        Branch: "",
+        Commits: [],
+        Deploys: []
+    });
+
+    useEffect(() => {
+        fetchService(`/api/v1/services/${name}`);
+    }, []);
+
+    async function fetchService(path) {
+        fetch(path).then(res => res.json()).then(data => {
+            if (data.length > 0) { // Duplicate names, it's possible...
+                setService(data[0]);
+            }
+
+            if (data.Commits === null || data.Commits.length === 0) {
+                data.Commits = [];
+            }
+
+            if (data.Deploys === null || data.Deploys.length === 0) {
+                data.Deploys = [];
+            }
+
+            setService(data);
+        });
+        // .catch(err => console.log(err)); // should do something with the error
+    }
+
     return (
         <>
             <PageSection variant={PageSectionVariants.light}>
                 <TextContent>
                     <Text className="fullWidth" component="h1">
-                        {service[2]}
+                        {service.DisplayName}
                         <div className="right">
-                            {service[3] && <Icon github link={service[3]} />}
-                            {service[4] && <Icon gitlab link={service[4]} />}
+                            {service.GHRepo && <Icon github link={service.GHRepo} />}
+                            {service.GLRepo && <Icon gitlab link={service.GLRepo} />}
                         </div>
                     </Text>
-                    <Text component="p">
-                        Namespace: {service[6]}
-                        <br />
-                        Branch: {service[7]}
-                    </Text>
+                    <TextList component={TextListVariants.dl}>
+                        <TextListItem component={TextListItemVariants.dt}>Namespace</TextListItem>
+                        <TextListItem component={TextListItemVariants.dd}>{service.Namespace ? service.Namespace : NONE_SPECIFIED}</TextListItem>
+
+                        <TextListItem component={TextListItemVariants.dt}>Branch</TextListItem>
+                        <TextListItem component={TextListItemVariants.dd}>{service.Branch ? service.Branch : NONE_SPECIFIED}</TextListItem>
+                        
+                        <TextListItem component={TextListItemVariants.dt}>Lastest Commit</TextListItem>
+                        <TextListItem component={TextListItemVariants.dd}> {/** Assuming they will be sorted by date */}
+                            {service.Commits.length > 0 ? <Moment date={service.Commits[0].Timestamp} /> : NONE_FOUND}
+                        </TextListItem>
+                        
+                        <TextListItem component={TextListItemVariants.dt}>Lastest Deployment</TextListItem>
+                        <TextListItem component={TextListItemVariants.dd}> {/** Assuming they will be sorted by date */}
+                            {service.Deploys.length > 0 ? <Moment date={service.Deploys[0].Timestamp} /> : NONE_FOUND}
+                        </TextListItem>
+                    </TextList>
                 </TextContent>
             </PageSection>
-            <PageSection>
-                <CommitTable dataPath={ `/api/v1/services/${service[1]}` }/>
-            </PageSection>
-            <PageSection>
-                <DeployTable dataPath={ `/api/v1/services/${service[1]}` }/>
-            </PageSection>
+
+            {/** Keys added to update the children with the new props */}
+            <CommitTable data={service.Commits} gh_url={service.GHRepo} gl_url={service.GLRepo} key={service.ID} />
+            <DeployTable data={service.Deploys} key={service.Name} />
         </>
     );
 }

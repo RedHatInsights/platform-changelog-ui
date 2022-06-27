@@ -12,65 +12,43 @@ import {
   Text
 } from "@patternfly/react-core";
 import AppHeader from "./Header";
-import NavExpandableList from "./Nav";
-import ServiceTable from "./ServiceTable";
-import CommitTable from "./CommitTable";
-import DeployTable from "./DeployTable";
+
+import {Routes, Route, useLocation} from "react-router-dom";
+
+import Home from "Home";
 import Service from "./Service";
+import Services from "Services";
+import Commits from "Commits";
+import Deploys from "Deploys";
 
-class AppPage extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      activeItem: 0,
-      onNavChange: this.onNavChange.bind(this),
-      activeService: null
-    };
-  }
 
-  onNavSelect = result => {
-    this.setState({
-      activeItem: result.itemId,
-      activeService: null
-    });
-  };
+function AppPage() {
 
-  /** Added for changes triggered by non NavItem element */
-  onNavChange = (itemId, service) => {
-    this.setState({
-      activeItem: itemId,
-      activeService: service
-    });
-  }
+    const active = useLocation().pathname;
 
-  render() {
-      const {activeItem} = this.state;
-      const {children} = this.props;
-
-      const PageNav = (
-          <Nav onSelect={this.onNavSelect} aria-label="Nav">
-            <NavList>
-              <NavItem itemId={0} isActive={activeItem === 0}>
-                Home 
-              </NavItem>
-              <NavItem itemId={1} isActive={activeItem === 1}>
+    const PageNav = (
+        <Nav aria-label="Nav">
+          <NavList>
+            <NavItem itemId={0} isActive={active === "/"} to="/">
+                Home
+            </NavItem>
+            <NavItem itemId={1} isActive={active === "/services"} to="/services">
                 Services
-              </NavItem>
-              <NavItem itemId={2} isActive={activeItem === 2}>
+            </NavItem>
+            <NavItem itemId={2} isActive={active === "/commits"} to="/commits">
                 Commits 
-              </NavItem>
-              <NavItem itemId={3} isActive={activeItem === 3}>
+            </NavItem>
+            <NavItem itemId={3} isActive={active === "/deploys"} to="/deploys">
                 Deploys 
-              </NavItem>
-          </NavList>
-          </Nav>
-      );
-
+            </NavItem>
+        </NavList>
+        </Nav>
+    );
 
     const Sidebar = <PageSidebar nav={PageNav} />;
     const pageId = "main-content-page-layout-simple-nav";
     const PageSkipToContent = (
-      <SkipToContent href={`#${pageId}`}>Skip to Content</SkipToContent>
+        <SkipToContent href={`#${pageId}`}>Skip to Content</SkipToContent>
     );
 
     /** 
@@ -85,54 +63,15 @@ class AppPage extends React.Component {
             mainContainerId={pageId}
             className="myPageClass"
         >
-        {this.state.activeItem === -1 
-            ? <Service service={this.state.activeService} /> 
-            : <>
-                <PageSection variant={PageSectionVariants.light}>
-                {this.state.activeItem === 0 ? <TextContent>
-                    <Text component="h1">Gumbaroo</Text>
-                    <Text component="p">
-                    Global Changelog System for Console Dot Platform
-                    </Text> 
-                </TextContent> : null }
-                {this.state.activeItem === 1 ? <TextContent>
-                    <Text component="h1">Services</Text>
-                    <Text component="p">
-                        Managed services monitored by Gumbaroo
-                    </Text> 
-                </TextContent> : null }
-                {this.state.activeItem === 2 ? <TextContent>
-                    <Text component="h1">Commits</Text>
-                    <Text component="p">
-                        Complete commit logs for managed services
-                    </Text> 
-                </TextContent> : null }
-                {this.state.activeItem === 3 ? <TextContent>
-                    <Text component="h1">Deploys</Text>
-                    <Text component="p">
-                        Complete deployment logs for managed services
-                    </Text> 
-                </TextContent> : null }
-                </PageSection>
-                {this.state.activeItem === 0 || this.state.activeItem === 1 
-                    ? <PageSection>
-                        <ServiceTable onNavChange={this.onNavChange}/>
-                    </PageSection> 
-                    : null }
-                {this.state.activeItem === 0 || this.state.activeItem === 2 
-                    ? <PageSection> 
-                        <CommitTable/> 
-                    </PageSection> 
-                    : null }
-                {this.state.activeItem === 0 || this.state.activeItem === 3 
-                    ? <PageSection> 
-                        <DeployTable/> 
-                    </PageSection>
-                    : null }
-            </>}
-      </Page>
+            <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/services" element={<Services />} />
+                <Route path="/commits" element={<Commits />} />
+                <Route path="/deploys" element={<Deploys />} />
+                <Route path="/services/:name" element={<Service />} />
+            </Routes>
+        </Page>
     );
-  }
 }
 
 export default AppPage;

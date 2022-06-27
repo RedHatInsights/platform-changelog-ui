@@ -1,9 +1,13 @@
 import React from 'react';
 import GenericTable from './GenericTable';
 
-function DeployTable({dataPath = "/api/v1/deploys"}) {
+import { PageSection } from "@patternfly/react-core";
+
+function DeployTable({data=null, dataPath = "/api/v1/deploys"}) {
     return (
-        <GenericTable title="Deploys" dataPath={dataPath}/>
+        <PageSection>
+            <GenericTable title="Deploys" data={data} dataPath={dataPath}/>
+        </PageSection>
     );
 }
 

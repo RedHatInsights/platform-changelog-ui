@@ -1,16 +1,16 @@
 import React from 'react';
 import '@patternfly/react-core/dist/styles/base.css';
-import AppPage from './Page';
+import Page from './Page';
 
 class App extends React.Component {
     constructor(props) {
         super(props);
     }
 
-    render() { 
+    render() {
       return (
         <React.Fragment>
-            <AppPage />
+            <Page />
         </React.Fragment>
       );
   }
