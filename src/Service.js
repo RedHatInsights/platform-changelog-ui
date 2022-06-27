@@ -47,18 +47,15 @@ export default function Service() {
             if (data.length > 0) { // Duplicate names, it's possible...
                 setService(data[0]);
             }
-
             if (data.Commits === null || data.Commits.length === 0) {
                 data.Commits = [];
             }
-
             if (data.Deploys === null || data.Deploys.length === 0) {
                 data.Deploys = [];
             }
 
             setService(data);
-        });
-        // .catch(err => console.log(err)); // should do something with the error
+        }).catch(); // should do something with the error
     }
 
     return (
@@ -72,6 +69,12 @@ export default function Service() {
                             {service.GLRepo && <Icon gitlab link={service.GLRepo} />}
                         </div>
                     </Text>
+                </TextContent>
+            </PageSection>
+
+            {/** Displays much of the service's metadata */}
+            <PageSection variant={PageSectionVariants.light}>
+                <TextContent>
                     <TextList component={TextListVariants.dl}>
                         <TextListItem component={TextListItemVariants.dt}>Namespace</TextListItem>
                         <TextListItem component={TextListItemVariants.dd}>{service.Namespace ? service.Namespace : NONE_SPECIFIED}</TextListItem>

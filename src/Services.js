@@ -8,20 +8,12 @@ import {
   } from "@patternfly/react-core";
 
 import ServiceTable from 'ServiceTable';
+import TitleSection from 'TitleSection';
 
 export default function Services() {
     return (
         <>
-            <PageSection variant={PageSectionVariants.light} >
-                <TextContent>
-                    <Text component="h1">
-                        Services
-                    </Text>
-                    <Text component="p">
-                        Managed services monitored by Gumbaroo
-                    </Text> 
-                </TextContent>
-            </PageSection>
+            <TitleSection title="Services" description="Managed services monitored by Gumbaroo." />
 
             <ServiceTable />
         </>

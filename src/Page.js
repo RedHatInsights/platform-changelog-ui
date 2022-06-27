@@ -4,23 +4,19 @@ import {
   NavItem,
   NavList,
   Page,
-  PageSection,
-  PageSectionVariants,
   PageSidebar,
   SkipToContent,
-  TextContent,
-  Text
 } from "@patternfly/react-core";
 import AppHeader from "./Header";
 
-import {Routes, Route, useLocation} from "react-router-dom";
+import {Routes, Route, useLocation, Link} from "react-router-dom";
 
 import Home from "Home";
 import Service from "./Service";
 import Services from "Services";
 import Commits from "Commits";
 import Deploys from "Deploys";
-
+import Error from "Error";
 
 function AppPage() {
 
@@ -28,20 +24,20 @@ function AppPage() {
 
     const PageNav = (
         <Nav aria-label="Nav">
-          <NavList>
-            <NavItem itemId={0} isActive={active === "/"} to="/">
-                Home
-            </NavItem>
-            <NavItem itemId={1} isActive={active === "/services"} to="/services">
-                Services
-            </NavItem>
-            <NavItem itemId={2} isActive={active === "/commits"} to="/commits">
-                Commits 
-            </NavItem>
-            <NavItem itemId={3} isActive={active === "/deploys"} to="/deploys">
-                Deploys 
-            </NavItem>
-        </NavList>
+            <NavList>
+                <NavItem itemId={0} isActive={active === "/"}>
+                    <Link to="/">Home</Link>
+                </NavItem>
+                <NavItem itemId={1} isActive={active === "/services"}>
+                    <Link to="/services">Services</Link>
+                </NavItem>
+                <NavItem itemId={2} isActive={active === "/commits"}>
+                    <Link to="/commits">Commits</Link>
+                </NavItem>
+                <NavItem itemId={3} isActive={active === "/deploys"}>
+                    <Link to="/deploys">Deploys</Link>
+                </NavItem>
+            </NavList>
         </Nav>
     );
 
@@ -51,9 +47,6 @@ function AppPage() {
         <SkipToContent href={`#${pageId}`}>Skip to Content</SkipToContent>
     );
 
-    /** 
-     * Once the user selects a service, the page will display the commits and deploys for that service
-     */
     return (
         <Page
             header={<AppHeader />}
@@ -64,6 +57,8 @@ function AppPage() {
             className="myPageClass"
         >
             <Routes>
+                <Route path="*" element={<Error error="Page not found"/>} />
+
                 <Route path="/" element={<Home />} />
                 <Route path="/services" element={<Services />} />
                 <Route path="/commits" element={<Commits />} />

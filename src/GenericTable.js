@@ -10,7 +10,16 @@ import {
 } from '@patternfly/react-table';
 
 import Pagination from 'Pagination';
-import { Text, TextContent, TextVariants, Toolbar, ToolbarContent, ToolbarItem, ToolbarItemVariant } from '@patternfly/react-core';
+import { 
+  PageSection, 
+  Toolbar, 
+  ToolbarContent, 
+  ToolbarItem, 
+  ToolbarItemVariant 
+} from '@patternfly/react-core';
+
+const DESC = 'desc';
+const ASC = 'asc';
 
 class GenericTable extends React.Component {
   constructor(props) {
@@ -21,7 +30,7 @@ class GenericTable extends React.Component {
       dataPath: props.dataPath,
       title: props.title,
       activeSortIndex: -1,
-      activeSortDirection: "none",
+      activeSortDirection: DESC,
       link: props.link,
       cellFunction: props.cellFunction,
       columnFunction: props.columnFunction,
@@ -79,13 +88,13 @@ class GenericTable extends React.Component {
       const updatedRows = this.state.rows.sort((a, b) => {
         if (typeof a[index] === 'number') {
           // numeric sort
-          if (direction === 'asc') {
+          if (direction === ASC) {
             return a[index] - b[index];
           }
           return b[index] - a[index];
         } else {
           // string sort
-          if (direction === 'asc') {
+          if (direction === ASC) {
             if (a[index]) {
               return a[index].localeCompare(b[index]);
             }
@@ -123,7 +132,7 @@ class GenericTable extends React.Component {
     }
 
     return (
-      <React.Fragment>
+      <PageSection>
         <Toolbar>
           <ToolbarContent>
             <ToolbarItem variant={ToolbarItemVariant.label}>
@@ -132,7 +141,7 @@ class GenericTable extends React.Component {
             {this.state.rows.length > 0
               ? <ToolbarItem variant="pagination" alignment={{ default : 'alignRight'}}>
                   <Pagination 
-                    page={this.state.page} 
+                    page={this.state.page}
                     perPage={this.state.perPage} 
                     onSetPage={onSetPage} 
                     onPerPageSelect={onPerPageSelect} 
@@ -179,7 +188,7 @@ class GenericTable extends React.Component {
             ))}
           </Tbody>
         </TableComposable>
-      </React.Fragment>
+      </PageSection>
     );
   }
 }

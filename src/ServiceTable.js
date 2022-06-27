@@ -2,7 +2,6 @@ import React from 'react';
 import GenericTable from './GenericTable';
 import Icon from './Icon';
 
-import { PageSection, PageSectionVariants } from "@patternfly/react-core";
 import {Td} from '@patternfly/react-table';
 
 import { NavLink } from 'react-router-dom';
@@ -55,13 +54,11 @@ function ServiceTable({dataPath = "/api/v1/services"}) {
     }
 
     return (
-        <PageSection>
-            <GenericTable 
-                title = "Services"
-                dataPath ={dataPath}
-                link cellFunction={FormatCell}
-                columnFunction={FormatColumn} />
-        </PageSection>
+        <GenericTable 
+            title = "Services"
+            dataPath ={dataPath}
+            link cellFunction={FormatCell}
+            columnFunction={FormatColumn} />
     );
 }
 

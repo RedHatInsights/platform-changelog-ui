@@ -1,29 +1,14 @@
 import React from 'react';
 
-import {
-    PageSection,
-    PageSectionVariants,
-    TextContent,
-    Text
-} from "@patternfly/react-core";
-
 import CommitTable from 'CommitTable';
 import DeployTable from 'DeployTable';
 import ServiceTable from 'ServiceTable';
+import TitleSection from 'TitleSection';
 
 export default function Home() {
     return (
         <>
-            <PageSection variant={PageSectionVariants.light}>
-                <TextContent>
-                    <Text component="h1">
-                        Gumbaroo
-                    </Text>
-                    <Text component="p">
-                        Global Changelog System for Console Dot Platform
-                    </Text> 
-                </TextContent>
-            </PageSection>
+            <TitleSection title="Gumbaroo" description="Global Changelog System for Console Dot Platform" />
 
             <ServiceTable />
             <CommitTable />

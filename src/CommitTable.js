@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import GenericTable from './GenericTable';
 import Moment from 'react-moment';
 
-import { PageSection, PageSectionVariants } from "@patternfly/react-core";
 import { Td } from '@patternfly/react-table';
 
 /**
@@ -63,9 +62,7 @@ function CommitTable({data = undefined, dataPath = "/api/v1/commits", gh_url="",
     }
 
     return (
-        <PageSection>
-            <GenericTable title="Commits" data={data} dataPath={dataPath} cellFunction={FormatCell} columnFunction={FormatColumn} />
-        </PageSection>
+        <GenericTable title="Commits" data={data} dataPath={dataPath} cellFunction={FormatCell} columnFunction={FormatColumn} />
     );
 }
 
