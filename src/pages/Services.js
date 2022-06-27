@@ -1,14 +1,10 @@
 import React from 'react';
 
 import {
-    PageSection,
-    PageSectionVariants,
-    TextContent,
-    Text
-  } from "@patternfly/react-core";
+    TitleSection,
+} from 'components';
 
-import ServiceTable from 'ServiceTable';
-import TitleSection from 'TitleSection';
+import { ServiceTable } from 'components/tables';
 
 export default function Services() {
     return (

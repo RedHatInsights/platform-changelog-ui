@@ -1,8 +1,10 @@
 import React, { useEffect } from 'react';
-import GenericTable from './GenericTable';
+
 import Moment from 'react-moment';
 
 import { Td } from '@patternfly/react-table';
+
+import GenericTable from './GenericTable';
 
 /**
  * Options to pass in the desired data or the data path to the table

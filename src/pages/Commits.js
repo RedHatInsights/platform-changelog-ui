@@ -1,7 +1,10 @@
-import CommitTable from 'CommitTable';
 import React from 'react';
 
-import TitleSection from 'TitleSection';
+import {
+    TitleSection,
+} from 'components';
+
+import { CommitTable } from 'components/tables';
 
 export default function Commits() {
     return (

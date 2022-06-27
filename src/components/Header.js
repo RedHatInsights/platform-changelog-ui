@@ -3,6 +3,7 @@ import {
   Brand,
   PageHeader,
 } from '@patternfly/react-core';
+
 import AppPageHeaderTools from './pageHeaderTools';
 
 class AppHeader extends React.Component {

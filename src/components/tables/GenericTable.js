@@ -1,4 +1,5 @@
 import React from 'react';
+
 import {
   TableComposable,
   Thead,
@@ -6,10 +7,7 @@ import {
   Tr,
   Th,
   Td,
-  Caption
 } from '@patternfly/react-table';
-
-import Pagination from 'Pagination';
 import { 
   PageSection, 
   Toolbar, 
@@ -17,6 +15,9 @@ import {
   ToolbarItem, 
   ToolbarItemVariant 
 } from '@patternfly/react-core';
+
+
+import Pagination from './Pagination';
 
 const DESC = 'desc';
 const ASC = 'asc';

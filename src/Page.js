@@ -7,16 +7,19 @@ import {
   PageSidebar,
   SkipToContent,
 } from "@patternfly/react-core";
-import AppHeader from "./Header";
 
 import {Routes, Route, useLocation, Link} from "react-router-dom";
 
-import Home from "Home";
-import Service from "./Service";
-import Services from "Services";
-import Commits from "Commits";
-import Deploys from "Deploys";
-import Error from "Error";
+import { AppHeader }  from "components";
+
+import {
+    Home,
+    Services,
+    Commits,
+    Deploys,
+    Service,
+    Error,
+} from "pages";
 
 function AppPage() {
 

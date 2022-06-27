@@ -1,7 +1,10 @@
-import DeployTable from 'DeployTable';
 import React from 'react';
 
-import TitleSection from 'TitleSection';
+import {
+    TitleSection,
+} from 'components';
+
+import { DeployTable } from 'components/tables';
 
 export default function Deploys() {
     return (

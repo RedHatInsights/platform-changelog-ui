@@ -1,9 +1,14 @@
 import React from 'react';
 
-import CommitTable from 'CommitTable';
-import DeployTable from 'DeployTable';
-import ServiceTable from 'ServiceTable';
-import TitleSection from 'TitleSection';
+import {
+    TitleSection,
+} from 'components';
+
+import {
+    CommitTable,
+    DeployTable,
+    ServiceTable,
+} from 'components/tables';
 
 export default function Home() {
     return (

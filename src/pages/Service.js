@@ -11,12 +11,17 @@ import {
     TextList
 } from "@patternfly/react-core";
 
-import CommitTable from "./CommitTable";
-import DeployTable from "./DeployTable";
-import Icon from "./Icon";
-
 import { useParams } from "react-router-dom";
 import Moment from 'react-moment';
+
+import {
+    Icon,
+} from 'components';
+
+import {
+    CommitTable,
+    DeployTable,
+} from 'components/tables';
 
 const NONE_SPECIFIED = "None specified";
 const NONE_FOUND = "None found";

@@ -1,10 +1,11 @@
 import React from 'react';
-import GenericTable from './GenericTable';
-import Icon from './Icon';
 
 import {Td} from '@patternfly/react-table';
 
 import { NavLink } from 'react-router-dom';
+
+import GenericTable from './GenericTable';
+import { Icon } from 'components';
 
 function ServiceTable({dataPath = "/api/v1/services"}) {
     function FormatColumn(column) {
