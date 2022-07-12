@@ -6,8 +6,8 @@ import {
   Tbody,
   Tr,
   Th,
-  Td,
 } from '@patternfly/react-table';
+
 import { 
   PageSection, 
   Toolbar, 
@@ -16,8 +16,8 @@ import {
   ToolbarItemVariant 
 } from '@patternfly/react-core';
 
-
 import Pagination from './Pagination';
+import CommitRow from './rows/CommitRow';
 
 const DESC = 'desc';
 const ASC = 'asc';
@@ -36,7 +36,8 @@ class GenericTable extends React.Component {
       cellFunction: props.cellFunction,
       columnFunction: props.columnFunction,
       page: 1,
-      perPage: 10
+      perPage: 10,
+      loading: false
     }
   }
 
@@ -44,7 +45,8 @@ class GenericTable extends React.Component {
     if (data.length > 0) {
       this.setState({
         columns: Object.keys(data[0]),
-        rows: data.map(d => Object.values(d))
+        rows: data.map(d => Object.values(d)),
+        loading: false
       });
     }
   }
@@ -122,16 +124,14 @@ class GenericTable extends React.Component {
 
     const displayRow = (row, rowIndex) => {
       if (rowIndex >= (this.state.page - 1) * this.state.perPage && rowIndex < this.state.page * this.state.perPage) {
-        return (
-          <Tr key={rowIndex}>
-            {row.map((cell, cellIndex) => (
-              this.state.cellFunction(cell, row, this.state.columns, rowIndex, cellIndex)
-            ))}
-          </Tr>);
+        return <CommitRow key={`${rowIndex}`} row={row} columns={this.state.columns} rowIndex={rowIndex} />;
       }
       return null;
     }
 
+    if (this.props.loading === true) {
+      return <div>Loading...</div>;
+    }
     return (
       <PageSection>
         <Toolbar>
@@ -183,11 +183,9 @@ class GenericTable extends React.Component {
               })}
             </Tr>
           </Thead>
-          <Tbody>
             {this.state.rows.map((row, rowIndex) => (
               displayRow(row, rowIndex)
             ))}
-          </Tbody>
         </TableComposable>
       </PageSection>
     );
