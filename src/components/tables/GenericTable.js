@@ -114,7 +114,6 @@ function GenericTable({title = "", dataPath = "", provideData = null, link = "",
             delete newExpandedCells[rowIndex];
         }
 
-        console.log(newExpandedCells[rowIndex]);
         setExpandedCells(newExpandedCells);
     };
 
@@ -193,7 +192,9 @@ function GenericTable({title = "", dataPath = "", provideData = null, link = "",
                                 <Tr key={`${rowIndex}_expanded`} isExpanded={true}>
                                     <Td key={`${expandedCells[rowIndex]}_expanded`} dataLabel={columns[expandedCells[rowIndex]]} colSpan={columns.length}>
                                         <ExpandableRowContent>
-                                            {row[expandedCells[rowIndex]]}
+                                            {columns[expandedCells[rowIndex]] === "Commits" 
+                                                ? <CommitExpandable commit={row[expandedCells[rowIndex]][0]}/>
+                                                : row[expandedCells[rowIndex]]}
                                         </ExpandableRowContent>
                                     </Td>
                                 </Tr> : null
@@ -203,6 +204,17 @@ function GenericTable({title = "", dataPath = "", provideData = null, link = "",
                 )}
             </TableComposable>
         </PageSection>
+    );
+}
+
+function CommitExpandable({commit}) {
+
+    return (
+        <div key={`${commit.ID}_expanded`}>
+            <div>{commit.Message}</div>
+            <div>{commit.Ref}</div>
+            <div>{commit.Author}</div>
+        </div>
     );
 }
 
