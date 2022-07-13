@@ -2,10 +2,11 @@ import React from 'react';
 
 import {Td} from '@patternfly/react-table';
 
+import { GithubIcon, GitlabIcon } from '@patternfly/react-icons';
+
 import { NavLink } from 'react-router-dom';
 
 import GenericTable from './GenericTable';
-import { Icon } from 'components';
 
 function ServiceTable({dataPath = "/api/v1/services"}) {
     function FormatColumn(column) {
@@ -25,11 +26,6 @@ function ServiceTable({dataPath = "/api/v1/services"}) {
         return column;
     }
 
-    // just adds the Td element around the content
-    function TableCell(contents, column, rowIndex, cellIndex) {
-        return <Td key={`${rowIndex}_${cellIndex}`} dataLabel={column}>{contents}</Td>
-    }
-
     function FormatCell(cell, row, columns, rowIndex, cellIndex) {
         const column = columns[cellIndex];
     
@@ -39,26 +35,33 @@ function ServiceTable({dataPath = "/api/v1/services"}) {
         } 
 
         let cellContents;
+        let width = 0; // percentage modifier for the cell width
         
         if (column === "DisplayName") {
             cellContents = <NavLink to={`/services/${row[1]}`}>{cell}</NavLink>;
-        } else if (column === "GHRepo") {
-            cellContents = <Icon github link={cell} />;
-        } else if (column === "GLRepo") {
-            cellContents = <Icon gitlab link={cell} />;
+        } else if (column === "GHRepo" && cell !== "") {
+            width = 10;
+            cellContents =  <a href={cell} target="_blank" rel="noreferrer">
+                                <GithubIcon key="icon" />
+                            </a>;
+        } else if (column === "GLRepo" && cell !== "") {
+            width = 10;
+            cellContents = <a href={cell} target="_blank" rel="noreferrer">
+                                <GitlabIcon key="icon" />
+                            </a>;
         } else if (column === "MergedBy") {
             cellContents = <>Merged By</>;
         } else {
             cellContents = <>{cell}</>;
         }
-        return TableCell(cellContents, column, rowIndex, cellIndex);
+        return <Td key={`${rowIndex}_${cellIndex}`} dataLabel={column} width={10}>{cellContents}</Td>
     }
 
     return (
         <GenericTable 
             title = "Services"
             dataPath ={dataPath}
-            link cellFunction={FormatCell}
+            cellFunction={FormatCell}
             columnFunction={FormatColumn} />
     );
 }

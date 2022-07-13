@@ -3,7 +3,7 @@ import GenericTable from './GenericTable';
 
 function DeployTable({data=null, dataPath = "/api/v1/deploys"}) {
     return (
-        <GenericTable title="Deploys" data={data} dataPath={dataPath}/>
+        <GenericTable title="Deploys" provideData={data} dataPath={dataPath}/>
     );
 }
 

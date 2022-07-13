@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+
 import {
     PageSection,
     PageSectionVariants,
@@ -10,13 +11,10 @@ import {
     TextListItem,
     TextList
 } from "@patternfly/react-core";
+import { GithubIcon, GitlabIcon } from '@patternfly/react-icons';
 
 import { useParams } from "react-router-dom";
 import Moment from 'react-moment';
-
-import {
-    Icon,
-} from 'components';
 
 import {
     CommitTable,
@@ -70,8 +68,8 @@ export default function Service() {
                     <Text className="fullWidth" component="h1">
                         {service.DisplayName}
                         <div className="right">
-                            {service.GHRepo && <Icon github link={service.GHRepo} />}
-                            {service.GLRepo && <Icon gitlab link={service.GLRepo} />}
+                            {service.GHRepo && <a href={service.GHRepo} target="_blank" rel="noreferrer"><GithubIcon /></a>}
+                            {service.GLRepo && <a href={service.GLRepo} target="_blank" rel="noreferrer"><GitlabIcon /></a>}
                         </div>
                     </Text>
                 </TextContent>

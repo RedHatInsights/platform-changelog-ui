@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import {
+  ExpandableRowContent,
   TableComposable,
   Thead,
   Tbody,
   Tr,
   Th,
+  Td,
 } from '@patternfly/react-table';
 
 import { 
@@ -17,179 +19,191 @@ import {
 } from '@patternfly/react-core';
 
 import Pagination from './Pagination';
-import CommitRow from './rows/CommitRow';
 
 const DESC = 'desc';
 const ASC = 'asc';
 
-class GenericTable extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      columns: [],
-      rows: [],
-      dataPath: props.dataPath,
-      title: props.title,
-      activeSortIndex: -1,
-      activeSortDirection: DESC,
-      link: props.link,
-      cellFunction: props.cellFunction,
-      columnFunction: props.columnFunction,
-      page: 1,
-      perPage: 10,
-      loading: false
-    }
-  }
+function GenericTable({title = "", dataPath = "", provideData = null, link = "", cellFunction = null, columnFunction = null}) {
+    const [ data, setData ] = React.useState(provideData);
+    const [ columns, setColumns ] = React.useState([]);
+    const [ rows, setRows ] = React.useState([]);
+    const [ expandedCells, setExpandedCells ] = React.useState({});
+    const [ activeSortIndex, setActiveSortIndex ] = React.useState(-1);
+    const [ activeSortDirection, setActiveSortDirection ] = React.useState(DESC);
+    const [ page, setPage ] = React.useState(1);
+    const [ perPage, setPerPage ] = React.useState(10);
 
-  setModel(data) {
-    if (data.length > 0) {
-      this.setState({
-        columns: Object.keys(data[0]),
-        rows: data.map(d => Object.values(d)),
-        loading: false
-      });
-    }
-  }
-
-  componentDidMount() {
-    if (this.props.data === null || this.props.data === undefined) {
-      this.getModel();
-    }
-    else {
-      if (this.props.data.length > 0) {
-        this.setModel(this.props.data);
-      } else {
-        this.setState({
-          columns: [],
-          rows: []
-        });
-      }
-    }
-  }
-
-  componentDidUpdate(prevProps) {
-    if (
-      this.props.data !== undefined
-      && this.props.data !== null 
-      && this.props.data !== prevProps.data
-    ) {
-      this.setModel(this.props.data);
-    }
-  }
-
-  getModel() {
-    fetch(this.state.dataPath).then(res => res.json()).then(data => {
-      this.setModel(data);
-    });
-  }
-
-  render() {
-    const onSort = (_event, index, direction) => {
-      this.state.activeSortIndex = index;
-      this.state.activeSortDirection = direction;
-      // sorts the rows
-      const updatedRows = this.state.rows.sort((a, b) => {
-        if (typeof a[index] === 'number') {
-          // numeric sort
-          if (direction === ASC) {
-            return a[index] - b[index];
-          }
-          return b[index] - a[index];
-        } else {
-          // string sort
-          if (direction === ASC) {
-            if (a[index]) {
-              return a[index].localeCompare(b[index]);
+    function fetchData() {
+        fetch(dataPath).then(res => res.json()).then(data => {
+            if (data !== undefined && data.length > 0) {
+                setColumns(Object.keys(data[0]));
+                setRows(data.map(d => Object.values(d)));
             }
-          }
-          if (b[index]) {
-            return b[index].localeCompare(a[index]);
-          }
+        });
+    }
+
+    useEffect(() => {
+        if (data === null) {
+            fetchData();
+        } else if (data.length > 0) {
+            setColumns(Object.keys(data[0]));
+            setRows(data.map(d => Object.values(d)));
+        } else {
+            setColumns([]);
+            setRows([]);
         }
-      });
-      this.setState({rows: updatedRows});
+    }, [data]);
+
+    const onSort = (_event, index, direction) => {
+        setActiveSortIndex(index);
+        setActiveSortDirection(direction);
+
+        // sorts the rows
+        const updatedRows = rows.sort((a, b) => {
+            if (typeof a[index] === 'number') {
+                // numeric sort
+                if (direction === ASC) {
+                    return a[index] - b[index];
+                }
+                
+                return b[index] - a[index];
+                
+            } else {
+                // string sort
+                if (direction === ASC) {
+                    if (a[index]) {
+                        return a[index].localeCompare(b[index]);
+                    }
+                }
+                if (b[index]) {
+                    return b[index].localeCompare(a[index]);
+                }
+            }
+        });
+        setRows(updatedRows);
     };
 
     const onSetPage = (_event, /** @type {number} */ page) => {
-      this.setState({page: page});
+        setPage(page);
+
+        // reset expanded cells
+        setExpandedCells({});
     };
   
     const onPerPageSelect = (_event, /** @type {number} */ perPage) => {
-      if (perPage > this.state.rows.length) {
-        this.setState({page: 1, perPage: perPage});
-      } else {
-        this.setState({perPage: perPage});
-      }
+        if (perPage > rows.length) {
+            setPage(1);
+            setPerPage(perPage);
+
+            // reset expanded cells
+            setExpandedCells({});
+        } else {
+            setPerPage(perPage);
+        }
     };
 
-    const displayRow = (row, rowIndex) => {
-      if (rowIndex >= (this.state.page - 1) * this.state.perPage && rowIndex < this.state.page * this.state.perPage) {
-        return <CommitRow key={`${rowIndex}`} row={row} columns={this.state.columns} rowIndex={rowIndex} />;
-      }
-      return null;
-    }
+    const setCellExpanded = (rowIndex, columnIndex, expanded) => {
+        const newExpandedCells = {
+            ...expandedCells
+        };
 
-    if (this.props.loading === true) {
-      return <div>Loading...</div>;
-    }
+        if (!expanded) {
+            newExpandedCells[rowIndex] = columnIndex;
+        } 
+        else {
+            delete newExpandedCells[rowIndex];
+        }
+
+        console.log(newExpandedCells[rowIndex]);
+        setExpandedCells(newExpandedCells);
+    };
+
+    const compoundExpandParams = (rowIndex, columnIndex) => ({
+        isExpanded: expandedCells[rowIndex] === columnIndex,
+        onToggle: () => setCellExpanded(rowIndex, columnIndex, expandedCells[rowIndex] === columnIndex)
+    });
+
     return (
-      <PageSection>
-        <Toolbar>
-          <ToolbarContent>
-            <ToolbarItem variant={ToolbarItemVariant.label}>
-              {this.state.title}
-            </ToolbarItem>
-            {this.state.rows.length > 0
-              ? <ToolbarItem variant="pagination" alignment={{ default : 'alignRight'}}>
-                  <Pagination 
-                    page={this.state.page}
-                    perPage={this.state.perPage} 
-                    onSetPage={onSetPage} 
-                    onPerPageSelect={onPerPageSelect} 
-                    itemCount={this.state.rows.length} />
-                </ToolbarItem>
-              : <ToolbarItem variant={ToolbarItemVariant.label} alignment={{default : "alignRight"}}>
-                  No rows found
-                </ToolbarItem>
-            }
-          </ToolbarContent>
-        </Toolbar>
-        <TableComposable>
-          <Thead>
-            <Tr>
-              {this.state.columns.map((column, columnIndex) => {
-                // formatted column name
-                let col = column;
-                if (this.state.columnFunction) {
-                  col = this.state.columnFunction(column);
+        <PageSection>
+            <Toolbar>
+                <ToolbarContent>
+                    <ToolbarItem variant={ToolbarItemVariant.label}>
+                        {title}
+                    </ToolbarItem>
+                    {rows.length > 0 
+                        ? <ToolbarItem variant="pagination" alignment={{ default : 'alignRight'}}>
+                            <Pagination 
+                            page={page}
+                            perPage={perPage} 
+                            onSetPage={onSetPage} 
+                            onPerPageSelect={onPerPageSelect} 
+                            itemCount={rows.length} />
+                        </ToolbarItem>
+                        : <ToolbarItem variant={ToolbarItemVariant.label} alignment={{default : "alignRight"}}>
+                            No rows found
+                        </ToolbarItem>
+                    }
+                </ToolbarContent>
+            </Toolbar>
+            <TableComposable>
+                <Thead>
+                    <Tr>
+                        {columns.map((column, columnIndex) => {
+                            // formatted column name
+                            let col = column;
 
-                  if (col === null) return null;
-                }
+                            if (columnFunction) {
+                                col = columnFunction(column);
 
-                const sortParams = {
-                  sort: {
-                    sortBy: {
-                      index: this.state.activeSortIndex,
-                      direction: this.state.activeSortDirection
-                    },
-                    onSort,
-                    columnIndex
-                  }
-                };
+                                if (col === null) return null;
+                            }
 
-                return (
-                  <Th key={columnIndex} {...sortParams}>{col}</Th>
-                );
-              })}
-            </Tr>
-          </Thead>
-            {this.state.rows.map((row, rowIndex) => (
-              displayRow(row, rowIndex)
-            ))}
-        </TableComposable>
-      </PageSection>
+                            const sortParams = {
+                                sort: {
+                                    sortBy: {
+                                        index: activeSortIndex,
+                                        direction: activeSortDirection
+                                    },
+                                    onSort,
+                                    columnIndex
+                                }
+                            };
+
+                            return (
+                                <Th key={columnIndex} {...sortParams}>{col}</Th>
+                            );
+                        })}
+                    </Tr>
+                </Thead>
+                {rows.map((row, rowIndex) => (
+                    rowIndex >= (page - 1) * perPage 
+                    && rowIndex < page * perPage) && (
+                        <Tbody key={`${rowIndex}`} isExpanded={!!expandedCells[rowIndex]}>
+                            <Tr key={`${rowIndex}_row`}>
+                                {row.map((cell, cellIndex) => (
+                                    cellFunction(cell, 
+                                        row, 
+                                        columns, 
+                                        rowIndex, 
+                                        cellIndex, 
+                                        compoundExpandParams)
+                                ))}
+                            </Tr>
+                            {expandedCells[rowIndex] !== undefined ?
+                                <Tr key={`${rowIndex}_expanded`} isExpanded={true}>
+                                    <Td key={`${expandedCells[rowIndex]}_expanded`} dataLabel={columns[expandedCells[rowIndex]]} colSpan={columns.length}>
+                                        <ExpandableRowContent>
+                                            {row[expandedCells[rowIndex]]}
+                                        </ExpandableRowContent>
+                                    </Td>
+                                </Tr> : null
+                            }
+                        </Tbody>
+                    )
+                )}
+            </TableComposable>
+        </PageSection>
     );
-  }
 }
 
 export default GenericTable;
