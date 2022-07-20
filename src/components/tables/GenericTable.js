@@ -207,6 +207,9 @@ function GenericTable({title = "", dataPath = "", provideData = null, link = "",
     );
 }
 
+/**
+ * Make these use patternfly's TextList components
+ */
 function CommitExpandable({commit}) {
 
     return (
@@ -214,6 +217,17 @@ function CommitExpandable({commit}) {
             <div>{commit.Message}</div>
             <div>{commit.Ref}</div>
             <div>{commit.Author}</div>
+        </div>
+    );
+}
+
+function DeployExpandable({deploy}) {
+
+    return (
+        <div key={`${deploy.ID}_expanded`}>
+            <div>{deploy.Cluster}</div>
+            <div>{deploy.Ref}</div>
+            <div>{deploy.Image}</div>
         </div>
     );
 }
