@@ -8,27 +8,23 @@ import { CodeBranchIcon } from '@patternfly/react-icons';
 
 import GenericTable from './GenericTable';
 
-function DeployTable({data = undefined, dataPath = "/api/v1/deploys"}) {
+import { deploysSchema } from 'schema';
+
+function DeployTable({dataPath = "/api/v1/deploys"}) {
     function FormatColumn(column) {
-        if (column === "ID") {
-            return null;
-        } else if (column === "ServiceID") {
-            return null;
-        } else if (column === "Repo") {
-            return "Repository";
-        }
-        return column;
+        const formatted = deploysSchema[column]
+        return formatted === undefined ? null : formatted;
     }
 
     function FormatCell(cell, row, columns, rowIndex, cellIndex, compoundExpandParams = null) {
-        const column = columns[cellIndex];
-   
-        let expandable = false;
+        const column = deploysSchema[columns[cellIndex]];
 
         // do not display the id or serviceID columns
-        if (column === "ID" || column === "ServiceID") {
+        if (column === undefined) {
             return null;
         }
+
+        let expandable = false;
 
         let cellContents;
         
@@ -53,8 +49,17 @@ function DeployTable({data = undefined, dataPath = "/api/v1/deploys"}) {
     }
 
     return (
-        <GenericTable title="Deploys" provideData={data} dataPath={dataPath} cellFunction={FormatCell} columnFunction={FormatColumn} />
+        <GenericTable title="Deploys" dataPath={dataPath} cellFunction={FormatCell} columnFunction={FormatColumn} />
     );
+}
+
+export const deploys = {
+    timestamp: 'Timestamp',
+    repo: 'Repo',
+    ref: 'Ref',
+    namespace: 'Namespace',
+    cluster: 'Cluster',
+    image: 'Image',
 }
 
 export default DeployTable;

@@ -23,8 +23,8 @@ import Pagination from './Pagination';
 const DESC = 'desc';
 const ASC = 'asc';
 
-function GenericTable({title = "", dataPath = "", provideData = null, link = "", cellFunction = null, columnFunction = null}) {
-    const [ data, setData ] = React.useState(provideData);
+function GenericTable({title = "", dataPath = "", link = "", cellFunction = null, columnFunction = null}) {
+    const [ data, setData ] = React.useState([]);
     const [ columns, setColumns ] = React.useState([]);
     const [ rows, setRows ] = React.useState([]);
     const [ expandedCells, setExpandedCells ] = React.useState({});
@@ -43,15 +43,7 @@ function GenericTable({title = "", dataPath = "", provideData = null, link = "",
     }
 
     useEffect(() => {
-        if (data === null) {
-            fetchData();
-        } else if (data.length > 0) {
-            setColumns(Object.keys(data[0]));
-            setRows(data.map(d => Object.values(d)));
-        } else {
-            setColumns([]);
-            setRows([]);
-        }
+        fetchData();
     }, [data]);
 
     const onSort = (_event, index, direction) => {
@@ -192,9 +184,12 @@ function GenericTable({title = "", dataPath = "", provideData = null, link = "",
                                 <Tr key={`${rowIndex}_expanded`} isExpanded={true}>
                                     <Td key={`${expandedCells[rowIndex]}_expanded`} dataLabel={columns[expandedCells[rowIndex]]} colSpan={columns.length}>
                                         <ExpandableRowContent>
-                                            {columns[expandedCells[rowIndex]] === "Commits" 
+                                            {columns[expandedCells[rowIndex]] === "commits" 
                                                 ? <CommitExpandable commit={row[expandedCells[rowIndex]][0]}/>
-                                                : row[expandedCells[rowIndex]]}
+                                                : columns[expandedCells[rowIndex]] === "deploys"
+                                                    ? <DeployExpandable deploy={row[expandedCells[rowIndex]][0]}/> 
+                                                    : row[expandedCells[rowIndex]]
+                                            }
                                         </ExpandableRowContent>
                                     </Td>
                                 </Tr> : null
@@ -214,9 +209,9 @@ function CommitExpandable({commit}) {
 
     return (
         <div key={`${commit.ID}_expanded`}>
-            <div>{commit.Message}</div>
-            <div>{commit.Ref}</div>
-            <div>{commit.Author}</div>
+            <div>{commit.message}</div>
+            <div>{commit.ref}</div>
+            <div>{commit.author}</div>
         </div>
     );
 }
@@ -225,9 +220,9 @@ function DeployExpandable({deploy}) {
 
     return (
         <div key={`${deploy.ID}_expanded`}>
-            <div>{deploy.Cluster}</div>
-            <div>{deploy.Ref}</div>
-            <div>{deploy.Image}</div>
+            <div>{deploy.cluster}</div>
+            <div>{deploy.ref}</div>
+            <div>{deploy.image}</div>
         </div>
     );
 }
