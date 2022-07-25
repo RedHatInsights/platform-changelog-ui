@@ -53,13 +53,4 @@ function DeployTable({dataPath = "/api/v1/deploys"}) {
     );
 }
 
-export const deploys = {
-    timestamp: 'Timestamp',
-    repo: 'Repo',
-    ref: 'Ref',
-    namespace: 'Namespace',
-    cluster: 'Cluster',
-    image: 'Image',
-}
-
 export default DeployTable;

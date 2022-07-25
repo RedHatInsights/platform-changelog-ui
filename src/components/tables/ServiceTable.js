@@ -14,10 +14,8 @@ import { expandedServicesSchema } from 'schema';
 
 function ServiceTable({dataPath = "/api/v1/services"}) {
     function FormatColumn(column) {
-        function FormatColumn(column) {
-            const formatted = expandedServicesSchema[column]
-            return formatted === undefined ? null : formatted;
-        }
+        const formatted = expandedServicesSchema[column]
+        return formatted === undefined ? null : formatted;
     }
 
     function FormatCell(cell, row, columns, rowIndex, cellIndex, compoundExpandParams = null) {
@@ -34,26 +32,32 @@ function ServiceTable({dataPath = "/api/v1/services"}) {
 
         let width = 0; // percentage modifier for the cell width
         
-        if (column === "Name") {
+        if (cell == "") {
+            cellContents = <>{cell}</>
+        } else if (column === "Name") {
             cellContents = <NavLink to={`/services/${row[1]}`}>{cell}</NavLink>;
-        } else if (column === "Github" && cell !== "") {
+        } else if (column === "Github") {
             width = 10;
             cellContents =  <a href={cell} target="_blank" rel="noreferrer">
                                 <GithubIcon key="icon" />
                             </a>;
-        } else if (column === "Gitlab" && cell !== "") {
+        } else if (column === "Gitlab") {
             width = 10;
             cellContents = <a href={cell} target="_blank" rel="noreferrer">
                                 <GitlabIcon key="icon" />
                             </a>;
         } else if (column === "Merged by") {
             cellContents = <>Merged By</>;
-        } else if (column === "Latest commit" && cell.length > 0) { 
-            cellContents = <><CodeBranchIcon /><Moment date={cell[0].Timestamp} format=" MM/YYYY"/></>;
-            expandable = true;
-        } else if (column === "Latest deploy" && cell !== null && cell.length > 0) {
-            cellContents = <><CodeBranchIcon /><Moment date={cell[0].Timestamp} format=" MM/YYYY"/></>;
-            expandable = true;
+        } else if (column === "Latest commit") {
+            if (cell !== null && cell.id !== 0) {
+                cellContents = <><CodeBranchIcon /><Moment date={cell.timestamp} format=" MM/YYYY"/></>;
+                expandable = true;
+            }
+        } else if (column === "Latest deploy") {
+            if (cell !== null && cell.id !== 0) {
+                cellContents = <><CodeBranchIcon /><Moment date={cell.timestamp} format=" MM/YYYY"/></>;
+                 expandable = true;
+            }
         } else {
             cellContents = <>{cell}</>;
         }

@@ -10,18 +10,25 @@ import {
   Td,
 } from '@patternfly/react-table';
 
-import { 
-  PageSection, 
-  Toolbar, 
-  ToolbarContent, 
-  ToolbarItem, 
-  ToolbarItemVariant 
+import {
+    PageSection,
+    TextContent,
+    TextListVariants,
+    TextListItemVariants,
+    TextListItem,
+    TextList,
+    Toolbar, 
+    ToolbarContent, 
+    ToolbarItem, 
+    ToolbarItemVariant 
 } from '@patternfly/react-core';
 
 import Pagination from './Pagination';
 
 const DESC = 'desc';
 const ASC = 'asc';
+
+const NONE_SPECIFIED = "None specified";
 
 function GenericTable({title = "", dataPath = "", link = "", cellFunction = null, columnFunction = null}) {
     const [ data, setData ] = React.useState([]);
@@ -184,12 +191,7 @@ function GenericTable({title = "", dataPath = "", link = "", cellFunction = null
                                 <Tr key={`${rowIndex}_expanded`} isExpanded={true}>
                                     <Td key={`${expandedCells[rowIndex]}_expanded`} dataLabel={columns[expandedCells[rowIndex]]} colSpan={columns.length}>
                                         <ExpandableRowContent>
-                                            {columns[expandedCells[rowIndex]] === "commits" 
-                                                ? <CommitExpandable commit={row[expandedCells[rowIndex]][0]}/>
-                                                : columns[expandedCells[rowIndex]] === "deploys"
-                                                    ? <DeployExpandable deploy={row[expandedCells[rowIndex]][0]}/> 
-                                                    : row[expandedCells[rowIndex]]
-                                            }
+                                            <Expandable column={columns[expandedCells[rowIndex]]} object={row[expandedCells[rowIndex]]}/>
                                         </ExpandableRowContent>
                                     </Td>
                                 </Tr> : null
@@ -202,28 +204,56 @@ function GenericTable({title = "", dataPath = "", link = "", cellFunction = null
     );
 }
 
+// : columns[expandedCells[rowIndex]] === "deploys"
+// ? <DeployExpandable deploy={row[expandedCells[rowIndex]][0]}/> 
+// : row[expandedCells[rowIndex]]
+
+function Expandable({ column = "", object }) {
+    return (
+        <>
+            {   column == 'latest_commit' ? <CommitExpandable commit={object}/> :
+                column == 'latest_deploy' ? <DeployExpandable deploy={object}/> :
+                    <div>{object}</div>
+            }
+        </>
+    )
+}
 /**
  * Make these use patternfly's TextList components
  */
 function CommitExpandable({commit}) {
 
     return (
-        <div key={`${commit.ID}_expanded`}>
-            <div>{commit.message}</div>
-            <div>{commit.ref}</div>
-            <div>{commit.author}</div>
-        </div>
+        <TextContent>
+            <TextList component={TextListVariants.dl}>
+                <TextListItem component={TextListItemVariants.dt}>Author</TextListItem>
+                <TextListItem component={TextListItemVariants.dd}>{commit.author ? commit.author : NONE_SPECIFIED}</TextListItem>
+
+                <TextListItem component={TextListItemVariants.dt}>Message</TextListItem>
+                <TextListItem component={TextListItemVariants.dd}>{commit.message ? commit.message : NONE_SPECIFIED}</TextListItem>
+
+                <TextListItem component={TextListItemVariants.dt}>Reference</TextListItem>
+                <TextListItem component={TextListItemVariants.dd}>{commit.ref ? commit.ref : NONE_SPECIFIED}</TextListItem>
+            </TextList>
+        </TextContent>
     );
 }
 
 function DeployExpandable({deploy}) {
 
     return (
-        <div key={`${deploy.ID}_expanded`}>
-            <div>{deploy.cluster}</div>
-            <div>{deploy.ref}</div>
-            <div>{deploy.image}</div>
-        </div>
+        <TextContent>
+            <TextList component={TextListVariants.dl}>
+                <TextListItem component={TextListItemVariants.dt}>Cluster</TextListItem>
+                <TextListItem component={TextListItemVariants.dd}>{deploy.cluster ? deploy.cluster : NONE_SPECIFIED}</TextListItem>
+
+                <TextListItem component={TextListItemVariants.dt}>Image</TextListItem>
+                <TextListItem component={TextListItemVariants.dd}>{deploy.image ? deploy.image : NONE_SPECIFIED}</TextListItem>
+
+                <TextListItem component={TextListItemVariants.dt}>Reference</TextListItem>
+                <TextListItem component={TextListItemVariants.dd}>{deploy.ref ? deploy.ref : NONE_SPECIFIED}</TextListItem>
+            </TextList>
+        </TextContent>
     );
 }
 
