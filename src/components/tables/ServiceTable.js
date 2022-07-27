@@ -10,35 +10,21 @@ import Moment from 'react-moment';
 
 import GenericTable from './GenericTable';
 
+import { expandedServicesSchema } from 'schema';
+
 function ServiceTable({dataPath = "/api/v1/services"}) {
     function FormatColumn(column) {
-        if (column === "ID") {
-            return null;
-        } else if (column === "Name") {
-            return null;
-        } else if (column === "DisplayName") {
-            return "Service";
-        } else if (column === "GHRepo") {
-            return "GitHub";
-        } else if (column === "GLRepo") {
-            return "GitLab";
-        } else if (column === "Commits") {
-            return "Latest Commits";
-        } else if (column === "Deploys") {
-            return "Latest Deploys";
-        } else if (column === "DeployFile") {
-            return "Deploy File";
-        }
-        return column;
+        const formatted = expandedServicesSchema[column]
+        return formatted === undefined ? null : formatted;
     }
 
     function FormatCell(cell, row, columns, rowIndex, cellIndex, compoundExpandParams = null) {
-        const column = columns[cellIndex];
+        const column = expandedServicesSchema[columns[cellIndex]];
     
         // do not display the id columns
-        if (column === "ID" || column === "Name") {
+        if (column === undefined) {
             return null;
-        } 
+        }
 
         let expandable = false;
 
@@ -46,26 +32,32 @@ function ServiceTable({dataPath = "/api/v1/services"}) {
 
         let width = 0; // percentage modifier for the cell width
         
-        if (column === "DisplayName") {
+        if (cell == "") {
+            cellContents = <>{cell}</>
+        } else if (column === "Name") {
             cellContents = <NavLink to={`/services/${row[1]}`}>{cell}</NavLink>;
-        } else if (column === "GHRepo" && cell !== "") {
+        } else if (column === "Github") {
             width = 10;
             cellContents =  <a href={cell} target="_blank" rel="noreferrer">
                                 <GithubIcon key="icon" />
                             </a>;
-        } else if (column === "GLRepo" && cell !== "") {
+        } else if (column === "Gitlab") {
             width = 10;
             cellContents = <a href={cell} target="_blank" rel="noreferrer">
                                 <GitlabIcon key="icon" />
                             </a>;
-        } else if (column === "MergedBy") {
+        } else if (column === "Merged by") {
             cellContents = <>Merged By</>;
-        } else if (column === "Commits" && cell.length > 0) { 
-            cellContents = <><CodeBranchIcon /><Moment date={cell[0].Timestamp} format=" MM/YYYY"/></>;
-            expandable = true;
-        } else if (column === "Deploys" && cell !== null && cell.length > 0) {
-            cellContents = <><CodeBranchIcon /><Moment date={cell[0].Timestamp} format=" MM/YYYY"/></>;
-            expandable = true;
+        } else if (column === "Latest commit") {
+            if (cell !== null && cell.id !== 0) {
+                cellContents = <><CodeBranchIcon /><Moment date={cell.timestamp} format=" MM/YYYY"/></>;
+                expandable = true;
+            }
+        } else if (column === "Latest deploy") {
+            if (cell !== null && cell.id !== 0) {
+                cellContents = <><CodeBranchIcon /><Moment date={cell.timestamp} format=" MM/YYYY"/></>;
+                 expandable = true;
+            }
         } else {
             cellContents = <>{cell}</>;
         }

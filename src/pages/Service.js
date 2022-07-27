@@ -29,16 +29,14 @@ export default function Service() {
     const name = useParams().name;
 
     const [service, setService] = useState({
-        ID: 0, 
-        Name: "",
-        DisplayName: "",
-        GHRepo: "",
-        GLRepo: "", 
-        DeployFile: "", 
-        Namespace: "",
-        Branch: "",
-        Commits: [],
-        Deploys: []
+        id: 0, 
+        name: "",
+        display_name: "",
+        gh_repo: "",
+        gl_repo: "", 
+        deploy_file: "", 
+        namespace: "",
+        branch: "",
     });
 
     useEffect(() => {
@@ -50,12 +48,6 @@ export default function Service() {
             if (data.length > 0) { // Duplicate names, it's possible...
                 setService(data[0]);
             }
-            if (data.Commits === null || data.Commits.length === 0) {
-                data.Commits = [];
-            }
-            if (data.Deploys === null || data.Deploys.length === 0) {
-                data.Deploys = [];
-            }
 
             setService(data);
         }).catch(); // should do something with the error
@@ -66,10 +58,10 @@ export default function Service() {
             <PageSection variant={PageSectionVariants.light}>
                 <TextContent>
                     <Text className="fullWidth" component="h1">
-                        {service.DisplayName}
+                        {service.display_name}
                         <div className="right">
-                            {service.GHRepo && <a href={service.GHRepo} target="_blank" rel="noreferrer"><GithubIcon /></a>}
-                            {service.GLRepo && <a href={service.GLRepo} target="_blank" rel="noreferrer"><GitlabIcon /></a>}
+                            {service.gh_repo && <a href={service.gh_repo} target="_blank" rel="noreferrer"><GithubIcon /></a>}
+                            {service.gl_repo && <a href={service.gl_repo} target="_blank" rel="noreferrer"><GitlabIcon /></a>}
                         </div>
                     </Text>
                 </TextContent>
@@ -80,27 +72,17 @@ export default function Service() {
                 <TextContent>
                     <TextList component={TextListVariants.dl}>
                         <TextListItem component={TextListItemVariants.dt}>Namespace</TextListItem>
-                        <TextListItem component={TextListItemVariants.dd}>{service.Namespace ? service.Namespace : NONE_SPECIFIED}</TextListItem>
+                        <TextListItem component={TextListItemVariants.dd}>{service.namespace ? service.namespace : NONE_SPECIFIED}</TextListItem>
 
                         <TextListItem component={TextListItemVariants.dt}>Branch</TextListItem>
-                        <TextListItem component={TextListItemVariants.dd}>{service.Branch ? service.Branch : NONE_SPECIFIED}</TextListItem>
-                        
-                        <TextListItem component={TextListItemVariants.dt}>Lastest Commit</TextListItem>
-                        <TextListItem component={TextListItemVariants.dd}> {/** Assuming they will be sorted by date */}
-                            {service.Commits.length > 0 ? <Moment date={service.Commits[0].Timestamp} /> : NONE_FOUND}
-                        </TextListItem>
-                        
-                        <TextListItem component={TextListItemVariants.dt}>Lastest Deployment</TextListItem>
-                        <TextListItem component={TextListItemVariants.dd}> {/** Assuming they will be sorted by date */}
-                            {service.Deploys.length > 0 ? <Moment date={service.Deploys[0].Timestamp} /> : NONE_FOUND}
-                        </TextListItem>
+                        <TextListItem component={TextListItemVariants.dd}>{service.branch ? service.branch : NONE_SPECIFIED}</TextListItem>
                     </TextList>
                 </TextContent>
             </PageSection>
 
             {/** Keys added to update the children with the new props */}
-            <CommitTable data={service.Commits} gh_url={service.GHRepo} gl_url={service.GLRepo} key={service.ID} />
-            <DeployTable data={service.Deploys} key={service.Name} />
+            <CommitTable key={service.id} dataPath={`/api/v1/services/${name}/commits`} gh_url={service.gh_repo} gl_url={service.gl_repo} />
+            <DeployTable key={service.name} dataPath={`/api/v1/services/${name}/deploys`} />
         </>
     );
 }

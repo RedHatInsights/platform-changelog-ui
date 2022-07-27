@@ -8,31 +8,28 @@ import { CodeBranchIcon } from '@patternfly/react-icons';
 
 import GenericTable from './GenericTable';
 
+import { commitsSchema } from 'schema';
+
 /**
  * Options to pass in the desired data or the data path to the table
  */
-function CommitTable({data = undefined, dataPath = "/api/v1/commits", gh_url="", gl_url=""}) {
+function CommitTable({dataPath = "/api/v1/commits", gh_url="", gl_url=""}) {
 
     function FormatColumn(column) {
-        if (column === "ID") {
-            return null;
-        } else if (column === "ServiceID") {
-            return null;
-        } else if (column === "Repo") {
-            return "Repository";
-        }
-        return column;
+        const formatted = commitsSchema[column]
+        return formatted === undefined ? null : formatted;
     }
 
     function FormatCell(cell, row, columns, rowIndex, cellIndex, compoundExpandParams = null) {
-        const column = columns[cellIndex];
+        const column = commitsSchema[columns[cellIndex]];
    
         let expandable = false;
-
-        // do not display the id or serviceID columns
-        if (column === "ID" || column === "ServiceID") {
+        
+        if (column === undefined) {
             return null;
         }
+
+        console.log(column);
 
         let cellContents;
         
@@ -66,7 +63,7 @@ function CommitTable({data = undefined, dataPath = "/api/v1/commits", gh_url="",
     }
 
     return (
-        <GenericTable title="Commits" provideData={data} dataPath={dataPath} cellFunction={FormatCell} columnFunction={FormatColumn} />
+        <GenericTable title="Commits" dataPath={dataPath} cellFunction={FormatCell} columnFunction={FormatColumn} />
     );
 }
 
