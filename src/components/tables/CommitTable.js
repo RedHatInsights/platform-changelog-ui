@@ -29,8 +29,6 @@ function CommitTable({dataPath = "/api/v1/commits", gh_url="", gl_url=""}) {
             return null;
         }
 
-        console.log(column);
-
         let cellContents;
         
         if (column === "Ref") {

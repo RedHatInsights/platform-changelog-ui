@@ -9,7 +9,10 @@ import {
     TextListVariants,
     TextListItemVariants,
     TextListItem,
-    TextList
+    TextList,
+    Tabs, 
+    Tab, 
+    TabTitleText,
 } from "@patternfly/react-core";
 import { GithubIcon, GitlabIcon } from '@patternfly/react-icons';
 
@@ -39,6 +42,8 @@ export default function Service() {
         branch: "",
     });
 
+    const [activeTab, setActiveTab] = useState(0);
+
     useEffect(() => {
         fetchService(`/api/v1/services/${name}`);
     }, []);
@@ -51,6 +56,10 @@ export default function Service() {
 
             setService(data);
         }).catch(); // should do something with the error
+    }
+
+    function handleTabClick(_event, tabIndex) {
+        setActiveTab(tabIndex);
     }
 
     return (
@@ -67,22 +76,40 @@ export default function Service() {
                 </TextContent>
             </PageSection>
 
-            {/** Displays much of the service's metadata */}
-            <PageSection variant={PageSectionVariants.light}>
-                <TextContent>
-                    <TextList component={TextListVariants.dl}>
-                        <TextListItem component={TextListItemVariants.dt}>Namespace</TextListItem>
-                        <TextListItem component={TextListItemVariants.dd}>{service.namespace ? service.namespace : NONE_SPECIFIED}</TextListItem>
+            <Tabs
+                activeKey={activeTab}
+                onSelect={handleTabClick}
+                isBox={false}
+                aria-label="Select between commits and deploys tabs"
+            >
+                <Tab eventKey={0} title={<TabTitleText>Details</TabTitleText>}>
+                    <PageSection variant={PageSectionVariants.light}>
+                        <TextContent>
+                            <TextList component={TextListVariants.dl}>
+                                <TextListItem component={TextListItemVariants.dt}>Namespace</TextListItem>
+                                <TextListItem component={TextListItemVariants.dd}>{service.namespace ? service.namespace : NONE_SPECIFIED}</TextListItem>
 
-                        <TextListItem component={TextListItemVariants.dt}>Branch</TextListItem>
-                        <TextListItem component={TextListItemVariants.dd}>{service.branch ? service.branch : NONE_SPECIFIED}</TextListItem>
-                    </TextList>
-                </TextContent>
-            </PageSection>
+                                <TextListItem component={TextListItemVariants.dt}>Branch</TextListItem>
+                                <TextListItem component={TextListItemVariants.dd}>{service.branch ? service.branch : NONE_SPECIFIED}</TextListItem>
+                            </TextList>
+                        </TextContent>
+                    </PageSection>
+                </Tab>
 
-            {/** Keys added to update the children with the new props */}
-            <CommitTable key={service.id} dataPath={`/api/v1/services/${name}/commits`} gh_url={service.gh_repo} gl_url={service.gl_repo} />
-            <DeployTable key={service.name} dataPath={`/api/v1/services/${name}/deploys`} />
+                <Tab eventKey={1} title={<TabTitleText>Timeline</TabTitleText>}>
+                    <PageSection variant={PageSectionVariants.light}>
+                        Timeline
+                    </PageSection>
+                </Tab>
+
+                <Tab eventKey={2} title={<TabTitleText>Commits</TabTitleText>}>
+                    <CommitTable key={service.id} dataPath={`/api/v1/services/${name}/commits`} gh_url={service.gh_repo} gl_url={service.gl_repo} />
+                </Tab>
+
+                <Tab eventKey={3} title={<TabTitleText>Deploys</TabTitleText>}>
+                    <DeployTable key={service.name} dataPath={`/api/v1/services/${name}/deploys`} />
+                </Tab>
+            </Tabs>
         </>
     );
 }
