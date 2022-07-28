@@ -24,6 +24,10 @@ import {
     DeployTable,
 } from 'components/tables';
 
+import {
+    Timelines
+} from 'components';
+
 const NONE_SPECIFIED = "None specified";
 const NONE_FOUND = "None found";
 
@@ -82,7 +86,7 @@ export default function Service() {
                 isBox={false}
                 aria-label="Select between commits and deploys tabs"
             >
-                <Tab eventKey={0} title={<TabTitleText>Details</TabTitleText>}>
+                <Tab key={0} eventKey={0} title={<TabTitleText>Details</TabTitleText>}>
                     <PageSection variant={PageSectionVariants.light}>
                         <TextContent>
                             <TextList component={TextListVariants.dl}>
@@ -96,17 +100,15 @@ export default function Service() {
                     </PageSection>
                 </Tab>
 
-                <Tab eventKey={1} title={<TabTitleText>Timeline</TabTitleText>}>
-                    <PageSection variant={PageSectionVariants.light}>
-                        Timeline
-                    </PageSection>
+                <Tab key={1} eventKey={1} title={<TabTitleText>Timeline</TabTitleText>}>
+                    <Timelines dataPath={`/api/v1/services/${name}/timelines`} />
                 </Tab>
 
-                <Tab eventKey={2} title={<TabTitleText>Commits</TabTitleText>}>
+                <Tab key={2} eventKey={2} title={<TabTitleText>Commits</TabTitleText>}>
                     <CommitTable key={service.id} dataPath={`/api/v1/services/${name}/commits`} gh_url={service.gh_repo} gl_url={service.gl_repo} />
                 </Tab>
 
-                <Tab eventKey={3} title={<TabTitleText>Deploys</TabTitleText>}>
+                <Tab key={3} eventKey={3} title={<TabTitleText>Deploys</TabTitleText>}>
                     <DeployTable key={service.name} dataPath={`/api/v1/services/${name}/deploys`} />
                 </Tab>
             </Tabs>
