@@ -42,7 +42,7 @@ function GenericTable({title = "", dataPath = "", link = "", cellFunction = null
 
     function fetchData() {
         fetch(dataPath).then(res => res.json()).then(data => {
-            if (data !== undefined && data.length > 0) {
+            if (data !== undefined && data !== null && data.length > 0) {
                 setColumns(Object.keys(data[0]));
                 setRows(data.map(d => Object.values(d)));
             }
