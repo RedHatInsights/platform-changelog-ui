@@ -28,7 +28,7 @@ function Timelines({dataPath=`/api/v1/timelines`, include_repo = false}) {
     }
 
     return (
-        <PageSection>
+        <PageSection style={{"height": "0px"}}>
             {timelines.map((timeline, index) => 
                 <TimelineCard key={index} timeline={timeline} include_repo={include_repo}/>
             )}
