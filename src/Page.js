@@ -46,16 +46,12 @@ function AppPage() {
 
     const Sidebar = <PageSidebar nav={PageNav} />;
     const pageId = "main-content-page-layout-simple-nav";
-    const PageSkipToContent = (
-        <SkipToContent href={`#${pageId}`}>Skip to Content</SkipToContent>
-    );
 
     return (
         <Page
             header={<AppHeader />}
             sidebar={Sidebar}
             isManagedSidebar
-            skipToContent={PageSkipToContent}
             mainContainerId={pageId}
             className="myPageClass"
         >
