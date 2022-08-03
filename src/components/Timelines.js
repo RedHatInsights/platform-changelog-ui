@@ -12,7 +12,7 @@ import {
 
 import { TimelineCard } from './TimelineCard';
 
-function Timelines({dataPath=`/api/v1/timelines`, include_repo = false}) {
+function Timelines({dataPath=`/api/v1/timelines`, include_repo = false, gh_url="", gl_url=""}) {
     const [timelines, setTimelines] = React.useState([]);
 
     useEffect(() => {
@@ -29,8 +29,8 @@ function Timelines({dataPath=`/api/v1/timelines`, include_repo = false}) {
 
     return (
         <PageSection style={{"height": "0px"}}>
-            {timelines.map((timeline, index) => 
-                <TimelineCard key={index} timeline={timeline} include_repo={include_repo}/>
+            {timelines.map((timeline, index) =>
+                <TimelineCard key={index} timeline={timeline} include_repo={include_repo} gh_url={gh_url} gl_url={gl_url} />
             )}
         </PageSection>
     )

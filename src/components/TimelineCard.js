@@ -3,13 +3,25 @@ import {Card, CardTitle, CardBody, CardFooter} from '@patternfly/react-core';
 
 const type = {commit: "Commit", deploy: "Deploy"};
 
-export const TimelineCard = ({timeline, include_repo = false}) =>
+export const TimelineCard = ({timeline, include_repo = false, gh_url="", gl_url=""}) =>
     <div style={timeline.type == "deploy" ? deployStyle : commitStyle}>
         <Card isCompact isFlat>
             {include_repo && <CardTitle>{timeline.repo}</CardTitle>}
             {timeline.type == "commit" &&
                 <CardBody>
-                    <p>Commit: <b>{timeline.ref}</b></p>
+                    <p>Commit:&nbsp;
+                    {gh_url != "" && 
+                        <a 
+                            href={gh_url != "" 
+                            ? `${gh_url}/commit/${timeline.ref}` 
+                            : `${gl_url}/-/commit/${timeline.ref}`} 
+                            target="_blank" 
+                            rel="noreferrer noopener"
+                        >
+                            <b>{timeline.ref}</b>
+                        </a>
+                    }
+                    </p>
                     <p>{timeline.author}</p>
                     <p>{timeline.message}</p>
                     <p>{timeline.timestamp}</p>

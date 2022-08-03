@@ -101,7 +101,7 @@ export default function Service() {
                 </Tab>
 
                 <Tab key={1} eventKey={1} title={<TabTitleText>Timeline</TabTitleText>}>
-                    <Timelines dataPath={`/api/v1/services/${name}/timelines`} />
+                    <Timelines dataPath={`/api/v1/services/${name}/timelines`} gh_url={service.gh_repo} gl_url={service.gl_repo} />
                 </Tab>
 
                 <Tab key={2} eventKey={2} title={<TabTitleText>Commits</TabTitleText>}>
