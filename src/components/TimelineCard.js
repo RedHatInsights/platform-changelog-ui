@@ -10,7 +10,6 @@ export const TimelineCard = ({timeline, include_repo = false, gh_url="", gl_url=
             {timeline.type == "commit" &&
                 <CardBody>
                     <p>Commit:&nbsp;
-                    {gh_url != "" && 
                         <a 
                             href={gh_url != "" 
                             ? `${gh_url}/commit/${timeline.ref}` 
@@ -20,7 +19,6 @@ export const TimelineCard = ({timeline, include_repo = false, gh_url="", gl_url=
                         >
                             <b>{timeline.ref}</b>
                         </a>
-                    }
                     </p>
                     <p>{timeline.author}</p>
                     <p>{timeline.message}</p>
