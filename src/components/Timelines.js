@@ -6,7 +6,9 @@ import {
     Toolbar, 
     ToolbarContent, 
     ToolbarItem, 
-    ToolbarItemVariant 
+    ToolbarItemVariant,
+    Spinner,
+    Flex
 } from '@patternfly/react-core';
 
 import { TimelineCardWrapper as TimelineCard } from './TimelineCard';
@@ -29,7 +31,6 @@ function Timelines({dataPath=`/api/v1/timelines`, include_repo = false, gh_url="
         if (observer.current) observer.current.disconnect();
 
         if (offset >= count) {
-            console.log("No more timelines to load");
             return;
         }
 
@@ -71,6 +72,10 @@ function Timelines({dataPath=`/api/v1/timelines`, include_repo = false, gh_url="
                 }
                 return <TimelineCard key={index} {...props} />;
             })}
+            <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100px'}}>
+                {loading && <Spinner isSVG aria-label="Timelines loading" />}
+                {offset >= count && <div>No more timelines to load</div>}
+            </div>
         </PageSection>
     )
 }
