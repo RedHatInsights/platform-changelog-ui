@@ -31,7 +31,6 @@ const ASC = 'asc';
 const NONE_SPECIFIED = "None specified";
 
 function GenericTable({title = "", dataPath = "", link = "", cellFunction = null, columnFunction = null}) {
-    const [ data, setData ] = React.useState([]);
     const [ columns, setColumns ] = React.useState([]);
     const [ rows, setRows ] = React.useState([]);
     const [ expandedCells, setExpandedCells ] = React.useState({});
@@ -39,19 +38,23 @@ function GenericTable({title = "", dataPath = "", link = "", cellFunction = null
     const [ activeSortDirection, setActiveSortDirection ] = React.useState(DESC);
     const [ page, setPage ] = React.useState(1);
     const [ perPage, setPerPage ] = React.useState(10);
+    const [ count, setCount ] = React.useState(0);
 
     function fetchData() {
-        fetch(dataPath).then(res => res.json()).then(data => {
-            if (data !== undefined && data !== null && data.length > 0) {
-                setColumns(Object.keys(data[0]));
-                setRows(data.map(d => Object.values(d)));
+        let offset = (page - 1) * perPage;
+
+        fetch(`${dataPath}?offset=${offset}&limit=${perPage}`).then(res => res.json()).then(data => {
+            if (data !== undefined && data !== null && data.data.length > 0) {
+                setColumns(Object.keys(data.data[0]));
+                setRows(data.data.map(d => Object.values(d)));
+                setCount(data.count);
             }
         });
     }
 
     useEffect(() => {
         fetchData();
-    }, [data]);
+    }, [page, perPage]);
 
     const onSort = (_event, index, direction) => {
         setActiveSortIndex(index);
@@ -90,7 +93,7 @@ function GenericTable({title = "", dataPath = "", link = "", cellFunction = null
     };
   
     const onPerPageSelect = (_event, /** @type {number} */ perPage) => {
-        if (perPage > rows.length) {
+        if (perPage > count) {
             setPage(1);
             setPerPage(perPage);
 
@@ -135,7 +138,7 @@ function GenericTable({title = "", dataPath = "", link = "", cellFunction = null
                             perPage={perPage} 
                             onSetPage={onSetPage} 
                             onPerPageSelect={onPerPageSelect} 
-                            itemCount={rows.length} />
+                            itemCount={count} />
                         </ToolbarItem>
                         : <ToolbarItem variant={ToolbarItemVariant.label} alignment={{default : "alignRight"}}>
                             No rows found
@@ -174,31 +177,28 @@ function GenericTable({title = "", dataPath = "", link = "", cellFunction = null
                     </Tr>
                 </Thead>
                 {rows.map((row, rowIndex) => (
-                    rowIndex >= (page - 1) * perPage 
-                    && rowIndex < page * perPage) && (
-                        <Tbody key={`${rowIndex}`} isExpanded={!!expandedCells[rowIndex]}>
-                            <Tr key={`${rowIndex}_row`}>
-                                {row.map((cell, cellIndex) => (
-                                    cellFunction(cell, 
-                                        row, 
-                                        columns, 
-                                        rowIndex, 
-                                        cellIndex, 
-                                        compoundExpandParams)
-                                ))}
-                            </Tr>
-                            {expandedCells[rowIndex] !== undefined ?
-                                <Tr key={`${rowIndex}_expanded`} isExpanded={true}>
-                                    <Td key={`${expandedCells[rowIndex]}_expanded`} dataLabel={columns[expandedCells[rowIndex]]} colSpan={columns.length}>
-                                        <ExpandableRowContent>
-                                            <Expandable column={columns[expandedCells[rowIndex]]} object={row[expandedCells[rowIndex]]}/>
-                                        </ExpandableRowContent>
-                                    </Td>
-                                </Tr> : null
-                            }
-                        </Tbody>
-                    )
-                )}
+                    <Tbody key={`${rowIndex}`} isExpanded={!!expandedCells[rowIndex]}>
+                        <Tr key={`${rowIndex}_row`}>
+                            {row.map((cell, cellIndex) => (
+                                cellFunction(cell, 
+                                    row, 
+                                    columns, 
+                                    rowIndex, 
+                                    cellIndex, 
+                                    compoundExpandParams)
+                            ))}
+                        </Tr>
+                        {expandedCells[rowIndex] !== undefined ?
+                            <Tr key={`${rowIndex}_expanded`} isExpanded={true}>
+                                <Td key={`${expandedCells[rowIndex]}_expanded`} dataLabel={columns[expandedCells[rowIndex]]} colSpan={columns.length}>
+                                    <ExpandableRowContent>
+                                        <Expandable column={columns[expandedCells[rowIndex]]} object={row[expandedCells[rowIndex]]}/>
+                                    </ExpandableRowContent>
+                                </Td>
+                            </Tr> : null
+                        }
+                    </Tbody>
+                ))}
             </TableComposable>
         </PageSection>
     );
