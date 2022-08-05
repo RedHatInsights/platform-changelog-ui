@@ -8,7 +8,6 @@ import {
     ToolbarItem, 
     ToolbarItemVariant,
     Spinner,
-    Flex
 } from '@patternfly/react-core';
 
 import { TimelineCardWrapper as TimelineCard } from './TimelineCard';
