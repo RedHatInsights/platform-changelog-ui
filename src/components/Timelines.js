@@ -43,8 +43,7 @@ function Timelines({dataPath=`/api/v1/timelines`, include_repo = false, gh_url="
         , { threshold: 0.5 });
 
         if (node) observer.current.observe(node);
-        console.log(node)}
-    , [loading]);
+    }, [loading]);
 
     function fetchTimelines() {
         fetch(`${dataPath}?offset=${offset}&limit=${PER_CALL}`).then(res => res.json()).then(data => {
