@@ -85,6 +85,7 @@ export default function Service() {
                 onSelect={handleTabClick}
                 isBox={false}
                 aria-label="Select between commits and deploys tabs"
+                style={{overflow: "visible"}}
             >
                 <Tab key={0} eventKey={0} title={<TabTitleText>Details</TabTitleText>}>
                     <PageSection variant={PageSectionVariants.light}>
