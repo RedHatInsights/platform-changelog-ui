@@ -19,6 +19,7 @@ import { GithubIcon, GitlabIcon } from '@patternfly/react-icons';
 import { useParams } from "react-router-dom";
 import Moment from 'react-moment';
 
+import { NotificationsContext, NotificationsPortal } from 'components/notifications';
 import {
     CommitTable,
     DeployTable,
@@ -32,6 +33,7 @@ const NONE_SPECIFIED = "None specified";
 const NONE_FOUND = "None found";
 
 export default function Service() {
+    const notifications = React.useContext(NotificationsContext);
 
     const name = useParams().name;
 
@@ -53,13 +55,26 @@ export default function Service() {
     }, []);
 
     async function fetchService(path) {
-        fetch(path).then(res => res.json()).then(data => {
+        fetch(path).then(res => {
+            if (!res.ok) {
+                throw new Error(`Service ${service.name} not found`);
+            }
+            res.json()
+        }).then(data => {
+            if (data == undefined || data == null) {
+                // service not found
+                notifications.sendError(`Service ${service.name} not found`);
+                return null;
+            }
+            
             if (data.length > 0) { // Duplicate names, it's possible...
                 setService(data[0]);
             }
 
             setService(data);
-        }).catch(); // should do something with the error
+        }).catch(error => {
+            notifications.sendError(error.message);
+        });
     }
 
     function handleTabClick(_event, tabIndex) {
@@ -71,7 +86,7 @@ export default function Service() {
             <PageSection variant={PageSectionVariants.light}>
                 <TextContent>
                     <Text className="fullWidth" component="h1">
-                        {service.display_name}
+                        {service.display_name == "" ? name : service.display_name}
                         <div className="right">
                             {service.gh_repo && <a href={service.gh_repo} target="_blank" rel="noreferrer"><GithubIcon /></a>}
                             {service.gl_repo && <a href={service.gl_repo} target="_blank" rel="noreferrer"><GitlabIcon /></a>}
@@ -100,17 +115,16 @@ export default function Service() {
                         </TextContent>
                     </PageSection>
                 </Tab>
-
                 <Tab key={1} eventKey={1} title={<TabTitleText>Timeline</TabTitleText>}>
-                    <Timelines dataPath={`/api/v1/services/${name}/timelines`} gh_url={service.gh_repo} gl_url={service.gl_repo} />
+                    {service.id > 0 && <Timelines dataPath={`/api/v1/services/${name}/timelines`} gh_url={service.gh_repo} gl_url={service.gl_repo} /> }
                 </Tab>
 
                 <Tab key={2} eventKey={2} title={<TabTitleText>Commits</TabTitleText>}>
-                    <CommitTable key={service.id} dataPath={`/api/v1/services/${name}/commits`} gh_url={service.gh_repo} gl_url={service.gl_repo} />
+                    {service.id > 0 && <CommitTable key={service.id} dataPath={`/api/v1/services/${name}/commits`} gh_url={service.gh_repo} gl_url={service.gl_repo} /> }
                 </Tab>
 
                 <Tab key={3} eventKey={3} title={<TabTitleText>Deploys</TabTitleText>}>
-                    <DeployTable key={service.name} dataPath={`/api/v1/services/${name}/deploys`} />
+                    {service.id > 0 && <DeployTable key={service.name} dataPath={`/api/v1/services/${name}/deploys`} /> }
                 </Tab>
             </Tabs>
         </>
