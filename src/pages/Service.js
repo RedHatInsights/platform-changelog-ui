@@ -59,7 +59,7 @@ export default function Service() {
             if (!res.ok) {
                 throw new Error(`Service ${service.name} not found`);
             }
-            res.json()
+            return res.json();
         }).then(data => {
             if (data == undefined || data == null) {
                 // service not found
@@ -115,17 +115,20 @@ export default function Service() {
                         </TextContent>
                     </PageSection>
                 </Tab>
-                <Tab key={1} eventKey={1} title={<TabTitleText>Timeline</TabTitleText>}>
-                    {service.id > 0 && <Timelines dataPath={`/api/v1/services/${name}/timelines`} gh_url={service.gh_repo} gl_url={service.gl_repo} /> }
-                </Tab>
 
-                <Tab key={2} eventKey={2} title={<TabTitleText>Commits</TabTitleText>}>
-                    {service.id > 0 && <CommitTable key={service.id} dataPath={`/api/v1/services/${name}/commits`} gh_url={service.gh_repo} gl_url={service.gl_repo} /> }
-                </Tab>
+                {service.id > 0 && <>
+                    <Tab key={1} eventKey={1} title={<TabTitleText>Timeline</TabTitleText>}>
+                        <Timelines dataPath={`/api/v1/services/${name}/timelines`} gh_url={service.gh_repo} gl_url={service.gl_repo} />
+                    </Tab>
 
-                <Tab key={3} eventKey={3} title={<TabTitleText>Deploys</TabTitleText>}>
-                    {service.id > 0 && <DeployTable key={service.name} dataPath={`/api/v1/services/${name}/deploys`} /> }
-                </Tab>
+                    <Tab key={2} eventKey={2} title={<TabTitleText>Commits</TabTitleText>}>
+                        <CommitTable key={service.id} dataPath={`/api/v1/services/${name}/commits`} gh_url={service.gh_repo} gl_url={service.gl_repo} />
+                    </Tab>
+
+                    <Tab key={3} eventKey={3} title={<TabTitleText>Deploys</TabTitleText>}>
+                        <DeployTable key={service.name} dataPath={`/api/v1/services/${name}/deploys`} />
+                    </Tab>
+                </>}
             </Tabs>
         </>
     );

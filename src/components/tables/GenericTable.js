@@ -50,7 +50,7 @@ function GenericTable({title = "", dataPath = "", link = "", cellFunction = null
         fetch(`${dataPath}?offset=${offset}&limit=${perPage}`).then(res => {
             if (!res.ok) {
                 notifications.sendError(`Failed to fetch data.`, `${res.status}: ${res.statusText}`);
-                return undefined;
+                return;
             }
             return res.json();
         }).then(data => {

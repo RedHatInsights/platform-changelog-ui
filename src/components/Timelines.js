@@ -49,7 +49,7 @@ function Timelines({dataPath=`/api/v1/timelines`, include_repo = false, gh_url="
         fetch(`${dataPath}?offset=${offset}&limit=${PER_CALL}`).then(res => {
             if (!res.ok) {
                 notifications.sendError(`Failed to fetch data.`, `${res.status}: ${res.statusText}`);
-                return undefined;
+                return;
             }
             return res.json();
         }).then(data => {
