@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
 
 import {
   ExpandableRowContent,
@@ -25,12 +25,16 @@ import {
 
 import Pagination from './Pagination';
 
+import { NotificationsContext } from 'components/notifications';
+
 const DESC = 'desc';
 const ASC = 'asc';
 
 const NONE_SPECIFIED = "None specified";
 
 function GenericTable({title = "", dataPath = "", link = "", cellFunction = null, columnFunction = null}) {
+    const notifications = useContext(NotificationsContext);
+
     const [ columns, setColumns ] = React.useState([]);
     const [ rows, setRows ] = React.useState([]);
     const [ expandedCells, setExpandedCells ] = React.useState({});
@@ -43,12 +47,20 @@ function GenericTable({title = "", dataPath = "", link = "", cellFunction = null
     function fetchData() {
         let offset = (page - 1) * perPage;
 
-        fetch(`${dataPath}?offset=${offset}&limit=${perPage}`).then(res => res.json()).then(data => {
+        fetch(`${dataPath}?offset=${offset}&limit=${perPage}`).then(res => {
+            if (!res.ok) {
+                notifications.sendError(`Failed to fetch data.`, `${res.status}: ${res.statusText}`);
+                return;
+            }
+            return res.json();
+        }).then(data => {
             if (data !== undefined && data !== null && data.data.length > 0) {
                 setColumns(Object.keys(data.data[0]));
                 setRows(data.data.map(d => Object.values(d)));
                 setCount(data.count);
             }
+        }).catch(error => {
+            notifications.sendError(error.message);
         });
     }
 

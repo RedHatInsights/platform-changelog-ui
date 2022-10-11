@@ -45,7 +45,7 @@ function AppPage() {
     );
 
     const Sidebar = <PageSidebar nav={PageNav} />;
-    const pageId = "main-content-page-layout-simple-nav";
+    const pageId = "main-content";
 
     return (
         <Page

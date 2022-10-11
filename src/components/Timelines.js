@@ -46,12 +46,20 @@ function Timelines({dataPath=`/api/v1/timelines`, include_repo = false, gh_url="
     }, [loading]);
 
     function fetchTimelines() {
-        fetch(`${dataPath}?offset=${offset}&limit=${PER_CALL}`).then(res => res.json()).then(data => {
+        fetch(`${dataPath}?offset=${offset}&limit=${PER_CALL}`).then(res => {
+            if (!res.ok) {
+                notifications.sendError(`Failed to fetch data.`, `${res.status}: ${res.statusText}`);
+                return;
+            }
+            return res.json();
+        }).then(data => {
             if (data !== undefined && data !== null && data.data.length > 0) {
                 setTimelines([...timelines, ...data.data]);
                 setCount(data.count);
             }
             setLoading(false);
+        }).catch(error => {
+            notifications.sendError(error.message);
         });
     }
 

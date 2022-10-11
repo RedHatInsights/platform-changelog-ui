@@ -1,19 +1,15 @@
 import React from 'react';
 import '@patternfly/react-core/dist/styles/base.css';
+
 import Page from './Page';
+import { NotificationsPortal } from './components/notifications';
 
-class App extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-
-    render() {
-      return (
-        <React.Fragment>
+function App() {
+    return (
+        <NotificationsPortal>
             <Page />
-        </React.Fragment>
-      );
-  }
+        </NotificationsPortal>
+    );
 }
 
 export default App;
