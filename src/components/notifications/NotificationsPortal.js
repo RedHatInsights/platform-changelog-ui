@@ -34,7 +34,7 @@ function NotificationsPortal(props) {
                 { createPortal((
                     <div aria-label='notifications-portal' style={{
                         position: 'fixed',
-                        top: 15,
+                        top: '5.275rem',
                         right: 15,
                         zIndex: 2000,
                     }}>
