@@ -1,0 +1,127 @@
+---
+apiVersion: v1
+kind: Template
+metadata:
+  name: platform-changelog-ui
+objects:
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    labels:
+      app: platform-changelog-ui
+    name: platform-changelog-ui
+  spec:
+    minReadySeconds: 15
+    progressDeadlineSeconds: 600
+    replicas: ${{REPLICAS}}
+    revisionHistoryLimit: 9
+    selector:
+      matchLabels:
+        app: platform-changelog-ui
+    strategy:
+      type: Recreate
+    template:
+      metadata:
+        labels:
+          app: platform-changelog-ui
+      spec:
+        affinity:
+          podAntiAffinity:
+            preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                    - platform-changelog-ui
+                topologyKey: failure-domain.beta.kubernetes.io/zone
+              weight: 100
+            - podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                    - platform-changelog-ui
+                topologyKey: kubernetes.io/hostname
+              weight: 99
+        containers:
+        - image: quay.io/cloudservices/platform-changelog-ui:${IMAGE_TAG}
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            failureThreshold: 10
+            httpGet:
+              path: /
+              port: 8000
+              scheme: HTTP
+            initialDelaySeconds: 30
+            periodSeconds: 5
+            timeoutSeconds: 2
+          name: platform-changelog-ui
+          readinessProbe:
+            failureThreshold: 10
+            httpGet:
+              path: /
+              port: 8000
+              scheme: HTTP
+            initialDelaySeconds: 30
+            periodSeconds: 5
+            timeoutSeconds: 2
+          resources:
+            limits:
+              cpu: ${CPU_LIMIT}
+              memory: ${MEMORY_LIMIT}
+            requests:
+              cpu: 200m
+              memory: 256Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /etc/nginx/nginx.conf
+            name: platform-changelog-nginx-conf
+            subPath: nginx.conf
+        dnsPolicy: ClusterFirst
+        imagePullSecrets:
+        - name: quay-cloudservices-pull
+        - name: rh-registry-pull
+        restartPolicy: Always
+        serviceAccountName: platform-changelog-ui
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - configMap:
+            name: platform-changelog-nginx-conf
+          name: platform-changelog-nginx-conf
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftWebConsole
+    labels:
+      app: platform-changelog-ui
+    name: platform-changelog-ui
+  spec:
+    ports:
+    - name: 8080-tcp
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+    selector:
+      app: platform-changelog-ui
+    sessionAffinity: None
+    type: ClusterIP
+parameters:
+- description: Cpu limit of service
+  name: CPU_LIMIT
+  value: 500m
+- description: memory limit of service
+  name: MEMORY_LIMIT
+  value: 512Mi
+- description: The number of replicas to use for the prometheus deployment
+  name: REPLICAS
+  value: '1'
+- description: Image tag
+  name: IMAGE_TAG
+  required: true
