@@ -6,5 +6,5 @@ USER root
 COPY . .
 
 
-RUN npm install
-CMD ["npm", "start"]
+RUN yarn install
+CMD ["yarn", "start"]
