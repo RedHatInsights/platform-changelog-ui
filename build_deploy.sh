@@ -15,7 +15,7 @@ if [[ -z "$RH_REGISTRY_USER" || -z "$RH_REGISTRY_TOKEN" ]]; then
     exit 1
 fi
 
-AUTH_CONF_DIR="$(pwd)/.podman"
+AUTH_CONF_DIR="$(pwd)/.docker"
 mkdir -p $AUTH_CONF_DIR
 
 podman login -u="$QUAY_USER" -p="$QUAY_TOKEN" quay.io
