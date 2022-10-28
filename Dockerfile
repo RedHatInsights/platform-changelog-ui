@@ -10,7 +10,7 @@ USER 0
 
 RUN microdnf install nodejs nginx
 
-COPY package.json yarn-lock.json ./
+COPY package.json yarn.lock ./
 RUN npm install yarn && yarn install
 
 
