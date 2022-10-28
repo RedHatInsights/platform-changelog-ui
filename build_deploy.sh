@@ -18,7 +18,7 @@ fi
 AUTH_CONF_DIR="$(pwd)/.docker"
 mkdir -p $AUTH_CONF_DIR
 
-podman login -u="$QUAY_USER" -p="$QUAY_TOKEN" quay.io
+docker login -u="$QUAY_USER" -p="$QUAY_TOKEN" quay.io
 
-podman build -t "${UI_IMAGE}:${IMAGE_TAG}" ui
-podman push "${UI_IMAGE}:${IMAGE_TAG}"
+docker build -t "${UI_IMAGE}:${IMAGE_TAG}" ui
+docker push "${UI_IMAGE}:${IMAGE_TAG}"
