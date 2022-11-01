@@ -8,19 +8,23 @@ ENV API_HOST=${SERVICE_HOST:-localhost}
 
 USER 0
 
+RUN microdnf module disable nodejs && \
+    microdnf module enable nodejs:16
 RUN microdnf install nodejs nginx
 
 COPY package.json yarn.lock ./
-RUN npm install yarn && yarn install
+RUN npm install --global yarn && yarn install
 
 
 COPY src ./src
-COPY .babelrc ./.babelrc
-COPY *.js ./
+COPY public ./public
 
-RUN yarn start && \
-    rm -rfv /usr/share/nginx/html && \
-    cp -rfv /usr/src/app/dist /usr/share/nginx/html && \
+RUN ls ./src
+
+RUN yarn build
+
+RUN rm -rfv /usr/share/nginx/html && \
+    cp -rfv /usr/src/app/build /usr/share/nginx/html && \
     chown nginx:nginx -R /usr/share/nginx/html && \
     mkdir -p /var/cache/nginx && \
     chown 777 -R /var/log/nginx && \
