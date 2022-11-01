@@ -18,6 +18,7 @@ RUN npm install --global yarn && yarn install
 
 COPY src ./src
 COPY public ./public
+COPY jsconfig.json ./
 
 RUN ls ./src
 
