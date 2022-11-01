@@ -1,16 +1,15 @@
 import React from "react";
 import {
-  Nav,
-  NavItem,
-  NavList,
-  Page,
-  PageSidebar,
-  SkipToContent,
+    Nav,
+    NavItem,
+    NavList,
+    Page,
+    PageSidebar,
 } from "@patternfly/react-core";
 
-import {Routes, Route, useLocation, Link} from "react-router-dom";
+import { Routes, Route, useLocation, Link } from "react-router-dom";
 
-import { AppHeader }  from "components";
+import { AppHeader } from "components";
 
 import {
     Home,
@@ -56,8 +55,12 @@ function AppPage() {
             className="myPageClass"
         >
             <Routes>
-                <Route path="*" element={<Error error="Page not found"/>} />
-
+                <Route path="*" element={
+                    <Error
+                        error="404: We can't find this page"
+                        description="Another page might have what you need, so try one of the links below."
+                    />
+                } />
                 <Route path="/" element={<Home />} />
                 <Route path="/services" element={<Services />} />
                 <Route path="/commits" element={<Commits />} />
