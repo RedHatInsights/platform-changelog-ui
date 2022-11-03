@@ -1,6 +1,10 @@
 import React from 'react';
 
 import {
+    PageSection,
+} from '@patternfly/react-core';
+
+import {
     TitleSection,
 } from 'components';
 
@@ -8,10 +12,11 @@ import { DeployTable } from 'components/tables';
 
 export default function Deploys() {
     return (
-        <>
-            <TitleSection title="Deploys" description="Complete deployment logs for managed services." />
-
-            <DeployTable />
-        </>
+        <div className='pc-c-page__content'>
+            <PageSection>
+                <TitleSection title="Deploys" />
+                <DeployTable noTitle={true} />
+            </PageSection>
+        </div>
     )
 }

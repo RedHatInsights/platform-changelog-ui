@@ -10,7 +10,7 @@ import GenericTable from './GenericTable';
 
 import { deploysSchema } from 'schema';
 
-function DeployTable({dataPath = "/api/v1/deploys"}) {
+function DeployTable({dataPath = "/api/v1/deploys", noTitle=false }) {
     function FormatColumn(column) {
         const formatted = deploysSchema[column]
         return formatted === undefined ? null : formatted;
@@ -49,7 +49,7 @@ function DeployTable({dataPath = "/api/v1/deploys"}) {
     }
 
     return (
-        <GenericTable title="Deploys" dataPath={dataPath} cellFunction={FormatCell} columnFunction={FormatColumn} />
+        <GenericTable title={noTitle ? "" : "Deploys"} dataPath={dataPath} cellFunction={FormatCell} columnFunction={FormatColumn} />
     );
 }
 

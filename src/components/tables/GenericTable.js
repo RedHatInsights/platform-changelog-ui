@@ -27,6 +27,8 @@ import Pagination from './Pagination';
 
 import { NotificationsContext } from 'components/notifications';
 
+import { FilterContext } from 'components/filters';
+
 const DESC = 'desc';
 const ASC = 'asc';
 
@@ -34,6 +36,7 @@ const NONE_SPECIFIED = "None specified";
 
 function GenericTable({title = "", dataPath = "", link = "", cellFunction = null, columnFunction = null}) {
     const notifications = useContext(NotificationsContext);
+    const filters = useContext(FilterContext).filters;
 
     const [ columns, setColumns ] = React.useState([]);
     const [ rows, setRows ] = React.useState([]);
@@ -45,9 +48,17 @@ function GenericTable({title = "", dataPath = "", link = "", cellFunction = null
     const [ count, setCount ] = React.useState(0);
 
     function fetchData() {
+        let query = dataPath;
         let offset = (page - 1) * perPage;
 
-        fetch(`${dataPath}?offset=${offset}&limit=${perPage}`).then(res => {
+        query += `?offset=${offset}&limit=${perPage}`;
+        query += filters.reduce((acc, filter) => {
+            return acc + `&${filter.field}=${filter.value}`;
+        }, "");
+
+        console.log(query);
+
+        fetch(query).then(res => {
             if (!res.ok) {
                 notifications.sendError(`Failed to fetch data.`, `${res.status}: ${res.statusText}`);
                 return;
@@ -66,7 +77,7 @@ function GenericTable({title = "", dataPath = "", link = "", cellFunction = null
 
     useEffect(() => {
         fetchData();
-    }, [page, perPage]);
+    }, [page, perPage, filters]);
 
     const onSort = (_event, index, direction) => {
         setActiveSortIndex(index);
@@ -137,7 +148,7 @@ function GenericTable({title = "", dataPath = "", link = "", cellFunction = null
     });
 
     return (
-        <PageSection>
+        <>
             <Toolbar>
                 <ToolbarContent>
                     <ToolbarItem variant={ToolbarItemVariant.label}>
@@ -212,7 +223,7 @@ function GenericTable({title = "", dataPath = "", link = "", cellFunction = null
                     </Tbody>
                 ))}
             </TableComposable>
-        </PageSection>
+        </>
     );
 }
 

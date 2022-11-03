@@ -13,7 +13,7 @@ import { commitsSchema } from 'schema';
 /**
  * Options to pass in the desired data or the data path to the table
  */
-function CommitTable({dataPath = "/api/v1/commits", gh_url="", gl_url=""}) {
+function CommitTable({dataPath = "/api/v1/commits", noTitle=false, gh_url="", gl_url=""}) {
 
     function FormatColumn(column) {
         const formatted = commitsSchema[column]
@@ -61,7 +61,7 @@ function CommitTable({dataPath = "/api/v1/commits", gh_url="", gl_url=""}) {
     }
 
     return (
-        <GenericTable title="Commits" dataPath={dataPath} cellFunction={FormatCell} columnFunction={FormatColumn} />
+        <GenericTable title={noTitle ? "" : "Commits"} dataPath={dataPath} cellFunction={FormatCell} columnFunction={FormatColumn} />
     );
 }
 

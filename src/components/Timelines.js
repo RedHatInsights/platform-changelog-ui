@@ -10,6 +10,8 @@ import {
     Spinner,
 } from '@patternfly/react-core';
 
+import * as Utils from "utils";
+
 import { TimelineCardWrapper as TimelineCard } from './TimelineCard';
 
 const PER_CALL = 10;

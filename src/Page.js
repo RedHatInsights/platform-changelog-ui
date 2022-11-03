@@ -10,7 +10,12 @@ import {
 
 import {Routes, Route, useLocation, Link} from "react-router-dom";
 
+import * as ConstantTypes from './AppConstants';
+
 import { AppHeader }  from "components";
+import {
+    FilterManager,
+} from 'components/filters';
 
 import {
     Home,
@@ -55,15 +60,17 @@ function AppPage() {
             mainContainerId={pageId}
             className="myPageClass"
         >
-            <Routes>
-                <Route path="*" element={<Error error="Page not found"/>} />
+            <FilterManager path={active}>
+                <Routes>
+                    <Route path="*" element={<Error error="Page not found"/>} />
 
-                <Route path="/" element={<Home />} />
-                <Route path="/services" element={<Services />} />
-                <Route path="/commits" element={<Commits />} />
-                <Route path="/deploys" element={<Deploys />} />
-                <Route path="/services/:name" element={<Service />} />
-            </Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/services" element={<Services />} />
+                    <Route path="/commits" element={<Commits />} />
+                    <Route path="/deploys" element={<Deploys />} />
+                    <Route path="/services/:name" element={<Service />} />
+                </Routes>
+            </FilterManager>
         </Page>
     );
 }

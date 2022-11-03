@@ -122,7 +122,9 @@ export default function Service() {
                     </Tab>
 
                     <Tab key={2} eventKey={2} title={<TabTitleText>Commits</TabTitleText>}>
-                        <CommitTable key={service.id} dataPath={`/api/v1/services/${name}/commits`} gh_url={service.gh_repo} gl_url={service.gl_repo} />
+                        <PageSection>
+                            <CommitTable key={service.id} dataPath={`/api/v1/services/${name}/commits`} gh_url={service.gh_repo} gl_url={service.gl_repo} />
+                        </PageSection>
                     </Tab>
 
                     <Tab key={3} eventKey={3} title={<TabTitleText>Deploys</TabTitleText>}>
