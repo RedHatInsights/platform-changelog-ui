@@ -4,7 +4,7 @@ APP_NAME="platform-changelog"
 COMPONENT_NAME="platform-changelog-ui"
 IMAGE="quay.io/cloudservices/platform-changelog-ui"
 
-# TODO: lint the project
+#TODO: Add a linter
 
 # create a 'dummy' result file so Jenkins will not fail
 mkdir -p $WORKSPACE/artifacts

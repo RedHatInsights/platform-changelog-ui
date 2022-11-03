@@ -1,23 +1,29 @@
-import React from 'react'; 
+import React from 'react';
 
-import { PageSection, Text, TextContent } from '@patternfly/react-core';
+import { Button, EmptyState, EmptyStateBody, EmptyStateIcon, EmptyStateSecondaryActions, Title } from '@patternfly/react-core';
 
 import { Link } from "react-router-dom";
 
-import {
-    TitleSection,
-} from 'components';
+import { ExclamationCircleIcon } from '@patternfly/react-icons';
 
-export default function Error({error="Internal Error", description="Sorry for any inconvenience."}) {
+export default function Error({ error = "Internal Error", description = "Sorry for any inconvenience." }) {
     return (
-        <TitleSection title={error} description={description}>
-            <PageSection variant="light">
-                <TextContent>
-                    <Text className="centered">
-                        Please head back to our <Link to="/">home page</Link>, and try again.
-                    </Text>
-                </TextContent>
-            </PageSection>
-        </TitleSection>
+        <EmptyState>
+            <EmptyStateIcon icon={ExclamationCircleIcon} />
+            <Title headingLevel="h4" size="lg">
+                {error}
+            </Title>
+            <EmptyStateBody>
+                {description}
+            </EmptyStateBody>
+            <Link to="/"><Button style={{
+                marginTop: "32px",
+            }} variant="primary">Return to home page</Button></Link>
+            <EmptyStateSecondaryActions>
+                <Link to="/services"><Button variant="link">Services</Button></Link>
+                <Link to="/commits"><Button variant="link">Commits</Button></Link>
+                <Link to="/deploys"><Button variant="link">Deploys</Button></Link>
+            </EmptyStateSecondaryActions>
+        </EmptyState>
     )
 }
