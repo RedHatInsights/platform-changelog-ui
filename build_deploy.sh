@@ -15,10 +15,13 @@ if [[ -z "$RH_REGISTRY_USER" || -z "$RH_REGISTRY_TOKEN" ]]; then
     exit 1
 fi
 
-AUTH_CONF_DIR="$(pwd)/.podman"
+AUTH_CONF_DIR="$(pwd)/.docker"
 mkdir -p $AUTH_CONF_DIR
 
-podman login -u="$QUAY_USER" -p="$QUAY_TOKEN" quay.io
+docker --config="$AUTH_CONF_DIR" login -u="$QUAY_USER" -p="$QUAY_TOKEN" quay.io
+docker --config="$AUTH_CONF_DIR" login -u="$RH_REGISTRY_USER" -p="$RH_REGISTRY_TOKEN" registry.redhat.io
+docker --config="$AUTH_CONF_DIR" build -t "${UI_IMAGE}:${IMAGE_TAG}" .
+docker --config="$AUTH_CONF_DIR" push "${UI_IMAGE}:${IMAGE_TAG}"
 
-podman build -t "${UI_IMAGE}:${IMAGE_TAG}" ui
-podman push "${UI_IMAGE}:${IMAGE_TAG}"
+docker --config="$AUTH_CONF_DIR" tag "${UI_IMAGE}:${IMAGE_TAG}" "${UI_IMAGE}:qa"
+docker --config="$AUTH_CONF_DIR" push "${UI_IMAGE}:qa"

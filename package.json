@@ -27,7 +27,7 @@
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^14.2.1",
-    "web-vitals": "^1.1.2"
+    "web-vitals": "^3.0.4"
   },
   "resolutions": {
     "@svgr/webpack": "^6.2.1"
