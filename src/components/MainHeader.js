@@ -6,15 +6,15 @@ import {
 
 import MainHeaderTools from './MainHeaderTools';
 
-function MainHeader({ pathname }) {
+function MainHeader({ isNavOpen, toggleNav, pathname }) {
     return (
         <PageHeader
             logo={<Brand src="/images/Masthead.png" alt="Gumbaroo" />}
-            headerTools={<MainHeaderTools pathname={pathname} />}
+            headerTools={<MainHeaderTools pathname={ pathname } />}
+            onNavToggle={ () => toggleNav(!isNavOpen) }
             showNavToggle
         />
     );
 }
 
 export default MainHeader;
-

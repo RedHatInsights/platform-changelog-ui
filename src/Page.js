@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useContext } from "react";
 import {
   Nav,
   NavItem,
@@ -12,9 +12,11 @@ import {Routes, Route, useLocation, Link} from "react-router-dom";
 
 import * as ConstantTypes from './AppConstants';
 
-import { AppHeader }  from "components";
+import { MainHeader }  from "components";
 import {
     FilterManager,
+    FilterToolbar,
+    FilterContext,
 } from 'components/filters';
 
 import {
@@ -27,8 +29,13 @@ import {
 } from "pages";
 
 function AppPage() {
+    const location = useLocation();
 
-    const active = useLocation().pathname;
+    const filterContext = useContext(FilterContext);
+
+    const active = location.pathname;
+
+    const [isNavOpen, toggleNav] = useState(false);
 
     const PageNav = (
         <Nav aria-label="Nav">
@@ -54,23 +61,22 @@ function AppPage() {
 
     return (
         <Page
-            header={<AppHeader />}
+            header={<MainHeader isNavOpen={isNavOpen} toggleNav={toggleNav} pathname={active} />}
             sidebar={Sidebar}
             isManagedSidebar
             mainContainerId={pageId}
             className="myPageClass"
         >
-            <FilterManager path={active}>
-                <Routes>
-                    <Route path="*" element={<Error error="Page not found"/>} />
+            <FilterToolbar filters={filterContext.filters} setFilters={filterContext.setFilters} options={filterContext.options} />
+            <Routes>
+                <Route path="*" element={<Error error="Page not found"/>} />
 
-                    <Route path="/" element={<Home />} />
-                    <Route path="/services" element={<Services />} />
-                    <Route path="/commits" element={<Commits />} />
-                    <Route path="/deploys" element={<Deploys />} />
-                    <Route path="/services/:name" element={<Service />} />
-                </Routes>
-            </FilterManager>
+                <Route path="/" element={<Home />} />
+                <Route path="/services" element={<Services />} />
+                <Route path="/commits" element={<Commits />} />
+                <Route path="/deploys" element={<Deploys />} />
+                <Route path="/services/:name" element={<Service />} />
+            </Routes>
         </Page>
     );
 }

@@ -30,7 +30,6 @@ function FilterToolbar({ options, filters, setFilters }) {
     const onCancelFn = () => { setModalOpen(false); onToggleFn(); };
 
     const onDeleteFn = (chip, type) => {
-        console.log(chip, type);
         setFilters(filters.filter(function(filter) { 
             return !(filter.field == type && filter.value == chip);
         }));

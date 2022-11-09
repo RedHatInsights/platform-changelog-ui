@@ -1,5 +1,5 @@
 export const COMMIT_FILTERS = [
-    'Repo', 'Ref', 'Author', 'Merged By'
+    'Repo', 'Ref', 'Author', 'Merged_By'
 ];
 
 export const DEPLOY_FILTERS = [

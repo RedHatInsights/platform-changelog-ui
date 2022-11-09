@@ -8,7 +8,9 @@ import { FilterManager } from 'components/filters';
 function App() {
     return (
         <NotificationsPortal>
-            <Page />
+            <FilterManager>
+                <Page />
+            </FilterManager>
         </NotificationsPortal>
     );
 }
