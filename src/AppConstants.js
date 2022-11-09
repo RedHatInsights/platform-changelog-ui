@@ -10,6 +10,7 @@ export const FILTER_MAP = [
     {
         path: "/services",
         show: false,
+        options: []
     },
     {
         path: "/commits",
@@ -24,9 +25,11 @@ export const FILTER_MAP = [
     {
         path: "/",
         show: false,
+        options: []
     },
     {
         path: "/.*",
         show: false,
+        options: []
     },
 ];

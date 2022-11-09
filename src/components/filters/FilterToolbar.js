@@ -1,12 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Button, Divider, Select, SelectOption, TreeViewSearch } from '@patternfly/react-core';
 
 import "./FilterToolbar.css";
 
 import Chips from './Chips';
 import FilterModal from './FilterModal';
+import FilterContext from './FilterContext';
 
-function FilterToolbar({ options, filters, setFilters }) {
+function FilterToolbar() {
+    const filterContext = useContext(FilterContext);
+    const options = filterContext.options;
+    const filters = filterContext.filters;
+    const setFilters = filterContext.setFilters;
+    const show = filterContext.show;
+
     const [selected, setSelected] = useState([]);
     const [isOpen, setIsOpen] = useState(false);
     const [isModalOpen, setModalOpen] = useState(false);
@@ -46,32 +53,35 @@ function FilterToolbar({ options, filters, setFilters }) {
     }, [filters]);
 
     return (
-        <div className='pc-filter-toolbar'>
-            {isModalOpen && <FilterModal
-                isOpen={isModalOpen}
-                options={selected}
-                onApplyFn={onApplyFn}
-                onCancelFn={onCancelFn}
-            />}
-            <Select
-                className='pc-filter-toolbar__selector'
-                variant='checkbox'
-                selections={selected}
-                isPlain
-                onToggle={onToggleFn}
-                onSelect={onSelectFn}
-                isOpen={isOpen}
-                placeholderText='Add Filters'
-                isCheckboxSelectionBadgeHidden
-            >
-                {options.map((option, key) => <SelectOption key={key} value={option}/>)}
-                <Divider/>
-                <Button variant='link' isDisabled={selected.length === 0} onClick={() => setModalOpen(true)}>
-                    Enter Filter Values
-                </Button>
-            </Select>
-            <Chips filters={filters} options={options} onDelete={onDeleteFn} />
-        </div>
+        <>
+            {show && <div className='pc-filter-toolbar'>
+                    {isModalOpen && <FilterModal
+                        isOpen={isModalOpen}
+                        options={selected}
+                        onApplyFn={onApplyFn}
+                        onCancelFn={onCancelFn}
+                    />}
+                    <Select
+                        className='pc-filter-toolbar__selector'
+                        variant='checkbox'
+                        selections={selected}
+                        isPlain
+                        onToggle={onToggleFn}
+                        onSelect={onSelectFn}
+                        isOpen={isOpen}
+                        placeholderText='Add Filters'
+                        isCheckboxSelectionBadgeHidden
+                    >
+                        {options.map((option, key) => <SelectOption key={key} value={option}/>)}
+                        <Divider/>
+                        <Button variant='link' isDisabled={selected.length === 0} onClick={() => setModalOpen(true)}>
+                            Enter Filter Values
+                        </Button>
+                    </Select>
+                    <Chips filters={filters} options={options} onDelete={onDeleteFn} />
+                </div>
+            }
+        </>
     );
 }
 

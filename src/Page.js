@@ -31,8 +31,6 @@ import {
 function AppPage() {
     const location = useLocation();
 
-    const filterContext = useContext(FilterContext);
-
     const active = location.pathname;
 
     const [isNavOpen, toggleNav] = useState(false);
@@ -67,7 +65,7 @@ function AppPage() {
             mainContainerId={pageId}
             className="myPageClass"
         >
-            <FilterToolbar filters={filterContext.filters} setFilters={filterContext.setFilters} options={filterContext.options} />
+            <FilterToolbar />
             <Routes>
                 <Route path="*" element={<Error error="Page not found"/>} />
 

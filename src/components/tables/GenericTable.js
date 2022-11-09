@@ -64,9 +64,7 @@ function GenericTable({title = "", dataPath = "", link = "", cellFunction = null
         if (filterContext.endDate) {
             query += `&end_date=${filterContext.endDate.format()}`;
         }
-
-        console.log(filterContext.startDate)
-
+        
         fetch(query).then(res => {
             if (!res.ok) {
                 notifications.sendError(`Failed to fetch data.`, `${res.status}: ${res.statusText}`);
