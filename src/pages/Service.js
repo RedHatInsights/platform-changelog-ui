@@ -29,7 +29,6 @@ import {
 import {
     Timelines
 } from 'components';
-import { timelines } from "schema/Timelines";
 
 const NONE_SPECIFIED = "None specified";
 const NONE_FOUND = "None found";
