@@ -121,7 +121,7 @@ parameters:
   value: 512Mi
 - description: The number of replicas to use for the prometheus deployment
   name: REPLICAS
-  value: '1'
+  value: '3'
 - description: Image tag
   name: IMAGE_TAG
   required: true
