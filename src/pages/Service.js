@@ -11,7 +11,8 @@ import {
     TextListItem,
     TextList,
     Tabs, 
-    Tab, 
+    Tab,
+    TabContent,
     TabTitleText,
 } from "@patternfly/react-core";
 import { GithubIcon, GitlabIcon } from '@patternfly/react-icons';
@@ -49,6 +50,11 @@ export default function Service() {
     });
 
     const [activeTab, setActiveTab] = useState(0);
+
+    const detailsTabRef = React.createRef();
+    const timelinesTabRef = React.createRef();
+    const commitsTabRef = React.createRef();
+    const deploysTabRef = React.createRef();
 
     useEffect(() => {
         fetchService(`/api/v1/services/${name}`);
@@ -96,13 +102,30 @@ export default function Service() {
             </PageSection>
 
             <Tabs
+                mountOnEnter
                 activeKey={activeTab}
                 onSelect={handleTabClick}
                 isBox={false}
-                aria-label="Select between commits and deploys tabs"
+                aria-label="Tabs of service information"
+                role="region"
                 style={{overflow: "visible"}}
             >
-                <Tab key={0} eventKey={0} title={<TabTitleText>Details</TabTitleText>}>
+                <Tab eventKey={0} title={<TabTitleText>Details</TabTitleText>} tabContentId="detailsTabContent" tabContentRef={detailsTabRef} />
+
+                <Tab eventKey={1} title={<TabTitleText>Timeline</TabTitleText>} tabContentId="timelinesTabContent" tabContentRef={timelinesTabRef} />
+
+                <Tab eventKey={2} title={<TabTitleText>Commits</TabTitleText>} tabContentId="commitsTabContent" tabContentRef={commitsTabRef} />
+
+                <Tab eventKey={3} title={<TabTitleText>Deploys</TabTitleText>} tabContentId="deploysTabContent" tabContentRef={deploysTabRef} />
+            </Tabs>
+
+            <>
+                <TabContent
+                    eventKey={0}
+                    id="detailsTabContent"
+                    ref={detailsTabRef}
+                    aria-label={`Details for ${service.display_name}`}
+                >
                     <PageSection variant={PageSectionVariants.light}>
                         <TextContent>
                             <TextList component={TextListVariants.dl}>
@@ -114,24 +137,38 @@ export default function Service() {
                             </TextList>
                         </TextContent>
                     </PageSection>
-                </Tab>
+                </TabContent>
 
                 {service.id > 0 && <>
-                    <Tab key={1} eventKey={1} title={<TabTitleText>Timeline</TabTitleText>}>
+                    <TabContent 
+                        eventKey={1} 
+                        id="timelinesTabContent"
+                        ref={timelinesTabRef}
+                        aria-label={`Timeline display for ${service.display_name}`}
+                        hidden
+                    >
                         <Timelines dataPath={`/api/v1/services/${name}/timelines`} gh_url={service.gh_repo} gl_url={service.gl_repo} />
-                    </Tab>
-
-                    <Tab key={2} eventKey={2} title={<TabTitleText>Commits</TabTitleText>}>
-                        <PageSection>
-                            <CommitTable key={service.id} dataPath={`/api/v1/services/${name}/commits`} gh_url={service.gh_repo} gl_url={service.gl_repo} />
-                        </PageSection>
-                    </Tab>
-
-                    <Tab key={3} eventKey={3} title={<TabTitleText>Deploys</TabTitleText>}>
+                    </TabContent>
+                    <TabContent
+                        eventKey={2}
+                        id="commitsTabContent"
+                        ref={commitsTabRef}
+                        aria-label={`Commits display for ${service.display_name}`}
+                        hidden
+                    >
+                        <CommitTable key={service.id} dataPath={`/api/v1/services/${name}/commits`} gh_url={service.gh_repo} gl_url={service.gl_repo} />
+                    </TabContent>
+                    <TabContent
+                        eventKey={3}
+                        id="deploysTabContent"
+                        ref={deploysTabRef}
+                        aria-label={`Deploys display for ${service.display_name}`}
+                        hidden
+                    >
                         <DeployTable key={service.name} dataPath={`/api/v1/services/${name}/deploys`} />
-                    </Tab>
+                    </TabContent>
                 </>}
-            </Tabs>
+            </>     
         </>
     );
 }
