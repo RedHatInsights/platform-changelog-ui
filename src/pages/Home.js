@@ -1,6 +1,11 @@
 import React from 'react';
 
 import {
+    PageSection,
+    PageSectionVariants,
+} from '@patternfly/react-core';
+
+import {
     TitleSection,
 } from 'components';
 
@@ -12,12 +17,22 @@ import {
 
 export default function Home() {
     return (
-        <>
-            <TitleSection title="Gumbaroo" description="Global Changelog System for Console Dot Platform" />
+        <div className='pc-c-page__content'>
+            <PageSection variant={PageSectionVariants.light}>
+                <TitleSection title="Gumbaroo" description="Global Changelog System for Console Dot Platform" />
+            </PageSection>
 
-            <ServiceTable />
-            <CommitTable />
-            <DeployTable />
-        </>
+            <PageSection>
+                <ServiceTable />
+            </PageSection>
+
+            <PageSection>
+                <CommitTable />
+            </PageSection>
+
+            <PageSection>
+                <DeployTable />
+            </PageSection>
+        </div>
     )
 }

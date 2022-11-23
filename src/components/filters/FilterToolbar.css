@@ -1,0 +1,24 @@
+* {
+    outline: none;
+}
+
+.pc-filter-toolbar {
+    display: inline-flex;
+    justify-content: space-between;
+    height: 50px;
+    width: 100%;
+    border-bottom: 1px solid black;
+    background-color: white;
+    margin: 0px;
+    padding-top: 10px;
+}
+
+.pc-filter-toolbar__selector {
+    padding-left: 10px;
+    top: -3px;
+    width: 160px;
+}
+
+.pc-filter-toolbar__apply {
+    top: -5px;
+}

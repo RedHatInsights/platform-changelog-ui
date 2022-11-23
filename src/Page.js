@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useContext } from "react";
 import {
     Nav,
     NavItem,
@@ -9,7 +9,14 @@ import {
 
 import { Routes, Route, useLocation, Link } from "react-router-dom";
 
-import { AppHeader } from "components";
+import * as ConstantTypes from './AppConstants';
+
+import { MainHeader }  from "components";
+import {
+    FilterManager,
+    FilterToolbar,
+    FilterContext,
+} from 'components/filters';
 
 import {
     Home,
@@ -21,8 +28,11 @@ import {
 } from "pages";
 
 function AppPage() {
+    const location = useLocation();
 
-    const active = useLocation().pathname;
+    const active = location.pathname;
+
+    const [isNavOpen, toggleNav] = useState(false);
 
     const PageNav = (
         <Nav aria-label="Nav">
@@ -48,12 +58,13 @@ function AppPage() {
 
     return (
         <Page
-            header={<AppHeader />}
+            header={<MainHeader isNavOpen={isNavOpen} toggleNav={toggleNav} pathname={active} />}
             sidebar={Sidebar}
             isManagedSidebar
             mainContainerId={pageId}
             className="myPageClass"
         >
+            <FilterToolbar />
             <Routes>
                 <Route path="*" element={
                     <Error

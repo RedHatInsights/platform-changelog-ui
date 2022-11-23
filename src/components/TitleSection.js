@@ -7,9 +7,11 @@ import {
     Text
   } from "@patternfly/react-core";
 
+import "./TitleSection.css";
+
 export default function TitleSection({title, description, children=null}) {
     return (
-        <PageSection variant={PageSectionVariants.light} >
+        <div className="header">
             <TextContent>
                 <Text component="h1">
                     {title}
@@ -19,6 +21,6 @@ export default function TitleSection({title, description, children=null}) {
                 </Text>
             </TextContent>
             {children}
-        </PageSection>
+        </div>
     )
 }

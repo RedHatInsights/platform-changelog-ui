@@ -1,0 +1,11 @@
+.pc-c-toolbar__chips {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+    margin-top: -3px;
+}
+
+.pc-c-toolbar__chip  {
+    margin-left: 20px;
+}
