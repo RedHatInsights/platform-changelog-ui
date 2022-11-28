@@ -59,7 +59,11 @@ export default function FilterManager(props) {
         params.forEach((value, key) => {
             // search for the key in the options array, not case sensitive
             const option = options.find(option => option.toLowerCase() === key.toLowerCase());
-            if (option) {
+
+            // check if the key value pair is already in the filters array
+            const found = newFilters.find(filter => filter.field === option && filter.value === value);
+            
+            if (option && !found) {
                 newFilters.push({field: option, value: value});
             }
             else {
@@ -105,6 +109,33 @@ export default function FilterManager(props) {
         return filters;
     }
 
+    // function for clickable fields
+    // given the field name and the value, add the filter
+    function addFilter(field, value) {
+        // search for the key in the options array, not case sensitive
+        let newFilter = {};
+
+        let formatted = field.replace(/ /g,"_").toLowerCase();
+        const option = options.find(option => option.toLowerCase() === formatted);
+
+        // check if the key value pair is already in the filters array
+        const found = filters.find(filter => filter.field === option && filter.value === value);
+
+        if (option && !found) {
+            newFilter = {field: option, value: value};
+        } else {
+            return;
+        }
+
+        setFilters([...filters, newFilter]);
+    }
+
+    function checkOptions(field) {
+        let formatted = field.replace(/ /g,"_").toLowerCase();
+        return options.find(option => option.toLowerCase() === formatted);
+    }
+        
+
     function setDate(start, end) {
         // set the start and end dates
         setStartDate(start);
@@ -118,7 +149,7 @@ export default function FilterManager(props) {
     }
 
     return (
-        <FilterContext.Provider value={{ filters, options, startDate, endDate, setFilters, setDate, show, clear }}>
+        <FilterContext.Provider value={{ filters, options, startDate, endDate, getFilters, addFilter, checkOptions, setFilters, setDate, show, clear }}>
             { props.children }
         </FilterContext.Provider>
     )
