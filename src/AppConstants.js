@@ -12,6 +12,12 @@ export const DEPLOY_FILTERS = [
 
 export const FILTER_MAP = [
     {
+        // dont show filters on the /services/{service} pages
+        path: "/services/*[a-zA-Z0-9]",
+        show: false,
+        options: [],
+    },
+    {
         path: "/services",
         show: true,
         options: SERVICE_FILTERS
