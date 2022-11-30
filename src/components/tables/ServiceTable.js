@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
 import {Td} from '@patternfly/react-table';
 
@@ -8,11 +8,16 @@ import { NavLink } from 'react-router-dom';
 
 import Moment from 'react-moment';
 
+import { FilterContext } from 'components/filters';
+
 import GenericTable from './GenericTable';
+import Hoverable from './Hoverable';
 
 import { expandedServicesSchema } from 'schema';
 
 function ServiceTable({dataPath = "/api/v1/services"}) {
+    const filterContext = useContext(FilterContext);
+
     function FormatColumn(column) {
         const formatted = expandedServicesSchema[column]
         return formatted === undefined ? null : formatted;
@@ -27,6 +32,10 @@ function ServiceTable({dataPath = "/api/v1/services"}) {
         }
 
         let expandable = false;
+        
+        // if the column is filterable (and not a link already),
+        // wrap the contents in a hoverable
+        let hoverable = false;
 
         let cellContents;
 
@@ -46,8 +55,6 @@ function ServiceTable({dataPath = "/api/v1/services"}) {
             cellContents = <a href={cell} target="_blank" rel="noreferrer">
                                 <GitlabIcon key="icon" />
                             </a>;
-        } else if (column === "Merged by") {
-            cellContents = <>Merged By</>;
         } else if (column === "Latest commit") {
             if (cell !== null && cell.id !== 0) {
                 cellContents = <><CodeBranchIcon /><Moment date={cell.timestamp} format=" MM/YYYY"/></>;
@@ -56,11 +63,18 @@ function ServiceTable({dataPath = "/api/v1/services"}) {
         } else if (column === "Latest deploy") {
             if (cell !== null && cell.id !== 0) {
                 cellContents = <><CodeBranchIcon /><Moment date={cell.timestamp} format=" MM/YYYY"/></>;
-                 expandable = true;
+                expandable = true;
             }
         } else {
             cellContents = <>{cell}</>;
+            hoverable = true;
         }
+        
+        // if you can filter by the column, wrap the contents in hoverable
+        if (hoverable && filterContext.checkOptions(column)) {
+            cellContents = <Hoverable filter={column} value={cell} >{cellContents}</Hoverable>
+        }
+
         return <Td key={`${rowIndex}_${cellIndex}`} 
                     dataLabel={column}
                     compoundExpand={expandable && compoundExpandParams != null ? compoundExpandParams(rowIndex, cellIndex) : null}

@@ -9,6 +9,7 @@ export const services = {
 
 export const expandedServices = {
     display_name: 'Name',
+    tenant: 'Tenant',
     gh_repo: 'Github',
     gl_repo: 'Gitlab',
     deploy_file: 'Deploy file',

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
 import Moment from 'react-moment';
 
@@ -6,11 +6,16 @@ import { Td } from '@patternfly/react-table';
 
 import { CodeBranchIcon } from '@patternfly/react-icons';
 
+import { FilterContext } from 'components/filters';
+
 import GenericTable from './GenericTable';
+import Hoverable from './Hoverable';
 
 import { deploysSchema } from 'schema';
 
 function DeployTable({dataPath = "/api/v1/deploys", noTitle=false }) {
+    const filterContext = useContext(FilterContext);
+
     function FormatColumn(column) {
         const formatted = deploysSchema[column]
         return formatted === undefined ? null : formatted;
@@ -25,6 +30,7 @@ function DeployTable({dataPath = "/api/v1/deploys", noTitle=false }) {
         }
 
         let expandable = false;
+        let hoverable = false;
 
         let cellContents;
         
@@ -40,6 +46,12 @@ function DeployTable({dataPath = "/api/v1/deploys", noTitle=false }) {
             cellContents = <Moment date={cell} />;
         } else {
             cellContents = <>{cell}</>;
+            hoverable = true;
+        }
+
+        // if you can filter by the column, wrap the contents in hoverable
+        if (hoverable && filterContext.checkOptions(column)) {
+            cellContents = <Hoverable filter={column} value={cell} >{cellContents}</Hoverable>
         }
 
         return <Td key={`${rowIndex}_${cellIndex}`} 

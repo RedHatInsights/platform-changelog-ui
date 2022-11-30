@@ -129,6 +129,9 @@ export default function Service() {
                     <PageSection variant={PageSectionVariants.light}>
                         <TextContent>
                             <TextList component={TextListVariants.dl}>
+                                <TextListItem component={TextListItemVariants.dt}>Tenant</TextListItem>
+                                <TextListItem component={TextListItemVariants.dd}>{service.tenant ? service.tenant : NONE_SPECIFIED}</TextListItem>
+                            
                                 <TextListItem component={TextListItemVariants.dt}>Namespace</TextListItem>
                                 <TextListItem component={TextListItemVariants.dd}>{service.namespace ? service.namespace : NONE_SPECIFIED}</TextListItem>
 

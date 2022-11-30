@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
 
 import Moment from 'react-moment';
 
@@ -6,7 +6,10 @@ import { Td } from '@patternfly/react-table';
 
 import { CodeBranchIcon } from '@patternfly/react-icons';
 
+import { FilterContext } from 'components/filters';
+
 import GenericTable from './GenericTable';
+import Hoverable from './Hoverable';
 
 import { commitsSchema } from 'schema';
 
@@ -14,6 +17,7 @@ import { commitsSchema } from 'schema';
  * Options to pass in the desired data or the data path to the table
  */
 function CommitTable({dataPath = "/api/v1/commits", noTitle=false, gh_url="", gl_url=""}) {
+    const filterContext = useContext(FilterContext);
 
     function FormatColumn(column) {
         const formatted = commitsSchema[column]
@@ -30,6 +34,8 @@ function CommitTable({dataPath = "/api/v1/commits", noTitle=false, gh_url="", gl
         }
 
         let cellContents;
+
+        let hoverable = false;
         
         if (column === "Ref") {
             // a link to the commit, so this function needs a service's url
@@ -52,6 +58,12 @@ function CommitTable({dataPath = "/api/v1/commits", noTitle=false, gh_url="", gl
             cellContents = <Moment date={cell} />;
         } else {
             cellContents = <>{cell}</>;
+            hoverable = true;
+        }
+
+        // if you can filter by the column, wrap the contents in hoverable
+        if (hoverable && filterContext.checkOptions(column)) {
+            cellContents = <Hoverable filter={column} value={cell} >{cellContents}</Hoverable>
         }
 
         return <Td key={`${rowIndex}_${cellIndex}`} 

@@ -1,3 +1,7 @@
+export const SERVICE_FILTERS = [
+    'Name', 'Display_Name', 'Tenant', 'Namespace', 'Branch'
+];
+
 export const COMMIT_FILTERS = [
     'Repo', 'Ref', 'Author', 'Merged_By'
 ];
@@ -8,9 +12,15 @@ export const DEPLOY_FILTERS = [
 
 export const FILTER_MAP = [
     {
-        path: "/services",
+        // dont show filters on the /services/{service} pages
+        path: "/services/*[a-zA-Z0-9]",
         show: false,
-        options: []
+        options: [],
+    },
+    {
+        path: "/services",
+        show: true,
+        options: SERVICE_FILTERS
     },
     {
         path: "/commits",
