@@ -4,6 +4,10 @@ kind: Template
 metadata:
   name: platform-changelog-ui
 objects:
+- apiVersion: v1
+  kind: ServiceAccount
+  metadata:
+    name: platform-changelog-ui
 - apiVersion: apps/v1
   kind: Deployment
   metadata:
