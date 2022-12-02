@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 
 import {
   ExpandableRowContent,
@@ -39,14 +39,14 @@ function GenericTable({title = "", dataPath = "", link = "", cellFunction = null
     const filterContext = useContext(FilterContext);
     const filters = filterContext.filters;
 
-    const [ columns, setColumns ] = React.useState([]);
-    const [ rows, setRows ] = React.useState([]);
-    const [ expandedCells, setExpandedCells ] = React.useState({});
-    const [ activeSortIndex, setActiveSortIndex ] = React.useState(-1);
-    const [ activeSortDirection, setActiveSortDirection ] = React.useState(DESC);
-    const [ page, setPage ] = React.useState(1);
-    const [ perPage, setPerPage ] = React.useState(10);
-    const [ count, setCount ] = React.useState(0);
+    const [ columns, setColumns ] = useState([]);
+    const [ rows, setRows ] = useState([]);
+    const [ expandedCells, setExpandedCells ] = useState({});
+    const [ activeSortIndex, setActiveSortIndex ] = useState(-1);
+    const [ activeSortDirection, setActiveSortDirection ] = useState(DESC);
+    const [ page, setPage ] = useState(1);
+    const [ perPage, setPerPage ] = useState(10);
+    const [ count, setCount ] = useState(0);
 
     function fetchData() {
         let query = dataPath;

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 
 import {
     PageSection,
@@ -17,10 +17,10 @@ import { TimelineCardWrapper as TimelineCard } from './TimelineCard';
 const PER_CALL = 10;
 
 function Timelines({dataPath=`/api/v1/timelines`, include_repo = false, gh_url="", gl_url=""}) {
-    const [timelines, setTimelines] = React.useState([]);
-    const [offset, setOffset] = React.useState(0);
-    const [count, setCount] = React.useState(0);
-    const [loading, setLoading] = React.useState(true);
+    const [timelines, setTimelines] = useState([]);
+    const [offset, setOffset] = useState(0);
+    const [count, setCount] = useState(0);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         fetchTimelines();
