@@ -57,7 +57,7 @@ objects:
             failureThreshold: 10
             httpGet:
               path: /
-              port: 8000
+              port: 8080
               scheme: HTTP
             initialDelaySeconds: 30
             periodSeconds: 5
@@ -67,7 +67,7 @@ objects:
             failureThreshold: 10
             httpGet:
               path: /
-              port: 8000
+              port: 8080
               scheme: HTTP
             initialDelaySeconds: 30
             periodSeconds: 5
