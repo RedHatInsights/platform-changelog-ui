@@ -18,14 +18,14 @@ function Export({rows, columns}) {
     }, [rows, columns]);
 
     return <Dropdown
-        onSelect={() => {
-            setOpen(false);
-            setFilename(getFilename());
-        }}
+        onSelect={() => setOpen(false)}
         toggle={
             <DropdownToggle
                 toggleIndicator={null}
-                onToggle={() => setOpen(!isOpen)}
+                onToggle={() => {
+                    setOpen(!isOpen);
+                    setFilename(getFilename());
+                }}
             >
                 <ExportIcon/>
             </DropdownToggle>
