@@ -15,7 +15,7 @@ import Hoverable from './Hoverable';
 
 import { expandedServicesSchema } from 'schema';
 
-function ServiceTable({dataPath = "/api/v1/services"}) {
+function ServiceTable({dataPath = "/api/v1/services", includeExport = true}) {
     const filterContext = useContext(FilterContext);
 
     function FormatColumn(column) {
@@ -84,9 +84,9 @@ function ServiceTable({dataPath = "/api/v1/services"}) {
     }
 
     return (
-        <GenericTable 
-            title = "Services"
-            dataPath ={dataPath}
+        <GenericTable
+            dataPath={dataPath}
+            includeExport={includeExport}
             cellFunction={FormatCell}
             columnFunction={FormatColumn} />
     );

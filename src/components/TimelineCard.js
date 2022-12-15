@@ -13,25 +13,25 @@ const type = {commit: 'commit', deploy: 'deploy'};
 
 type TimelineCardProps = {
     timeline: any;
-    include_repo: boolean;
-    gh_url: string;
-    gl_url: string;
+    includeRepo: boolean;
+    ghURL: string;
+    glURL: string;
 }
 
 const TimelineCard = (props: TimelineCardProps) => {
-    const {timeline, include_repo, gh_url, gl_url} = props;
+    const {timeline, includeRepo, ghURL, glURL} = props;
 
     return (
         <div style={timeline.type == type.deploy ? deployStyle : commitStyle}>
             <Card isCompact isFlat>
-                {include_repo && <CardTitle>{timeline.repo}</CardTitle>}
+                {includeRepo && <CardTitle>{timeline.repo}</CardTitle>}
                 {timeline.type == type.commit &&
                     <CardBody>
                         <p>Commit:&nbsp;
                             <a 
-                                href={gh_url != "" 
-                                ? `${gh_url}/commit/${timeline.ref}` 
-                                : `${gl_url}/-/commit/${timeline.ref}`} 
+                                href={ghURL != "" 
+                                ? `${ghURL}/commit/${timeline.ref}` 
+                                : `${glURL}/-/commit/${timeline.ref}`} 
                                 target="_blank" 
                                 rel="noreferrer noopener"
                             >

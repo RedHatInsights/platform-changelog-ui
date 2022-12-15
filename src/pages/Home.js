@@ -15,6 +15,7 @@ import {
     ServiceTable,
 } from 'components/tables';
 
+// The home page needs some new content/stats
 export default function Home() {
     return (
         <div className='pc-c-page__content'>
@@ -23,14 +24,17 @@ export default function Home() {
             </PageSection>
 
             <PageSection>
+                <TitleSection title="Services" headingLevel="h3" />
                 <ServiceTable />
             </PageSection>
 
             <PageSection>
+                <TitleSection title="Recent Commits" headingLevel="h3" />
                 <CommitTable />
             </PageSection>
 
             <PageSection>
+                <TitleSection title="Recent Deployments" headingLevel="h3" />
                 <DeployTable />
             </PageSection>
         </div>

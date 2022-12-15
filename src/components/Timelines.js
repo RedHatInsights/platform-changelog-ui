@@ -16,7 +16,7 @@ import { TimelineCardWrapper as TimelineCard } from './TimelineCard';
 
 const PER_CALL = 10;
 
-function Timelines({dataPath=`/api/v1/timelines`, include_repo = false, gh_url="", gl_url=""}) {
+function Timelines({dataPath=`/api/v1/timelines`, includeRepo = false, ghURL="", glURL=""}) {
     const [timelines, setTimelines] = useState([]);
     const [offset, setOffset] = useState(0);
     const [count, setCount] = useState(0);
@@ -70,9 +70,9 @@ function Timelines({dataPath=`/api/v1/timelines`, include_repo = false, gh_url="
             {timelines.map((timeline, index) => {
                 let props = {
                     timeline: timeline,
-                    include_repo: include_repo,
-                    gh_url: gh_url,
-                    gl_url: gl_url,
+                    includeRepo: includeRepo,
+                    ghURL: ghURL,
+                    glURL: glURL,
                 };
 
                 if (timelines.length === index + 1) {

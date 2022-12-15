@@ -13,7 +13,7 @@ import Hoverable from './Hoverable';
 
 import { deploysSchema } from 'schema';
 
-function DeployTable({dataPath = "/api/v1/deploys", noTitle=false }) {
+function DeployTable({dataPath = "/api/v1/deploys", includeExport=true }) {
     const filterContext = useContext(FilterContext);
 
     function FormatColumn(column) {
@@ -61,7 +61,11 @@ function DeployTable({dataPath = "/api/v1/deploys", noTitle=false }) {
     }
 
     return (
-        <GenericTable title={noTitle ? "" : "Deploys"} dataPath={dataPath} cellFunction={FormatCell} columnFunction={FormatColumn} />
+        <GenericTable
+            dataPath={dataPath}
+            includeExport={includeExport}
+            cellFunction={FormatCell}
+            columnFunction={FormatColumn} />
     );
 }
 
