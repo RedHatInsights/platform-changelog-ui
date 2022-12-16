@@ -150,7 +150,7 @@ export default function Service() {
                         aria-label={`Timeline display for ${service.display_name}`}
                         hidden
                     >
-                        <Timelines dataPath={`/api/v1/services/${name}/timelines`} gh_url={service.gh_repo} gl_url={service.gl_repo} />
+                        <Timelines dataPath={`/api/v1/services/${name}/timelines`} ghURL={service.gh_repo} glURL={service.gl_repo} />
                     </TabContent>
                     <TabContent
                         eventKey={2}
@@ -159,7 +159,7 @@ export default function Service() {
                         aria-label={`Commits display for ${service.display_name}`}
                         hidden
                     >
-                        <CommitTable key={service.id} dataPath={`/api/v1/services/${name}/commits`} gh_url={service.gh_repo} gl_url={service.gl_repo} />
+                        <CommitTable key={service.id} dataPath={`/api/v1/services/${name}/commits`} ghURL={service.gh_repo} glURL={service.gl_repo} />
                     </TabContent>
                     <TabContent
                         eventKey={3}

@@ -9,11 +9,11 @@ import {
 
 import "./TitleSection.css";
 
-export default function TitleSection({title, description, children=null}) {
+export default function TitleSection({title, description, headingLevel="h1", children=null}) {
     return (
         <div className="header">
             <TextContent>
-                <Text component="h1">
+                <Text component={headingLevel}>
                     {title}
                 </Text>
                 <Text component="p">

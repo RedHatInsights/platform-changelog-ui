@@ -25,8 +25,8 @@ import {
 
 import Pagination from './Pagination';
 
+import { Export } from 'components';
 import { NotificationsContext } from 'components/notifications';
-
 import { FilterContext } from 'components/filters';
 
 const DESC = 'desc';
@@ -34,7 +34,7 @@ const ASC = 'asc';
 
 const NONE_SPECIFIED = "None specified";
 
-function GenericTable({title = "", dataPath = "", link = "", cellFunction = null, columnFunction = null}) {
+function GenericTable({dataPath = "", link = "", includeExport = false, cellFunction = null, columnFunction = null}) {
     const notifications = useContext(NotificationsContext);
     const filterContext = useContext(FilterContext);
     const filters = filterContext.filters;
@@ -168,9 +168,7 @@ function GenericTable({title = "", dataPath = "", link = "", cellFunction = null
         <>
             <Toolbar>
                 <ToolbarContent>
-                    <ToolbarItem variant={ToolbarItemVariant.label}>
-                        {title}
-                    </ToolbarItem>
+                    {includeExport && rows.length > 0 && <Export rows={rows} columns={columns} />}
                     {rows.length > 0 
                         ? <ToolbarItem variant="pagination" alignment={{ default : 'alignRight'}}>
                             <Pagination 

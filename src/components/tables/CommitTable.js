@@ -16,7 +16,7 @@ import { commitsSchema } from 'schema';
 /**
  * Options to pass in the desired data or the data path to the table
  */
-function CommitTable({dataPath = "/api/v1/commits", noTitle=false, gh_url="", gl_url=""}) {
+function CommitTable({dataPath="/api/v1/commits", includeExport=true, ghURL="", glURL=""}) {
     const filterContext = useContext(FilterContext);
 
     function FormatColumn(column) {
@@ -43,11 +43,11 @@ function CommitTable({dataPath = "/api/v1/commits", noTitle=false, gh_url="", gl
             const icon = <CodeBranchIcon key="icon" />;
 
             // example: https://github.com/RedHatInsights/rhsm-subscriptions/commit/{Ref}
-            if (gh_url !== "") {
-                cellContents = <a href={`${gh_url}/commit/${cell}`} target="_blank" rel="noreferrer noopener">{icon}</a>;
+            if (ghURL !== "") {
+                cellContents = <a href={`${ghURL}/commit/${cell}`} target="_blank" rel="noreferrer noopener">{icon}</a>;
             } 
-            else if (gl_url !== "") { // example: https://gitlab.cee.redhat.com/service/app-interface/-/commit/{Ref}
-                cellContents = <a href={`${gl_url}/-/commit/${cell}`} target="_blank" rel="noreferrer noopener">{icon}</a>; // might want to handle if the url has a / at the end, too.
+            else if (glURL !== "") { // example: https://gitlab.cee.redhat.com/service/app-interface/-/commit/{Ref}
+                cellContents = <a href={`${glURL}/-/commit/${cell}`} target="_blank" rel="noreferrer noopener">{icon}</a>; // might want to handle if the url has a / at the end, too.
             } 
             else {
                 cellContents = <>{icon}</>;
@@ -73,7 +73,11 @@ function CommitTable({dataPath = "/api/v1/commits", noTitle=false, gh_url="", gl
     }
 
     return (
-        <GenericTable title={noTitle ? "" : "Commits"} dataPath={dataPath} cellFunction={FormatCell} columnFunction={FormatColumn} />
+        <GenericTable
+            dataPath={dataPath} 
+            includeExport = {includeExport}
+            cellFunction={FormatCell} 
+            columnFunction={FormatColumn} />
     );
 }
 
