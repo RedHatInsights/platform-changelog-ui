@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+
 import '@patternfly/react-core/dist/styles/base.css';
 
 import Page from './Page';

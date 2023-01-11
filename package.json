@@ -1,5 +1,5 @@
 {
-  "name": "ui",
+  "name": "platform-changelog-ui",
   "proxy": "http://localhost:8000",
   "version": "0.1.0",
   "private": true,
@@ -53,5 +53,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "insights": {
+    "appname": "platform-changelog"
   }
 }
