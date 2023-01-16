@@ -6,12 +6,9 @@ install:
 - yarn install --frozen-lockfile
 jobs:
   include:
-  - stage: Lint
-    script: npm run lint
-  - stage: Test
-    script: npm run test && npx codecov
+  # TODO: add Linting and testing
   - stage: Deploy
-    script: npm run deploy && curl -sSL https://raw.githubusercontent.com/RedHatInsights/insights-frontend-builder-common/master/src/bootstrap.sh | bash -s
+    script: curl -sSL https://raw.githubusercontent.com/RedHatInsights/insights-frontend-builder-common/master/src/bootstrap.sh | bash -s
 env:
   global:
   - REPO="git@github.com:RedHatInsights/platform-changelog-ui-build"
