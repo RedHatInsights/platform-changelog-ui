@@ -8,9 +8,9 @@ import './Style.css';
 
 import {
     TitleSection,
-} from 'components';
+} from '../components';
 
-import { CommitTable } from 'components/tables';
+import { CommitTable } from '../components/tables';
 
 export default function Commits() {
     return (

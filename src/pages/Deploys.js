@@ -6,9 +6,9 @@ import {
 
 import {
     TitleSection,
-} from 'components';
+} from '../components';
 
-import { DeployTable } from 'components/tables';
+import { DeployTable } from '../components/tables';
 
 export default function Deploys() {
     return (

@@ -11,14 +11,14 @@ export const TimelineCardWrapper = React.forwardRef((props, ref) => {
 
 const type = {commit: 'commit', deploy: 'deploy'};
 
-type TimelineCardProps = {
-    timeline: any;
-    includeRepo: boolean;
-    ghURL: string;
-    glURL: string;
-}
+// type TimelineCardProps = {
+//     timeline: any;
+//     includeRepo: boolean;
+//     ghURL: string;
+//     glURL: string;
+// }
 
-const TimelineCard = (props: TimelineCardProps) => {
+const TimelineCard = (props) => {
     const {timeline, includeRepo, ghURL, glURL} = props;
 
     return (

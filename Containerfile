@@ -19,10 +19,11 @@ RUN npm install --global yarn && yarn install
 COPY src ./src
 COPY public ./public
 COPY jsconfig.json ./
+COPY *.js ./
+COPY .babelrc ./.babelrc
 
-RUN yarn build
-
-RUN rm -rfv /usr/share/nginx/html && \
+RUN yarn run build && \
+    rm -rfv /usr/share/nginx/html && \
     mv /usr/src/app/build /usr/share/nginx/html && \
     chown nginx:nginx -R /usr/share/nginx/html && \
     chmod 777 -R /var/log/nginx && \

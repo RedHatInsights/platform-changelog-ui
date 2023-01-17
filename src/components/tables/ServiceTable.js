@@ -8,12 +8,12 @@ import { NavLink } from 'react-router-dom';
 
 import Moment from 'react-moment';
 
-import { FilterContext } from 'components/filters';
+import { FilterContext } from '../filters';
 
 import GenericTable from './GenericTable';
 import Hoverable from './Hoverable';
 
-import { expandedServicesSchema } from 'schema';
+import { expandedServicesSchema } from '../../schema';
 
 function ServiceTable({dataPath = "/api/v1/services", includeExport = true}) {
     const filterContext = useContext(FilterContext);

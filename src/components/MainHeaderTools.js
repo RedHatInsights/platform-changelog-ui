@@ -16,7 +16,7 @@ import spacingStyles from '@patternfly/react-styles/css/utilities/Spacing/spacin
 import { css } from '@patternfly/react-styles';
 import { BellIcon, CogIcon } from '@patternfly/react-icons';
 
-import { DateFilter } from 'components/filters';
+import { DateFilter } from './filters';
 
 export default function MainHeaderTools({ pathname }) {
 

@@ -6,11 +6,11 @@ import {
 
 import {
     TitleSection,
-} from 'components';
+} from '../components';
 
 import "./Style.css";
 
-import { ServiceTable } from 'components/tables';
+import { ServiceTable } from '../components/tables';
 
 export default function Services() {
     return (

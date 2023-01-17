@@ -7,13 +7,13 @@ import {
 
 import {
     TitleSection,
-} from 'components';
+} from '../components';
 
 import {
     CommitTable,
     DeployTable,
     ServiceTable,
-} from 'components/tables';
+} from '../components/tables';
 
 // The home page needs some new content/stats
 export default function Home() {

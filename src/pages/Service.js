@@ -20,15 +20,17 @@ import { GithubIcon, GitlabIcon } from '@patternfly/react-icons';
 import { useParams } from "react-router-dom";
 import Moment from 'react-moment';
 
-import { NotificationsContext, NotificationsPortal } from 'components/notifications';
+import { API_URL } from '../AppConstants';
+
+import { NotificationsContext, NotificationsPortal } from '../components/notifications';
 import {
     CommitTable,
     DeployTable,
-} from 'components/tables';
+} from '../components/tables';
 
 import {
     Timelines
-} from 'components';
+} from '../components';
 
 const NONE_SPECIFIED = "None specified";
 const NONE_FOUND = "None found";
@@ -57,7 +59,7 @@ export default function Service() {
     const deploysTabRef = React.createRef();
 
     useEffect(() => {
-        fetchService(`/api/v1/services/${name}`);
+        fetchService(`${API_URL}/api/v1/services/${name}`);
     }, []);
 
     async function fetchService(path) {

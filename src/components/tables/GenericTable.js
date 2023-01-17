@@ -23,11 +23,12 @@ import {
     ToolbarItemVariant 
 } from '@patternfly/react-core';
 
+import { API_URL } from '../../AppConstants';
 import Pagination from './Pagination';
 
-import { Export } from 'components';
-import { NotificationsContext } from 'components/notifications';
-import { FilterContext } from 'components/filters';
+import { Export } from '../';
+import { NotificationsContext } from '../notifications';
+import { FilterContext } from '../filters';
 
 const DESC = 'desc';
 const ASC = 'asc';
@@ -49,7 +50,7 @@ function GenericTable({dataPath = "", link = "", includeExport = false, cellFunc
     const [ count, setCount ] = useState(0);
 
     function fetchData() {
-        let query = dataPath;
+        let query = `${API_URL}${dataPath}`;
         let offset = (page - 1) * perPage;
 
         query += `?offset=${offset}&limit=${perPage}`;
