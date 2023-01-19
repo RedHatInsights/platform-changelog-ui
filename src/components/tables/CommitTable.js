@@ -6,12 +6,12 @@ import { Td } from '@patternfly/react-table';
 
 import { CodeBranchIcon } from '@patternfly/react-icons';
 
-import { FilterContext } from 'components/filters';
+import { FilterContext } from '../filters';
 
 import GenericTable from './GenericTable';
 import Hoverable from './Hoverable';
 
-import { commitsSchema } from 'schema';
+import { commitsSchema } from '../../schema';
 
 /**
  * Options to pass in the desired data or the data path to the table

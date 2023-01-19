@@ -20,8 +20,8 @@ import { CaretLeftIcon, CaretRightIcon, ClockIcon } from '@patternfly/react-icon
 
 import moment from 'moment';
 
-import { NotificationsContext } from 'components/notifications';
-import { FilterContext } from 'components/filters';
+import { NotificationsContext } from '../../notifications';
+import { FilterContext } from '../';
 
 import DateTextInput from './DateTextInput';
 

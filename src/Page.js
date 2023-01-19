@@ -11,12 +11,12 @@ import { Routes, Route, useLocation, Link } from "react-router-dom";
 
 import * as ConstantTypes from './AppConstants';
 
-import { MainHeader }  from "components";
+import { MainHeader }  from "./components";
 import {
     FilterManager,
     FilterToolbar,
     FilterContext,
-} from 'components/filters';
+} from './components/filters';
 
 import {
     Home,
@@ -25,7 +25,7 @@ import {
     Deploys,
     Service,
     Error,
-} from "pages";
+} from "./pages";
 
 function AppPage() {
     const location = useLocation();

@@ -10,7 +10,8 @@ import {
     Spinner,
 } from '@patternfly/react-core';
 
-import * as Utils from "utils";
+import { API_URL } from '../AppConstants';
+import * as Utils from "../utils";
 
 import { TimelineCardWrapper as TimelineCard } from './TimelineCard';
 
@@ -48,7 +49,7 @@ function Timelines({dataPath=`/api/v1/timelines`, includeRepo = false, ghURL="",
     }, [loading]);
 
     function fetchTimelines() {
-        fetch(`${dataPath}?offset=${offset}&limit=${PER_CALL}`).then(res => {
+        fetch(`${API_URL}${dataPath}?offset=${offset}&limit=${PER_CALL}`).then(res => {
             if (!res.ok) {
                 notifications.sendError(`Failed to fetch data.`, `${res.status}: ${res.statusText}`);
                 return;

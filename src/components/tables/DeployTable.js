@@ -6,12 +6,12 @@ import { Td } from '@patternfly/react-table';
 
 import { CodeBranchIcon } from '@patternfly/react-icons';
 
-import { FilterContext } from 'components/filters';
+import { FilterContext } from '../filters';
 
 import GenericTable from './GenericTable';
 import Hoverable from './Hoverable';
 
-import { deploysSchema } from 'schema';
+import { deploysSchema } from '../../schema';
 
 function DeployTable({dataPath = "/api/v1/deploys", includeExport=true }) {
     const filterContext = useContext(FilterContext);

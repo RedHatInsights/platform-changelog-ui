@@ -3,7 +3,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import { Button, Tooltip } from '@patternfly/react-core';
 import { PlusCircleIcon } from '@patternfly/react-icons';
 
-import { FilterContext } from 'components/filters';
+import { FilterContext } from '../filters';
 
 export default function Hoverable(props) {
     const filter = props.filter;

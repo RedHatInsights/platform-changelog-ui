@@ -5,7 +5,7 @@ import { useLocation } from 'react-router-dom';
 import { FILTER_MAP, COMMIT_FILTERS, DEPLOY_FILTERS } from '../../AppConstants';
 import { SingleRegex } from '../../utils/Regex';
 
-import { NotificationsContext } from 'components/notifications';
+import { NotificationsContext } from '../notifications';
 
 import FilterContext from './FilterContext';
 import FilterToolbar from './FilterToolbar';
