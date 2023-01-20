@@ -24,7 +24,7 @@ COPY .babelrc ./.babelrc
 
 RUN yarn run build && \
     rm -rfv /usr/share/nginx/html && \
-    mv /usr/src/app/build /usr/share/nginx/html && \
+    mv /usr/src/app/dist /usr/share/nginx/html && \
     chown nginx:nginx -R /usr/share/nginx/html && \
     chmod 777 -R /var/log/nginx && \
     mkdir -p /var/cache/nginx && \
