@@ -4,7 +4,7 @@ import {Td} from '@patternfly/react-table';
 
 import { GithubIcon, GitlabIcon, CodeBranchIcon } from '@patternfly/react-icons';
 
-import { NavLink } from 'react-router-dom';
+import {default as Link} from '../LinkWrapper';
 
 import Moment from 'react-moment';
 
@@ -44,7 +44,7 @@ function ServiceTable({dataPath = "/api/v1/services", includeExport = true}) {
         if (cell == "") {
             cellContents = <>{cell}</>
         } else if (column === "Name") {
-            cellContents = <NavLink to={`/services/${row[1]}`}>{cell}</NavLink>;
+            cellContents = <Link to={`/services/${row[1]}`}>{cell}</Link>;
         } else if (column === "Github") {
             width = 10;
             cellContents =  <a href={cell} target="_blank" rel="noreferrer">
