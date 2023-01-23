@@ -9,7 +9,7 @@ import {
 
 import { Routes, Route, useLocation, Link } from "react-router-dom";
 
-import * as ConstantTypes from './AppConstants';
+import { APP_ROOT } from './AppConstants';
 
 import { MainHeader }  from "./components";
 import {
@@ -38,16 +38,16 @@ function AppPage() {
         <Nav aria-label="Nav">
             <NavList>
                 <NavItem itemId={0} isActive={active === "/"}>
-                    <Link to="/">Home</Link>
+                    <Link to={`${APP_ROOT}/`}>Home</Link>
                 </NavItem>
                 <NavItem itemId={1} isActive={active === "/services"}>
-                    <Link to="/services">Services</Link>
+                    <Link to={`${APP_ROOT}/services`}>Services</Link>
                 </NavItem>
                 <NavItem itemId={2} isActive={active === "/commits"}>
-                    <Link to="/commits">Commits</Link>
+                    <Link to={`${APP_ROOT}/commits`}>Commits</Link>
                 </NavItem>
                 <NavItem itemId={3} isActive={active === "/deploys"}>
-                    <Link to="/deploys">Deploys</Link>
+                    <Link to={`${APP_ROOT}/deploys`}>Deploys</Link>
                 </NavItem>
             </NavList>
         </Nav>
@@ -72,11 +72,11 @@ function AppPage() {
                         description="Another page might have what you need, so try one of the links below."
                     />
                 } />
-                <Route path="/" element={<Home />} />
-                <Route path="/services" element={<Services />} />
-                <Route path="/commits" element={<Commits />} />
-                <Route path="/deploys" element={<Deploys />} />
-                <Route path="/services/:name" element={<Service />} />
+                <Route path={`${APP_ROOT}/`} element={<Home />} />
+                <Route path={`${APP_ROOT}/services`} element={<Services />} />
+                <Route path={`${APP_ROOT}/commits`} element={<Commits />} />
+                <Route path={`${APP_ROOT}/deploys`} element={<Deploys />} />
+                <Route path={`${APP_ROOT}/services/:name`} element={<Service />} />
             </Routes>
         </Page>
     );

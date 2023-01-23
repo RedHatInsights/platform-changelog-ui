@@ -2,9 +2,9 @@ import React from 'react';
 
 import { Button, EmptyState, EmptyStateBody, EmptyStateIcon, EmptyStateSecondaryActions, Title } from '@patternfly/react-core';
 
-import { Link } from "react-router-dom";
-
 import { ExclamationCircleIcon } from '@patternfly/react-icons';
+
+import {default as Link} from "../components/LinkWrapper"
 
 export default function Error({ error = "Internal Error", description = "Sorry for any inconvenience." }) {
     return (

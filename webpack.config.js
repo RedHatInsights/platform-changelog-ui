@@ -47,26 +47,38 @@ module.exports = {
         rules: [
             {
                 test: /\.(js|jsx)$/,
-                exclude: /node_modules/,
                 use: {
                     loader: 'babel-loader'
+                },
+                generator: {
+                    filename: 'js/[name][ext]'
                 }
             },
             {
-                test: /\.s?[ac]ss$/i,
+                test: /\.css$/,
                 use: ['style-loader', 'css-loader', 'sass-loader']
             },
             {
-                test: /\.(woff(2)?|ttf|jpg|png|eot|gif|svg)(\?v=\d+\.\d+\.\d+)?$/,
+                test: /\.(woff|woff2)$/,
                 type: 'asset/resource',
                 generator: {
-                    filename: 'public/[name][ext]'
+                    filename: 'public/fonts/[name][ext]'
+                }
+            },
+            {
+                test: /\.(png|svg)$/,
+                use: 'file-loader',
+                generator: {
+                    filename: 'public/images/[name][ext]'
                 }
             }
         ]
     },
     plugins: [
-        new HtmlWebpackPlugin({ template: './src/index.html' }),
+        new HtmlWebpackPlugin({ 
+            template: './src/index.html',
+            favicon: './public/images/favicon.ico'
+        }),
         new EnvironmentPlugin({ ENV: '' }),
         ...(process.env.ANALYZE === 'true' ? [new BundleAnalyzerPlugin()] : [])
     ]
