@@ -13,7 +13,7 @@ import Hoverable from './Hoverable';
 
 import { deploysSchema } from '../../schema';
 
-function DeployTable({dataPath = "/api/v1/deploys", includeExport=true }) {
+function DeployTable({dataPath = "/api/platform-changelog/v1/deploys", includeExport=true }) {
     const filterContext = useContext(FilterContext);
 
     function FormatColumn(column) {
