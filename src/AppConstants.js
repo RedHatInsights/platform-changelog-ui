@@ -1,5 +1,5 @@
 export const API_URL = process.env.ENV === 'development' ? 'http://localhost:8000' : '';
-export const APP_ROOT = '/ui';
+export const APP_ROOT = '';
 
 export const SERVICE_FILTERS = [
     'Name', 'Display_Name', 'Tenant', 'Namespace', 'Branch'
