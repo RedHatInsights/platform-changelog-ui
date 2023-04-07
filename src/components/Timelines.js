@@ -17,7 +17,7 @@ import { TimelineCardWrapper as TimelineCard } from './TimelineCard';
 
 const PER_CALL = 10;
 
-function Timelines({dataPath=`/api/platform-changelog/v1/timelines`, includeRepo = false, ghURL="", glURL=""}) {
+function Timelines({dataPath=`/api/v1/timelines`, includeRepo = false, ghURL="", glURL=""}) {
     const [timelines, setTimelines] = useState([]);
     const [offset, setOffset] = useState(0);
     const [count, setCount] = useState(0);

@@ -1,5 +1,5 @@
-export const API_URL = process.env.ENV === 'development' ? 'http://localhost:8000' : '/app/platform-changelog';
-export const APP_ROOT = '/app/platform-changelog';
+export const API_URL = process.env.ENV === 'development' ? 'http://localhost:8000' : '';
+export const APP_ROOT = '/ui';
 
 export const SERVICE_FILTERS = [
     'Name', 'Display_Name', 'Tenant', 'Namespace', 'Branch'
