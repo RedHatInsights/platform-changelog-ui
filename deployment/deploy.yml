@@ -104,7 +104,7 @@ objects:
       app: platform-changelog-ui
     sessionAffinity: None
     type: ClusterIP
-
+# nginx.conf for ephemeral
 - apiVersion: v1
   kind: ConfigMap
   apiVersion: v1
@@ -163,15 +163,6 @@ objects:
                 }
             }
         }
-- apiVersion: v1
-  kind: Secret
-  metadata:
-    name: platform-changelog-cookie
-    labels:
-      app: platform-changelog
-  data:
-    platform-changelog-cookie: dG1Vb204R28tbzRua3FsOFRzbldPV0ZKMnd0T0tKZjdZMkZmTFRXaTI3dz0=
-
 - apiVersion: route.openshift.io/v1
   kind: Route
   metadata:
@@ -190,7 +181,6 @@ objects:
       name: platform-changelog-oauth-proxy
       weight: 100
     wildcardPolicy: None
-
 - apiVersion: v1
   kind: Service
   metadata:
@@ -210,8 +200,6 @@ objects:
       pod: platform-changelog-oauth-proxy
     sessionAffinity: None
     type: ClusterIP
-
-
 - apiVersion: apps/v1
   kind: Deployment
   metadata:
@@ -262,8 +250,8 @@ objects:
             successThreshold: 1
           resources:
             limits:
-              cpu: ${API_CPU_LIMIT}
-              memory: ${API_MEMORY_LIMIT}
+              cpu: ${PROXY_CPU_LIMIT}
+              memory: ${PROXY_MEMORY_LIMIT}
             requests:
               cpu: 200m
               memory: 256Mi
@@ -290,6 +278,14 @@ objects:
           secret:
             defaultMode: 420
             secretName: platform-changelog-auth
+- apiVersion: v1
+  kind: Secret
+  metadata:
+    name: platform-changelog-cookie
+    labels:
+      app: platform-changelog
+  data:
+    platform-changelog-cookie: dG1Vb204R28tbzRua3FsOFRzbldPV0ZKMnd0T0tKZjdZMkZmTFRXaTI3dz0=
 
 parameters:
 - description: Cpu limit of service
@@ -304,3 +300,19 @@ parameters:
 - description: Image tag
   name: IMAGE_TAG
   required: true
+- description: Maximum amount of cpu the oauth proxy can use.
+  displayName: CPU Limit
+  name: PROXY_CPU_LIMIT
+  required: true
+  value: 500m
+- description: Maximum amount of memory for the oauth proxy.
+  displayName: Memory Limit
+  name: PROXY_MEMORY_LIMIT
+  required: true
+  value: 512Mi
+- name: PROXY_REPLICAS
+  value: '1'
+- name: OAUTH_PROXY_IMAGE_NAME
+  value: quay.io/openshift/origin-oauth-proxy
+- name: OAUTH_PROXY_IMAGE_TAG
+  value: "latest"
