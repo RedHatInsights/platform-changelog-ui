@@ -59,7 +59,7 @@ export default function Service() {
     const deploysTabRef = React.createRef();
 
     useEffect(() => {
-        fetchService(`${API_URL}/api/platform-changelog/v1/services/${name}`);
+        fetchService(`${API_URL}/api/v1/services/${name}`);
     }, []);
 
     async function fetchService(path) {
@@ -152,7 +152,7 @@ export default function Service() {
                         aria-label={`Timeline display for ${service.display_name}`}
                         hidden
                     >
-                        <Timelines dataPath={`/api/platform-changelog/v1/services/${name}/timelines`} ghURL={service.gh_repo} glURL={service.gl_repo} />
+                        <Timelines dataPath={`/api/v1/services/${name}/timelines`} ghURL={service.gh_repo} glURL={service.gl_repo} />
                     </TabContent>
                     <TabContent
                         eventKey={2}
@@ -161,7 +161,7 @@ export default function Service() {
                         aria-label={`Commits display for ${service.display_name}`}
                         hidden
                     >
-                        <CommitTable key={service.id} dataPath={`/api/platform-changelog/v1/services/${name}/commits`} ghURL={service.gh_repo} glURL={service.gl_repo} />
+                        <CommitTable key={service.id} dataPath={`/api/v1/services/${name}/commits`} ghURL={service.gh_repo} glURL={service.gl_repo} />
                     </TabContent>
                     <TabContent
                         eventKey={3}
@@ -170,7 +170,7 @@ export default function Service() {
                         aria-label={`Deploys display for ${service.display_name}`}
                         hidden
                     >
-                        <DeployTable key={service.name} dataPath={`/api/platform-changelog/v1/services/${name}/deploys`} />
+                        <DeployTable key={service.name} dataPath={`/api/v1/services/${name}/deploys`} />
                     </TabContent>
                 </>}
             </>     

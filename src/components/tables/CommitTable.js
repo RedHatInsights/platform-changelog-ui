@@ -16,7 +16,7 @@ import { commitsSchema } from '../../schema';
 /**
  * Options to pass in the desired data or the data path to the table
  */
-function CommitTable({dataPath="/api/platform-changelog/v1/commits", includeExport=true, ghURL="", glURL=""}) {
+function CommitTable({dataPath="/api/v1/commits", includeExport=true, ghURL="", glURL=""}) {
     const filterContext = useContext(FilterContext);
 
     function FormatColumn(column) {

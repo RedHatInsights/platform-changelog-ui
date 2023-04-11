@@ -51,7 +51,7 @@ $ podman rm platform-changelog
 When accessing the api, you may have to change the proxy address in ```ui/package.json``` from ```localhost``` to your IP.
 
 
-You can now access the application UI on `http://localhost:3000/app/platform-changelog/`. 
+You can now access the application UI on `http://localhost:3000/`. 
 
 
 To reset your local database:

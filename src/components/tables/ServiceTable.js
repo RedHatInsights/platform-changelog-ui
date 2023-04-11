@@ -15,7 +15,7 @@ import Hoverable from './Hoverable';
 
 import { expandedServicesSchema } from '../../schema';
 
-function ServiceTable({dataPath = "/api/platform-changelog/v1/services", includeExport = true}) {
+function ServiceTable({dataPath = "/api/v1/services", includeExport = true}) {
     const filterContext = useContext(FilterContext);
 
     function FormatColumn(column) {
