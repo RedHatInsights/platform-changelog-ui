@@ -7,6 +7,12 @@ objects:
 - apiVersion: v1
   kind: ServiceAccount
   metadata:
+    name: platform-changelog
+    annotations:
+      serviceaccounts.openshift.io/oauth-redirectreference.primary: '{"kind":"OAuthRedirectReference","apiVersion":"v1","reference":{"kind":"Route","name":"platform-changelog"}}'
+- apiVersion: v1
+  kind: ServiceAccount
+  metadata:
     name: platform-changelog-ui
 - apiVersion: apps/v1
   kind: Deployment
@@ -116,6 +122,189 @@ objects:
       app: platform-changelog-ui
     sessionAffinity: None
     type: ClusterIP
+# nginx.conf for ephemeral
+- apiVersion: v1
+  kind: ConfigMap
+  apiVersion: v1
+  metadata:
+    name: platform-changelog-nginx-conf
+  data:
+    nginx.conf: |-
+        worker_processes  2;
+        error_log  /var/log/nginx/error.log debug;
+        pid /tmp/nginx.pid;
+        events {
+            worker_connections  1024;
+        }
+        http {
+            include       /etc/nginx/mime.types;
+            default_type  application/octet-stream;
+            log_format main '[$time_local] "$request" $status $body_bytes_sent "$http_referer" "$http_user_agent" "$http_x_forwarded_for"';
+            access_log /var/log/nginx/access.log main;
+            sendfile        on;
+            keepalive_timeout  65;
+            server {
+                gzip on;
+                gzip_http_version 1.1;
+                gzip_comp_level 5;
+                gzip_min_length 256;
+                gzip_proxied any;
+                gzip_types
+                application/atom+xml
+                application/javascript
+                application/json
+                application/rss+xml
+                application/vnd.ms-fontobject
+                application/x-font-ttf
+                application/x-web-app-manifest+json
+                application/xhtml+xml
+                application/xml
+                font/opentype
+                image/svg+xml
+                image/x-icon
+                text/css
+                text/plain
+                text/x-component;
+                listen 8080;
+                disable_symlinks off;
+                root /usr/share/nginx/html;
+                location /api/v1 {
+                     proxy_pass http://platform-changelog-api:8000;
+                     #proxy_http_version 1.1;
+                     #proxy_set_header Upgrade $http_upgrade;
+                     #proxy_set_header Connection 'upgrade';
+                     #proxy_set_header Host $host;
+                     #proxy_cache_bypass $http_upgrade;
+                }
+                location / {
+                    try_files $uri /index.html;
+                }
+            }
+        }
+- apiVersion: route.openshift.io/v1
+  kind: Route
+  metadata:
+    labels:
+      app: platform-changelog
+    name: platform-changelog
+  spec:
+    port:
+      targetPort: 8443
+    tls:
+      insecureEdgeTerminationPolicy: Redirect
+      #termination: edge
+      termination: reencrypt
+    to:
+      kind: Service
+      name: platform-changelog-oauth-proxy
+      weight: 100
+    wildcardPolicy: None
+- apiVersion: v1
+  kind: Service
+  metadata:
+    name: platform-changelog-oauth-proxy
+    labels:
+      app: platform-changelog
+    annotations:
+      service.alpha.openshift.io/serving-cert-secret-name: platform-changelog-auth
+  spec:
+    ports:
+    - name: https-8443
+      port: 8443
+      protocol: TCP
+      targetPort: 8443
+    selector:
+      app: platform-changelog
+      pod: platform-changelog-oauth-proxy
+    sessionAffinity: None
+    type: ClusterIP
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    labels:
+      app: platform-changelog
+    name: platform-changelog-oauth-proxy
+    annotations:
+      ignore-check.kube-linter.io/minimum-three-replicas: "oauth-proxy does not need 3 replicas"
+  spec:
+    replicas: ${{PROXY_REPLICAS}}
+    selector:
+      matchLabels:
+        app: platform-changelog
+    template:
+      metadata:
+        labels:
+          app: platform-changelog
+          pod: platform-changelog-oauth-proxy
+      spec:
+        serviceAccountName: platform-changelog
+        containers:
+        - name: oauth-proxy
+          image: ${OAUTH_PROXY_IMAGE_NAME}:${OAUTH_PROXY_IMAGE_TAG}
+          imagePullPolicy: IfNotPresent
+          ports:
+          - containerPort: 8443
+            name: http
+            protocol: TCP
+          readinessProbe:
+            httpGet:
+              path: /oauth/healthz
+              port: http
+              scheme: HTTPS
+            initialDelaySeconds: 5
+            timeoutSeconds: 1
+            failureThreshold: 3
+            periodSeconds: 10
+            successThreshold: 1
+          livenessProbe:
+            httpGet:
+              path: /oauth/healthz
+              port: http
+              scheme: HTTPS
+            initialDelaySeconds: 5
+            timeoutSeconds: 1
+            failureThreshold: 3
+            periodSeconds: 10
+            successThreshold: 1
+          resources:
+            limits:
+              cpu: ${PROXY_CPU_LIMIT}
+              memory: ${PROXY_MEMORY_LIMIT}
+            requests:
+              cpu: 200m
+              memory: 256Mi
+          args:
+          - --https-address=:8443
+          - --provider=openshift
+          - --openshift-service-account=platform-changelog
+          - --upstream=http://platform-changelog-ui:8080
+          - --tls-cert=/etc/tls/private/tls.crt
+          - --tls-key=/etc/tls/private/tls.key
+          - --cookie-secret-file=/etc/proxy/secrets/platform-changelog-cookie
+          - --request-logging=true
+          volumeMounts:
+          - mountPath: /etc/proxy/secrets
+            name: platform-changelog-cookie
+          - mountPath: /etc/tls/private
+            name: platform-changelog-proxy-tls
+        volumes:
+        - name: platform-changelog-cookie
+          secret:
+            defaultMode: 420
+            secretName: platform-changelog-cookie
+        - name: platform-changelog-proxy-tls
+          secret:
+            defaultMode: 420
+            secretName: platform-changelog-auth
+- apiVersion: v1
+  kind: Secret
+  metadata:
+    name: platform-changelog-cookie
+    labels:
+      app: platform-changelog
+  data:
+    platform-changelog-cookie: dG1Vb204R28tbzRua3FsOFRzbldPV0ZKMnd0T0tKZjdZMkZmTFRXaTI3dz0=
+
 parameters:
 - description: Cpu limit of service
   name: CPU_LIMIT
@@ -129,3 +318,19 @@ parameters:
 - description: Image tag
   name: IMAGE_TAG
   required: true
+- description: Maximum amount of cpu the oauth proxy can use.
+  displayName: CPU Limit
+  name: PROXY_CPU_LIMIT
+  required: true
+  value: 500m
+- description: Maximum amount of memory for the oauth proxy.
+  displayName: Memory Limit
+  name: PROXY_MEMORY_LIMIT
+  required: true
+  value: 512Mi
+- name: PROXY_REPLICAS
+  value: '1'
+- name: OAUTH_PROXY_IMAGE_NAME
+  value: quay.io/openshift/origin-oauth-proxy
+- name: OAUTH_PROXY_IMAGE_TAG
+  value: "latest"
