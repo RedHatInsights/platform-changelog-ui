@@ -59,7 +59,25 @@ objects:
         containers:
         - image: quay.io/cloudservices/platform-changelog-ui:${IMAGE_TAG}
           imagePullPolicy: IfNotPresent
+          livenessProbe:
+            failureThreshold: 10
+            httpGet:
+              path: /
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 30
+            periodSeconds: 5
+            timeoutSeconds: 2
           name: platform-changelog-ui
+          readinessProbe:
+            failureThreshold: 10
+            httpGet:
+              path: /
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 30
+            periodSeconds: 5
+            timeoutSeconds: 2
           resources:
             limits:
               cpu: ${CPU_LIMIT}
@@ -296,7 +314,7 @@ parameters:
   value: 512Mi
 - description: The number of replicas to use for the prometheus deployment
   name: REPLICAS
-  value: '1'
+  value: '3'
 - description: Image tag
   name: IMAGE_TAG
   required: true
