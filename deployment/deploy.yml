@@ -333,4 +333,4 @@ parameters:
 - name: OAUTH_PROXY_IMAGE_NAME
   value: quay.io/openshift/origin-oauth-proxy
 - name: OAUTH_PROXY_IMAGE_TAG
-  value: "latest"
+  value: "4.10.0"
