@@ -14,6 +14,10 @@ objects:
   kind: ServiceAccount
   metadata:
     name: platform-changelog-ui
+- apiVersion: v1
+  kind: ServiceAccount
+  metadata:
+    name: tekton-pipeline
 - apiVersion: apps/v1
   kind: Deployment
   metadata:
