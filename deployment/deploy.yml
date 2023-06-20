@@ -20,10 +20,6 @@ objects:
     name: tekton-pipeline
 # solution to service account auth from
 # https://github.com/openshift/oauth-proxy/issues/179#issuecomment-1202279241
-# I definitely don't like it
-# If I knew more about openshift, I would want it to work where 
-# we have a serviceaccount "group" that has post access and another with only get access
-# in the case that another service wants to hit changelog
 - apiVersion: v1
   kind: ConfigMap
   metadata:
@@ -34,7 +30,7 @@ objects:
 - apiVersion: rbac.authorization.k8s.io/v1
   kind: Role
   metadata:
-    name: oauth-service-account-access
+    name: changelog-oauth-service-account-access
     namespace: default
   rules:
   - apiGroups:
@@ -43,6 +39,7 @@ objects:
     - configmaps
     verbs:
     - get
+    - update
     resourceNames:
     - oauth-service-account-access
 - apiVersion: apps/v1
@@ -308,13 +305,12 @@ objects:
           - --https-address=:8443
           - --provider=openshift
           - --openshift-service-account=platform-changelog
-          - --openshift-delegate-urls={"/api":{"group":"","resource":"configmaps","verb":"post","namespace":"default","name":"oauth-service-account-access"}}
+          - --openshift-delegate-urls={"/":{"group":"","resource":"configmaps","verb":"update","namespace":"default","name":"oauth-service-account-access"}}
           - --upstream=http://platform-changelog-ui:8080
           - --tls-cert=/etc/tls/private/tls.crt
           - --tls-key=/etc/tls/private/tls.key
           - --cookie-secret-file=/etc/proxy/secrets/platform-changelog-cookie
           - --request-logging=true
-          - --auth-logging=true
           volumeMounts:
           - mountPath: /etc/proxy/secrets
             name: platform-changelog-cookie
