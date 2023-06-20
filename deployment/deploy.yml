@@ -18,6 +18,30 @@ objects:
   kind: ServiceAccount
   metadata:
     name: tekton-pipeline
+# solution to service account auth from
+# https://github.com/openshift/oauth-proxy/issues/179#issuecomment-1202279241
+- apiVersion: v1
+  kind: ConfigMap
+  metadata:
+    name: oauth-service-account-access
+    namespace: default
+  data:
+    description: Fake ConfigMap to give all authenticated users access to a given service behind openshift-oauth-proxy.
+- apiVersion: rbac.authorization.k8s.io/v1
+  kind: Role
+  metadata:
+    name: changelog-oauth-service-account-access
+    namespace: default
+  rules:
+  - apiGroups:
+    - ""
+    resources:
+    - configmaps
+    verbs:
+    - get
+    - update
+    resourceNames:
+    - oauth-service-account-access
 - apiVersion: apps/v1
   kind: Deployment
   metadata:
@@ -281,6 +305,7 @@ objects:
           - --https-address=:8443
           - --provider=openshift
           - --openshift-service-account=platform-changelog
+          - --openshift-delegate-urls={"/":{"group":"","resource":"configmaps","verb":"update","namespace":"default","name":"oauth-service-account-access"}}
           - --upstream=http://platform-changelog-ui:8080
           - --tls-cert=/etc/tls/private/tls.crt
           - --tls-key=/etc/tls/private/tls.key
