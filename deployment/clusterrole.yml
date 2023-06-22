@@ -10,4 +10,4 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: platform-changelog
-  namespace: change-log-dev
+  namespace: platform-changelog-env
