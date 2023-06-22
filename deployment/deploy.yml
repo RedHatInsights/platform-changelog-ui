@@ -305,7 +305,7 @@ objects:
           - --https-address=:8443
           - --provider=openshift
           - --openshift-service-account=platform-changelog
-          - --openshift-delegate-urls={"/":{"group":"","resource":"configmaps","verb":"update","namespace":"platform-changelog-stage","name":"oauth-service-account-access"}}
+          - --openshift-delegate-urls={"/":{"group":"","resource":"configmaps","verb":"update","namespace":"default","name":"oauth-service-account-access"}}
           - --upstream=http://platform-changelog-ui:8080
           - --tls-cert=/etc/tls/private/tls.crt
           - --tls-key=/etc/tls/private/tls.key
