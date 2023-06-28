@@ -37,7 +37,9 @@ pipeline {
         }
 
         stage('Run Linter') {
-            // TODO: Add linting
+            steps {
+                echo 'TODO: Add linting'
+            }
         }
     }
 }
