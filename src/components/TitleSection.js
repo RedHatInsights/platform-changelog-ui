@@ -1,8 +1,6 @@
 import React from 'react';
 
 import {
-    PageSection,
-    PageSectionVariants,
     TextContent,
     Text
   } from "@patternfly/react-core";

@@ -5,7 +5,6 @@ import {
     PageSectionVariants,
     TextContent,
     Text,
-    TextVariants,
     TextListVariants,
     TextListItemVariants,
     TextListItem,
@@ -18,11 +17,10 @@ import {
 import { GithubIcon, GitlabIcon } from '@patternfly/react-icons';
 
 import { useParams } from "react-router-dom";
-import Moment from 'react-moment';
 
 import { API_URL } from '../AppConstants';
 
-import { NotificationsContext, NotificationsPortal } from '../components/notifications';
+import { NotificationsContext } from '../components/notifications';
 import {
     CommitTable,
     DeployTable,
@@ -33,7 +31,6 @@ import {
 } from '../components';
 
 const NONE_SPECIFIED = "None specified";
-const NONE_FOUND = "None found";
 
 export default function Service() {
     const notifications = React.useContext(NotificationsContext);

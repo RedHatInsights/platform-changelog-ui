@@ -1,6 +1,7 @@
 import React from 'react';
-import {Card, CardTitle, CardBody, CardFooter} from '@patternfly/react-core';
+import { Card, CardTitle, CardBody } from '@patternfly/react-core';
 
+/* eslint-disable react/display-name */
 export const TimelineCardWrapper = React.forwardRef((props, ref) => {
     return (
         <div ref={ref}>
