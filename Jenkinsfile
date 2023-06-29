@@ -42,7 +42,7 @@ pipeline {
                     steps {
                         withVault([configuration: configuration, vaultSecrets: secrets]) {
                             sh './lint.sh'
-                        }'
+                        }
                     }
                 }
             }
