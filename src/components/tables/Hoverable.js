@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 
 import { Button, Tooltip } from '@patternfly/react-core';
 import { PlusCircleIcon } from '@patternfly/react-icons';
@@ -30,4 +30,4 @@ export default function Hoverable(props) {
             </Button>
         </Tooltip>
     );
-};
+}

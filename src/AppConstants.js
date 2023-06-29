@@ -1,3 +1,4 @@
+/* eslint-disable */
 export const API_URL = process.env.ENV === 'development' ? 'http://localhost:8000' : '';
 export const APP_ROOT = '';
 

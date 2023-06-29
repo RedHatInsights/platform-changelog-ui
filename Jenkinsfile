@@ -26,19 +26,25 @@ pipeline {
         IMAGE="quay.io/cloudservices/platform-changelog-ui"
     }
     stages {
-        stage('Build the PR commit image') {
-            steps {
-                withVault([configuration: configuration, vaultSecrets: secrets]) {
-                    sh './build_deploy.sh'
+        stage('Pipeline') {
+            parallel {
+                stage('Build the PR commit image') {
+                    steps {
+                        withVault([configuration: configuration, vaultSecrets: secrets]) {
+                            sh './build_deploy.sh'
+                        }
+                        
+                        sh 'mkdir -p artifacts'
+                    }
                 }
-                
-                sh 'mkdir -p artifacts'
-            }
-        }
 
-        stage('Run Linter') {
-            steps {
-                echo 'TODO: Add linting'
+                stage('Run Linter') {
+                    steps {
+                        withVault([configuration: configuration, vaultSecrets: secrets]) {
+                            sh './lint.sh'
+                        }'
+                    }
+                }
             }
         }
     }

@@ -11,7 +11,6 @@ import {
 } from '@patternfly/react-table';
 
 import {
-    PageSection,
     TextContent,
     TextListVariants,
     TextListItemVariants,
@@ -35,7 +34,7 @@ const ASC = 'asc';
 
 const NONE_SPECIFIED = "None specified";
 
-function GenericTable({dataPath = "", link = "", includeExport = false, cellFunction = null, columnFunction = null}) {
+function GenericTable({dataPath = "", includeExport = false, cellFunction = null, columnFunction = null}) {
     const notifications = useContext(NotificationsContext);
     const filterContext = useContext(FilterContext);
     const filters = filterContext.filters;

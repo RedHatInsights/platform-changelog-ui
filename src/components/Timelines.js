@@ -9,7 +9,7 @@ import { API_URL } from '../AppConstants';
 
 import { TimelineCardWrapper as TimelineCard } from './TimelineCard';
 
-import { NotificationsContext } from '../../notifications';
+import { NotificationsContext } from './notifications';
 
 const PER_CALL = 10;
 

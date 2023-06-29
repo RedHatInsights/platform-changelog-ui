@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Button, Divider, Select, SelectOption, TreeViewSearch } from '@patternfly/react-core';
+import { Button, Divider, Select, SelectOption } from '@patternfly/react-core';
 
 import "./FilterToolbar.css";
 
@@ -22,6 +22,7 @@ function FilterToolbar() {
         return Object.entries(filter).map(([key, value]) => `${key}=${value}`)[0];
     };
 
+    // eslint-disable-next-line no-unused-vars
     const removeFilter = (arr, toRemove) => {
         return arr.filter(item => stringify(item) !== stringify(toRemove));
     };

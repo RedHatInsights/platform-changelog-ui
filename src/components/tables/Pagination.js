@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Pagination, PaginationVariant } from '@patternfly/react-core';
+import React from 'react';
+import { Pagination } from '@patternfly/react-core';
 
 export default function PaginationTop({ page, perPage, onSetPage, onPerPageSelect, itemCount}) {
     return (

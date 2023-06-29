@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { createPortal } from 'react-dom';
 
@@ -20,7 +20,7 @@ function NotificationsPortal(props) {
      */
     function sendMessage(type="success", title="Success!", message="") {
         /** append the message to the list of messages */
-        setMessage([...messages, { type: type, title: title, message: message }]);
+        setMessages([...messages, { type: type, title: title, message: message }]);
     }
 
     function clear() {

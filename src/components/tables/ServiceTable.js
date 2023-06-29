@@ -38,20 +38,16 @@ function ServiceTable({dataPath = "/api/v1/services", includeExport = true}) {
         let hoverable = false;
 
         let cellContents;
-
-        let width = 0; // percentage modifier for the cell width
         
         if (cell == "") {
             cellContents = <>{cell}</>
         } else if (column === "Name") {
             cellContents = <Link to={`/services/${row[1]}`}>{cell}</Link>;
         } else if (column === "Github") {
-            width = 10;
             cellContents =  <a href={cell} target="_blank" rel="noreferrer">
                                 <GithubIcon key="icon" />
                             </a>;
         } else if (column === "Gitlab") {
-            width = 10;
             cellContents = <a href={cell} target="_blank" rel="noreferrer">
                                 <GitlabIcon key="icon" />
                             </a>;

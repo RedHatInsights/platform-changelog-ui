@@ -4,7 +4,7 @@ import "./Chips.css";
 
 import { Chip, ChipGroup } from '@patternfly/react-core';
 
-export default function Chips ({ filters, options, onDelete }) {
+export default function Chips ({ filters, onDelete }) {
     const [chips, setChips] = useState({});
    
     useEffect(() => {

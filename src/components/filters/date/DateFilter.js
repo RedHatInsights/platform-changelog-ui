@@ -1,22 +1,16 @@
 import React, { useEffect, useRef, useState, useContext } from 'react';
-import { useLocation } from 'react-router-dom';
 
 import {
     Bullseye,
     Button,
-    Divider,
     Flex,
     FlexItem,
     Form,
     FormGroup,
     Modal,
-    Radio,
-    Tab,
-    Tabs,
-    Text,
     CalendarMonth
 } from '@patternfly/react-core';
-import { CaretLeftIcon, CaretRightIcon, ClockIcon } from '@patternfly/react-icons';
+import { ClockIcon } from '@patternfly/react-icons';
 
 import moment from 'moment';
 
@@ -29,8 +23,6 @@ function DateFilter() {
     // uses the FilterContext to hold the start and end date
     const filterContext = useContext(FilterContext);
     const notifications = useContext(NotificationsContext);
-    
-    const location = useLocation();
 
     // if no date is selected, the date filter is not applied
     const [modified, setModified] = useState(false);
@@ -38,6 +30,7 @@ function DateFilter() {
     const startDate = filterContext.startDate;
     const endDate = filterContext.endDate;
 
+    // eslint-disable-next-line no-unused-vars
     const [selectedDate, setSelectedDate] = useState({start: moment(), end: moment()});
 
     const [isOpen, setOpen] = useState(false);
@@ -140,6 +133,6 @@ function DateFilter() {
             </Button>
         </>
     );
-};
+}
 
 export default DateFilter;
