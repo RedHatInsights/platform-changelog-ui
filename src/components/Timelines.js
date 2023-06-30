@@ -23,6 +23,7 @@ function Timelines({dataPath=`/api/v1/timelines`, includeRepo = false, ghURL="",
 
     useEffect(() => {
         fetchTimelines();
+        setOffset(offset + PER_CALL);
     }, []);
 
     const observer = useRef();
@@ -40,8 +41,7 @@ function Timelines({dataPath=`/api/v1/timelines`, includeRepo = false, ghURL="",
                 setOffset(offset + PER_CALL);
                 fetchTimelines();
             }
-        }
-        , { threshold: 0.5 });
+        }, { threshold: 0.5 });
 
         if (node) observer.current.observe(node);
     }, [loading]);
