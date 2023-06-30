@@ -2,18 +2,14 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 
 import {
     PageSection,
-    PageSectionVariants,
-    Toolbar, 
-    ToolbarContent, 
-    ToolbarItem, 
-    ToolbarItemVariant,
     Spinner,
 } from '@patternfly/react-core';
 
 import { API_URL } from '../AppConstants';
-import * as Utils from "../utils";
 
 import { TimelineCardWrapper as TimelineCard } from './TimelineCard';
+
+import { NotificationsContext } from './notifications';
 
 const PER_CALL = 10;
 
@@ -22,6 +18,8 @@ function Timelines({dataPath=`/api/v1/timelines`, includeRepo = false, ghURL="",
     const [offset, setOffset] = useState(0);
     const [count, setCount] = useState(0);
     const [loading, setLoading] = useState(true);
+
+    const notifications = React.useContext(NotificationsContext);
 
     useEffect(() => {
         fetchTimelines();

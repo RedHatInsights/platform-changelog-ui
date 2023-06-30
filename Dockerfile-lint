@@ -1,0 +1,15 @@
+FROM registry.redhat.io/ubi8/ubi-minimal:latest
+
+WORKDIR /usr/src/app
+
+USER 0
+
+RUN microdnf module disable nodejs && \
+    microdnf module enable nodejs:16
+RUN microdnf install nodejs nginx
+
+COPY package.json yarn.lock ./
+RUN npm install --global yarn && yarn install
+
+COPY src ./src
+COPY .eslintrc.json .

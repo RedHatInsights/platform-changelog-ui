@@ -1,17 +1,13 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import { useLocation } from 'react-router-dom';
 
-import { FILTER_MAP, COMMIT_FILTERS, DEPLOY_FILTERS } from '../../AppConstants';
+import { FILTER_MAP } from '../../AppConstants';
 import { SingleRegex } from '../../utils/Regex';
 
-import { NotificationsContext } from '../notifications';
-
 import FilterContext from './FilterContext';
-import FilterToolbar from './FilterToolbar';
 
 export default function FilterManager(props) {
-    const notifications = useContext(NotificationsContext);
 
     const location = useLocation();
     const search = location.search;
@@ -30,7 +26,8 @@ export default function FilterManager(props) {
     }, [options, search])
 
     useEffect(() => {
-        let found = FILTER_MAP.find(( element, index ) =>
+        // eslint-disable-next-line no-unused-vars
+        let found = FILTER_MAP.find(( element, index) =>
             SingleRegex({pattern: element.path, value: path}));
 
         if (!found) {

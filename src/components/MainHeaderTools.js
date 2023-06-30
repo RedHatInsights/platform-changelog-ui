@@ -2,17 +2,11 @@ import React from 'react';
 import {
   Button,
   ButtonVariant,
-  Dropdown,
-  DropdownToggle,
-  DropdownItem,
-  DropdownSeparator,
-  KebabToggle,
   PageHeaderTools,
   PageHeaderToolsGroup,
   PageHeaderToolsItem
 } from '@patternfly/react-core';
 import accessibleStyles from '@patternfly/react-styles/css/utilities/Accessibility/accessibility';
-import spacingStyles from '@patternfly/react-styles/css/utilities/Spacing/spacing';
 import { css } from '@patternfly/react-styles';
 import { BellIcon, CogIcon } from '@patternfly/react-icons';
 

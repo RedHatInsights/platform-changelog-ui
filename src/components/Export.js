@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { CSVLink } from 'react-csv';
 
 import { Dropdown, DropdownItem, DropdownToggle } from '@patternfly/react-core';
-import { ExportIcon, ExportIconConfig } from '@patternfly/react-icons';
+import { ExportIcon } from '@patternfly/react-icons';
 
 function Export({rows, columns}) {
     const [isOpen, setOpen] = useState(false);
@@ -41,7 +41,7 @@ function Export({rows, columns}) {
             </DropdownItem>
         ]}
     />;
-};
+}
 
 // convert between the table's row and column format and the CSV format
 function convertToCSV(rows, columns) {

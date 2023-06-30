@@ -2,10 +2,10 @@ import React, { forwardRef, useEffect, useImperativeHandle, useState } from 'rea
 
 // import moment
 import moment from 'moment';
-import { Moment } from 'react-moment';
 
 import { TextInput } from '@patternfly/react-core';
 
+/* eslint-disable react/display-name */
 const DateTextInput = forwardRef(({ val, setValidation }, ref) => {
 
     const [isValid, setTextValidation] = useState(false);
@@ -23,7 +23,7 @@ const DateTextInput = forwardRef(({ val, setValidation }, ref) => {
             valid ? updateState(true) : updateState(false);
         }
         setCurrentValue(newVal);
-    };
+    }
 
     useEffect(() => {
         checkVal(val);

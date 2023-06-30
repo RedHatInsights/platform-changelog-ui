@@ -56,4 +56,4 @@ export default function FilterModal({ isOpen, options, onApplyFn, onCancelFn }) 
             </FormGroup>)}
         </Form>}
     </Modal>;
-};
+}
