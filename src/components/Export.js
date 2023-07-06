@@ -52,19 +52,21 @@ function convertToCSV(rows, columns) {
 
     // add the data rows
     rows.forEach(row => {
+        // create a copy of the row
+        var tempRow = [...row];
         columns.forEach((column, index) => {
             // all formatting listed here
             if (column === "latest_commit" || column === "latest_deploy") {
                 // check if latest is null
                 if (row[index] === null || row[index].id === 0) {
-                    row[index] = "";
+                    tempRow[index] = "";
                 } else {
-                    row[index] = row[index].timestamp;
+                    tempRow[index] = tempRow[index].timestamp;
                 }
             }
         });
 
-        csv.push(row);
+        csv.push(tempRow);
     });
 
     return csv;
