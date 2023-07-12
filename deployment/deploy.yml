@@ -18,6 +18,10 @@ objects:
   kind: ServiceAccount
   metadata:
     name: tekton-pipeline
+- apiVersion: v1
+  kind: ServiceAccount
+  metadata:
+    name: jenkins-jobs
 # solution to service account auth from
 # https://github.com/openshift/oauth-proxy/issues/179#issuecomment-1202279241
 - apiVersion: v1
