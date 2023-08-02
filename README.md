@@ -58,19 +58,3 @@ To reset your local database:
 ```
 $ docker-compose down --volumes
 ```
-
-## Define a service
-First, add your service to `services.yml` under `services` with the name of your
-service  as the key.
-
-The following attributes are required:
-```yaml
-display_name:
-name:
-```
-along with one of:
-```yaml
-gh_repo:
-# or
-gl_repo:
-```
