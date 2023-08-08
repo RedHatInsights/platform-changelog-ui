@@ -285,11 +285,11 @@ function DeployExpandable({deploy}) {
                 <TextListItem component={TextListItemVariants.dt}>Cluster</TextListItem>
                 <TextListItem component={TextListItemVariants.dd}>{deploy.cluster ? deploy.cluster : NONE_SPECIFIED}</TextListItem>
 
-                <TextListItem component={TextListItemVariants.dt}>Image</TextListItem>
-                <TextListItem component={TextListItemVariants.dd}>{deploy.image ? deploy.image : NONE_SPECIFIED}</TextListItem>
+                <TextListItem component={TextListItemVariants.dt}>Status</TextListItem>
+                <TextListItem component={TextListItemVariants.dd}>{deploy.status ? deploy.status : NONE_SPECIFIED}</TextListItem>
 
-                <TextListItem component={TextListItemVariants.dt}>Reference</TextListItem>
-                <TextListItem component={TextListItemVariants.dd}>{deploy.ref ? deploy.ref : NONE_SPECIFIED}</TextListItem>
+                <TextListItem component={TextListItemVariants.dt}>Timestamp</TextListItem>
+                <TextListItem component={TextListItemVariants.dd}>{deploy.timestamp ? deploy.timestamp : NONE_SPECIFIED}</TextListItem>
             </TextList>
         </TextContent>
     );
