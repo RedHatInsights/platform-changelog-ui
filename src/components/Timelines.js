@@ -13,7 +13,7 @@ import { NotificationsContext } from './notifications';
 
 const PER_CALL = 10;
 
-function Timelines({dataPath=`/api/v1/timelines`, includeRepo = false, ghURL="", glURL=""}) {
+function Timelines({dataPath=`/api/v1/timelines`, includeRepo = false, repo=""}) {
     const [timelines, setTimelines] = useState([]);
     const [offset, setOffset] = useState(0);
     const [count, setCount] = useState(0);
@@ -70,8 +70,7 @@ function Timelines({dataPath=`/api/v1/timelines`, includeRepo = false, ghURL="",
                 let props = {
                     timeline: timeline,
                     includeRepo: includeRepo,
-                    ghURL: ghURL,
-                    glURL: glURL,
+                    repo: repo,
                 };
 
                 if (timelines.length === index + 1) {

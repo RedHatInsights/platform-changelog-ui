@@ -3,7 +3,11 @@ export const API_URL = process.env.ENV === 'development' ? 'http://localhost:800
 export const APP_ROOT = '';
 
 export const SERVICE_FILTERS = [
-    'Name', 'Display_Name', 'Tenant', 'Namespace', 'Branch'
+    'Name', 'Display_Name', 'Tenant'
+];
+
+export const PROJECT_FILTERS = [
+    'Name', 'Repo', 'Branch', 'Namespace'
 ];
 
 export const COMMIT_FILTERS = [

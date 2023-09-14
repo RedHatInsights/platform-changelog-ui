@@ -14,21 +14,14 @@ import {
     TabContent,
     TabTitleText,
 } from "@patternfly/react-core";
-import { GithubIcon, GitlabIcon } from '@patternfly/react-icons';
 
 import { useParams } from "react-router-dom";
 
 import { API_URL } from '../AppConstants';
 
 import { NotificationsContext } from '../components/notifications';
-import {
-    CommitTable,
-    DeployTable,
-} from '../components/tables';
 
-import {
-    Timelines
-} from '../components';
+import {default as Link} from '../components/LinkWrapper';
 
 const NONE_SPECIFIED = "None specified";
 
@@ -41,19 +34,13 @@ export default function Service() {
         id: 0, 
         name: "",
         display_name: "",
-        gh_repo: "",
-        gl_repo: "", 
-        deploy_file: "", 
-        namespace: "",
-        branch: "",
+        tenant: "",
+        projects: [],
     });
 
     const [activeTab, setActiveTab] = useState(0);
 
     const detailsTabRef = React.createRef();
-    const timelinesTabRef = React.createRef();
-    const commitsTabRef = React.createRef();
-    const deploysTabRef = React.createRef();
 
     useEffect(() => {
         fetchService(`${API_URL}/api/v1/services/${name}`);
@@ -62,13 +49,13 @@ export default function Service() {
     async function fetchService(path) {
         fetch(path).then(res => {
             if (!res.ok) {
-                throw new Error(`Service ${service.name} not found`);
+                throw new Error(`Service ${name} not found`);
             }
             return res.json();
         }).then(data => {
             if (data == undefined || data == null) {
                 // service not found
-                notifications.sendError(`Service ${service.name} not found`);
+                notifications.sendError(`Service ${name} not found`);
                 return null;
             }
             
@@ -92,10 +79,6 @@ export default function Service() {
                 <TextContent>
                     <Text className="fullWidth" component="h1">
                         {service.display_name == "" ? name : service.display_name}
-                        <div className="right">
-                            {service.gh_repo && <a href={service.gh_repo} target="_blank" rel="noreferrer"><GithubIcon /></a>}
-                            {service.gl_repo && <a href={service.gl_repo} target="_blank" rel="noreferrer"><GitlabIcon /></a>}
-                        </div>
                     </Text>
                 </TextContent>
             </PageSection>
@@ -110,12 +93,6 @@ export default function Service() {
                 style={{overflow: "visible"}}
             >
                 <Tab eventKey={0} title={<TabTitleText>Details</TabTitleText>} tabContentId="detailsTabContent" tabContentRef={detailsTabRef} />
-
-                <Tab eventKey={1} title={<TabTitleText>Timeline</TabTitleText>} tabContentId="timelinesTabContent" tabContentRef={timelinesTabRef} />
-
-                <Tab eventKey={2} title={<TabTitleText>Commits</TabTitleText>} tabContentId="commitsTabContent" tabContentRef={commitsTabRef} />
-
-                <Tab eventKey={3} title={<TabTitleText>Deploys</TabTitleText>} tabContentId="deploysTabContent" tabContentRef={deploysTabRef} />
             </Tabs>
 
             <>
@@ -130,46 +107,18 @@ export default function Service() {
                             <TextList component={TextListVariants.dl}>
                                 <TextListItem component={TextListItemVariants.dt}>Tenant</TextListItem>
                                 <TextListItem component={TextListItemVariants.dd}>{service.tenant ? service.tenant : NONE_SPECIFIED}</TextListItem>
-                            
-                                <TextListItem component={TextListItemVariants.dt}>Namespace</TextListItem>
-                                <TextListItem component={TextListItemVariants.dd}>{service.namespace ? service.namespace : NONE_SPECIFIED}</TextListItem>
-
-                                <TextListItem component={TextListItemVariants.dt}>Branch</TextListItem>
-                                <TextListItem component={TextListItemVariants.dd}>{service.branch ? service.branch : NONE_SPECIFIED}</TextListItem>
+                                <TextListItem component={TextListItemVariants.dt}>Projects</TextListItem>
+                                <TextListItem component={TextListItemVariants.dd}>{service.projects && service.projects.length == 0 ? NONE_SPECIFIED : null}</TextListItem>
+                            </TextList>
+                            {/* list the projects under service.projects */}
+                            <TextList component={TextListVariants.dl}>
+                                {service.projects && service.projects.map((project, _index) => {
+                                    return <TextListItem key={project.id}component={TextListItemVariants.dt}><Link to={`/projects/${project.name}`}>{project.name}</Link></TextListItem>;
+                                })}
                             </TextList>
                         </TextContent>
                     </PageSection>
                 </TabContent>
-
-                {service.id > 0 && <>
-                    <TabContent 
-                        eventKey={1} 
-                        id="timelinesTabContent"
-                        ref={timelinesTabRef}
-                        aria-label={`Timeline display for ${service.display_name}`}
-                        hidden
-                    >
-                        <Timelines dataPath={`/api/v1/services/${name}/timelines`} ghURL={service.gh_repo} glURL={service.gl_repo} />
-                    </TabContent>
-                    <TabContent
-                        eventKey={2}
-                        id="commitsTabContent"
-                        ref={commitsTabRef}
-                        aria-label={`Commits display for ${service.display_name}`}
-                        hidden
-                    >
-                        <CommitTable key={service.id} dataPath={`/api/v1/services/${name}/commits`} ghURL={service.gh_repo} glURL={service.gl_repo} />
-                    </TabContent>
-                    <TabContent
-                        eventKey={3}
-                        id="deploysTabContent"
-                        ref={deploysTabRef}
-                        aria-label={`Deploys display for ${service.display_name}`}
-                        hidden
-                    >
-                        <DeployTable key={service.name} dataPath={`/api/v1/services/${name}/deploys`} />
-                    </TabContent>
-                </>}
             </>     
         </>
     );

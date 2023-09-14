@@ -15,12 +15,11 @@ const type = {commit: 'commit', deploy: 'deploy'};
 // type TimelineCardProps = {
 //     timeline: any;
 //     includeRepo: boolean;
-//     ghURL: string;
-//     glURL: string;
+//     repo: string;
 // }
 
 const TimelineCard = (props) => {
-    const {timeline, includeRepo, ghURL, glURL} = props;
+    const {timeline, includeRepo, repo} = props;
 
     return (
         <div style={timeline.type == type.deploy ? deployStyle : commitStyle}>
@@ -30,9 +29,7 @@ const TimelineCard = (props) => {
                     <CardBody>
                         <p>Commit:&nbsp;
                             <a 
-                                href={ghURL != "" 
-                                ? `${ghURL}/commit/${timeline.ref}` 
-                                : `${glURL}/-/commit/${timeline.ref}`} 
+                                href={`${repo}/commit/${timeline.ref}`} 
                                 target="_blank" 
                                 rel="noreferrer noopener"
                             >
