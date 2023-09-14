@@ -112,6 +112,7 @@ export default function Service() {
                             </TextList>
                             {/* list the projects under service.projects */}
                             <TextList component={TextListVariants.dl}>
+                                {/* eslint-disable-next-line no-unused-vars */}
                                 {service.projects && service.projects.map((project, _index) => {
                                     return <TextListItem key={project.id}component={TextListItemVariants.dt}><Link to={`/projects/${project.name}`}>{project.name}</Link></TextListItem>;
                                 })}
