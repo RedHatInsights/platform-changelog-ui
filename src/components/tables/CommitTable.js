@@ -16,7 +16,7 @@ import { commitsSchema } from '../../schema';
 /**
  * Options to pass in the desired data or the data path to the table
  */
-function CommitTable({dataPath="/api/v1/commits", includeExport=true, ghURL="", glURL=""}) {
+function CommitTable({dataPath="/api/v1/commits", includeExport=true, repo=""}) {
     const filterContext = useContext(FilterContext);
 
     function FormatColumn(column) {
@@ -43,12 +43,9 @@ function CommitTable({dataPath="/api/v1/commits", includeExport=true, ghURL="", 
             const icon = <CodeBranchIcon key="icon" />;
 
             // example: https://github.com/RedHatInsights/rhsm-subscriptions/commit/{Ref}
-            if (ghURL !== "") {
-                cellContents = <a href={`${ghURL}/commit/${cell}`} target="_blank" rel="noreferrer noopener">{icon}</a>;
-            } 
-            else if (glURL !== "") { // example: https://gitlab.cee.redhat.com/service/app-interface/-/commit/{Ref}
-                cellContents = <a href={`${glURL}/-/commit/${cell}`} target="_blank" rel="noreferrer noopener">{icon}</a>; // might want to handle if the url has a / at the end, too.
-            } 
+            if (repo !== "") {
+                cellContents = <a href={`${repo}/commit/${cell}`} target="_blank" rel="noreferrer noopener">{icon}</a>;
+            }
             else {
                 cellContents = <>{icon}</>;
                 expandable = true;

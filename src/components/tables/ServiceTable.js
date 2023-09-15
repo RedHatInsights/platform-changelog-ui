@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 
 import {Td} from '@patternfly/react-table';
 
-import { GithubIcon, GitlabIcon, CodeBranchIcon } from '@patternfly/react-icons';
+import { CodeBranchIcon } from '@patternfly/react-icons';
 
 import {default as Link} from '../LinkWrapper';
 
@@ -43,14 +43,6 @@ function ServiceTable({dataPath = "/api/v1/services", includeExport = true}) {
             cellContents = <>{cell}</>
         } else if (column === "Name") {
             cellContents = <Link to={`/services/${row[1]}`}>{cell}</Link>;
-        } else if (column === "Github") {
-            cellContents =  <a href={cell} target="_blank" rel="noreferrer">
-                                <GithubIcon key="icon" />
-                            </a>;
-        } else if (column === "Gitlab") {
-            cellContents = <a href={cell} target="_blank" rel="noreferrer">
-                                <GitlabIcon key="icon" />
-                            </a>;
         } else if (column === "Latest commit") {
             if (cell !== null && cell.id !== 0) {
                 cellContents = <><CodeBranchIcon /><Moment date={cell.timestamp} format=" MM/YYYY"/></>;
