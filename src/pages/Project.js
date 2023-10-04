@@ -66,18 +66,14 @@ export default function Project() {
     async function fetchProject(path) {
         fetch(path).then(res => {
             if (!res.ok) {
-                throw new Error(`Project ${id} not found`);
+                throw new Error(`Project with ID ${id} not found`);
             }
             return res.json();
         }).then(data => {
             if (data == undefined || data == null) {
                 // project not found
-                notifications.sendError(`Project ${id} not found`);
+                notifications.sendError(`Project with ID ${id} not found`);
                 return null;
-            }
-            
-            if (data.length > 0) { // Duplicate names, it's possible...
-                setProject(data[0]);
             }
 
             setProject(data);

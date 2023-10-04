@@ -54,18 +54,14 @@ export default function Service() {
     async function fetchService(path) {
         fetch(path).then(res => {
             if (!res.ok) {
-                throw new Error(`ServiceID ${id} not found`);
+                throw new Error(`Service with ID ${id} not found`);
             }
             return res.json();
         }).then(data => {
             if (data == undefined || data == null) {
                 // service not found
-                notifications.sendError(`ServiceID ${id} not found`);
+                notifications.sendError(`Service with ID ${id} not found`);
                 return null;
-            }
-            
-            if (data.length > 0) { // Duplicate names, it's possible...
-                setService(data[0]);
             }
 
             setService(data);
