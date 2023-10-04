@@ -42,7 +42,7 @@ function ServiceTable({dataPath = "/api/v1/services", includeExport = true}) {
         if (cell == "") {
             cellContents = <>{cell}</>
         } else if (column === "Name") {
-            cellContents = <Link to={`/services/${row[1]}`}>{cell}</Link>;
+            cellContents = <Link to={`/services/${row[0]}`}>{cell}</Link>;
         } else if (column === "Latest commit") {
             if (cell !== null && cell.id !== 0) {
                 cellContents = <><CodeBranchIcon /><Moment date={cell.timestamp} format=" MM/YYYY"/></>;

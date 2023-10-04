@@ -73,8 +73,8 @@ function AppPage() {
                 <Route path={`${APP_ROOT}/services`} element={<Services />} />
                 <Route path={`${APP_ROOT}/commits`} element={<Commits />} />
                 <Route path={`${APP_ROOT}/deploys`} element={<Deploys />} />
-                <Route path={`${APP_ROOT}/services/:name`} element={<Service />} />
-                <Route path={`${APP_ROOT}/projects/:name`} element={<Project />} />
+                <Route path={`${APP_ROOT}/services/:id`} element={<Service />} />
+                <Route path={`${APP_ROOT}/projects/:id`} element={<Project />} />
             </Routes>
         </Page>
     );
