@@ -55,10 +55,10 @@ export default function Project() {
     const deploysTabRef = React.createRef();
 
     useEffect(() => {
-        // if (id == undefined || id <= 0) {
-        //     notifications.sendError(`ProjectID ${id} not found`);
-        //     return null;
-        // }
+        if (id == undefined || id < 1 || isNaN(id)) {
+            notifications.sendError(`Project ID ${id} is not valid`);
+            return null;
+        }
 
         fetchProject(`${API_URL}/api/v1/projects/${id}`);
     }, []);
@@ -66,13 +66,13 @@ export default function Project() {
     async function fetchProject(path) {
         fetch(path).then(res => {
             if (!res.ok) {
-                throw new Error(`Project ${name} not found`);
+                throw new Error(`Project ${id} not found`);
             }
             return res.json();
         }).then(data => {
             if (data == undefined || data == null) {
                 // project not found
-                notifications.sendError(`Project ${name} not found`);
+                notifications.sendError(`Project ${id} not found`);
                 return null;
             }
             

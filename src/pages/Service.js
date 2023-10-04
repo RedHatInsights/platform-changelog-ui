@@ -43,6 +43,11 @@ export default function Service() {
     const detailsTabRef = React.createRef();
 
     useEffect(() => {
+        if (id == undefined || id < 1 || isNaN(id)) {
+            notifications.sendError(`Service ID ${id} is not valid`);
+            return null;
+        }
+
         fetchService(`${API_URL}/api/v1/services/${id}`);
     }, []);
 
