@@ -35,7 +35,7 @@ const NONE_SPECIFIED = "None specified";
 export default function Project() {
     const notifications = React.useContext(NotificationsContext);
 
-    const name = useParams().name;
+    const id = useParams().id;
 
     const [project, setProject] = useState({
         id: 0,
@@ -55,29 +55,25 @@ export default function Project() {
     const deploysTabRef = React.createRef();
 
     useEffect(() => {
-        fetchProject(`${API_URL}/api/v1/projects/${name}`);
+        if (id == undefined || id < 1 || isNaN(id)) {
+            notifications.sendError(`Project ID ${id} is not valid`);
+            return null;
+        }
 
-        // TODO: change endpoints to fetch by ID
-        // if service_id > 0 {
-        //     fetchService(`${API_URL}/api/v1/services/${service_id}`);
-        // }
+        fetchProject(`${API_URL}/api/v1/projects/${id}`);
     }, []);
 
     async function fetchProject(path) {
         fetch(path).then(res => {
             if (!res.ok) {
-                throw new Error(`Project ${name} not found`);
+                throw new Error(`Project with ID ${id} not found`);
             }
             return res.json();
         }).then(data => {
             if (data == undefined || data == null) {
                 // project not found
-                notifications.sendError(`Project ${name} not found`);
+                notifications.sendError(`Project with ID ${id} not found`);
                 return null;
-            }
-            
-            if (data.length > 0) { // Duplicate names, it's possible...
-                setProject(data[0]);
             }
 
             setProject(data);
@@ -144,7 +140,7 @@ export default function Project() {
                     </PageSection>
                 </TabContent>
 
-                {project.id > 0 && <>
+                {project.name != "" && <>
                     <TabContent 
                         eventKey={1} 
                         id="timelinesTabContent"
@@ -152,7 +148,7 @@ export default function Project() {
                         aria-label={`Timeline display for ${project.name}`}
                         hidden
                     >
-                        <Timelines dataPath={`/api/v1/projects/${name}/timelines`} repo={project.repo} />
+                        <Timelines dataPath={`/api/v1/projects/${id}/timelines`} repo={project.repo} />
                     </TabContent>
                     <TabContent
                         eventKey={2}
@@ -161,7 +157,7 @@ export default function Project() {
                         aria-label={`Commits display for ${project.name}`}
                         hidden
                     >
-                        <CommitTable key={project.id} dataPath={`/api/v1/projects/${name}/commits`} repo={project.repo} />
+                        <CommitTable key={project.id} dataPath={`/api/v1/projects/${id}/commits`} repo={project.repo} />
                     </TabContent>
                     <TabContent
                         eventKey={3}
@@ -170,7 +166,7 @@ export default function Project() {
                         aria-label={`Deploys display for ${project.name}`}
                         hidden
                     >
-                        <DeployTable key={project.name} dataPath={`/api/v1/projects/${name}/deploys`} />
+                        <DeployTable key={project.name} dataPath={`/api/v1/projects/${id}/deploys`} />
                     </TabContent>
                 </>}
             </>     

@@ -28,7 +28,7 @@ const NONE_SPECIFIED = "None specified";
 export default function Service() {
     const notifications = React.useContext(NotificationsContext);
 
-    const name = useParams().name;
+    const id = useParams().id;
 
     const [service, setService] = useState({
         id: 0, 
@@ -43,24 +43,25 @@ export default function Service() {
     const detailsTabRef = React.createRef();
 
     useEffect(() => {
-        fetchService(`${API_URL}/api/v1/services/${name}`);
+        if (id == undefined || id < 1 || isNaN(id)) {
+            notifications.sendError(`Service ID ${id} is not valid`);
+            return null;
+        }
+
+        fetchService(`${API_URL}/api/v1/services/${id}`);
     }, []);
 
     async function fetchService(path) {
         fetch(path).then(res => {
             if (!res.ok) {
-                throw new Error(`Service ${name} not found`);
+                throw new Error(`Service with ID ${id} not found`);
             }
             return res.json();
         }).then(data => {
             if (data == undefined || data == null) {
                 // service not found
-                notifications.sendError(`Service ${name} not found`);
+                notifications.sendError(`Service with ID ${id} not found`);
                 return null;
-            }
-            
-            if (data.length > 0) { // Duplicate names, it's possible...
-                setService(data[0]);
             }
 
             setService(data);
@@ -114,7 +115,7 @@ export default function Service() {
                             <TextList component={TextListVariants.dl}>
                                 {/* eslint-disable-next-line no-unused-vars */}
                                 {service.projects && service.projects.map((project, _index) => {
-                                    return <TextListItem key={project.id}component={TextListItemVariants.dt}><Link to={`/projects/${project.name}`}>{project.name}</Link></TextListItem>;
+                                    return <TextListItem key={project.id}component={TextListItemVariants.dt}><Link to={`/projects/${project.id}`}>{project.name}</Link></TextListItem>;
                                 })}
                             </TextList>
                         </TextContent>
