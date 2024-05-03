@@ -26,8 +26,8 @@ function job_cleanup() {
 
 trap job_cleanup EXIT ERR SIGINT SIGTERM
 
-DOCKER_CONF="$TMP_JOB_DIR/.docker"
-mkdir -p "$DOCKER_CONF"
+AUTH_CONF_DIR="$TMP_JOB_DIR/.docker"
+mkdir -p "$AUTH_CONF_DIR"
 
 docker --config="$AUTH_CONF_DIR" login -u="$QUAY_USER" -p="$QUAY_TOKEN" quay.io
 docker --config="$AUTH_CONF_DIR" login -u="$RH_REGISTRY_USER" -p="$RH_REGISTRY_TOKEN" registry.redhat.io
